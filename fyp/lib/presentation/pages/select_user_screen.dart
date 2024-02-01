@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/presentation/pages/Staf_Sreens/staf_login_screen.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/provider/login_provider.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/visitor_login_screen.dart';
+import 'package:provider/provider.dart';
 
 class SelectUserScreen extends StatelessWidget {
   const SelectUserScreen({super.key});
@@ -40,7 +42,9 @@ class SelectUserScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => const VisitorLoginScreen(),
+                              builder: (_) => ChangeNotifierProvider(
+                                  create: (context) => LoginProvider(context),
+                                  child: const VisitorLoginScreen()),
                             ));
                       },
                       style: ElevatedButton.styleFrom(
