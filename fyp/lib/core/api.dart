@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:fyp/logic/services/preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-const String BASE_URL = "https://vms-backend-eight.vercel.app";
+const String BASE_URL = "https://vms-backend-seven.vercel.app";
 const Map<String, dynamic> DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
 };
@@ -47,17 +47,20 @@ class Api {
 }
 
 class ApiResponse {
-  bool success;
-  dynamic data;
+  int status;
+  String res;
   String? message;
-  ApiResponse({required this.success, this.data, this.message});
+  dynamic data;
+  ApiResponse(
+      {required this.status, required this.res, this.message, this.data});
 
   factory ApiResponse.fromResponse(Response response) {
     final data = response.data as Map<String, dynamic>;
     return ApiResponse(
-      success: response.statusCode == 201,
-      data: data["data"],
+      status: data["status"],
+      res: data["res"],
       message: data["message"] ?? "Unexpected error",
+      data: data["data"],
     );
   }
 }

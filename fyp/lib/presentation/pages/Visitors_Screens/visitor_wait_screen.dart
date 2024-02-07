@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/visitor_form_screen.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/visitor_home_screen.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_form_screen.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 
 class VisitorWaitScreen extends StatelessWidget {
   const VisitorWaitScreen({super.key});

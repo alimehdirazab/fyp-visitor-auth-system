@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/logic/cubits/user_cubit/user_cubit.dart';
 import 'package:fyp/logic/cubits/user_cubit/user_state.dart';
 
-class LoginProvider with ChangeNotifier {
+class VisitorLoginProvider with ChangeNotifier {
   final BuildContext context;
-  LoginProvider(this.context) {
+  VisitorLoginProvider(this.context) {
     _listenToUserCubit();
   }
   bool isLoading = false;

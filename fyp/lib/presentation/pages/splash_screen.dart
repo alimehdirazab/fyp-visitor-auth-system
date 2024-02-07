@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/main.dart';
-import 'package:fyp/presentation/pages/select_user_screen.dart';
+import 'package:fyp/presentation/pages/loading_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  static const String routeName = "splashScreen";
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -21,11 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           statusBarColor: Colors.transparent,
         ),
       );
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const SelectUserScreen(),
-          ));
+      Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
     });
   }
 

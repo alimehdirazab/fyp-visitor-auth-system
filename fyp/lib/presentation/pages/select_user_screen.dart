@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/presentation/pages/Staf_Sreens/staf_login_screen.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/provider/login_provider.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/visitor_login_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 
-class SelectUserScreen extends StatelessWidget {
+class SelectUserScreen extends StatefulWidget {
   const SelectUserScreen({super.key});
 
+  static const String routeName = "selectUserScreen";
+
+  @override
+  State<SelectUserScreen> createState() => _SelectUserScreenState();
+}
+
+class _SelectUserScreenState extends State<SelectUserScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +44,8 @@ class SelectUserScreen extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ChangeNotifierProvider(
-                                  create: (context) => LoginProvider(context),
-                                  child: const VisitorLoginScreen()),
-                            ));
+                        Navigator.pushNamed(
+                            context, VisitorLoginScreen.routeName);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:

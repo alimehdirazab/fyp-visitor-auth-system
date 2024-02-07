@@ -8,7 +8,7 @@ import 'package:fyp/logic/services/preferences.dart';
 class UserRepository {
   final _api = Api();
 
-  Future<void> createAccount(
+  Future<UserModel> createAccount(
       {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
@@ -21,7 +21,7 @@ class UserRepository {
 
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (!apiResponse.success) {
+      if (apiResponse.status != 201) {
         throw apiResponse.message.toString();
       }
 
@@ -29,13 +29,14 @@ class UserRepository {
       // String refreshToken = apiResponse.data["refreshToken"];
       // Preferences.saveTokens(accessToken, refreshToken);
 
-      //  return UserModel.fromJson(apiResponse.data["accessToken"]);
+      return UserModel.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }
   }
 
-  Future<void> signIn({required String email, required String password}) async {
+  Future<UserModel> signIn(
+      {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
         '/api/v1/visitors/login',
@@ -48,11 +49,10 @@ class UserRepository {
           "password": password,
         }),
       );
-      log('hello');
 
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (!apiResponse.success) {
+      if (apiResponse.status != 200) {
         throw apiResponse.message.toString();
       }
 
@@ -60,7 +60,7 @@ class UserRepository {
       // String refreshToken = apiResponse.data["refreshToken"];
       // Preferences.saveTokens(accessToken, refreshToken);
 
-      // return UserModel.fromJson(apiResponse.data["data"]);
+      return UserModel.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }

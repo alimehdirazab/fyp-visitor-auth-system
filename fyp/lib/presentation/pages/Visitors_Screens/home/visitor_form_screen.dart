@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/visitor_home_screen.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/visitor_wait_screen.dart';
 
 class VisitorFormScreen extends StatefulWidget {
@@ -33,29 +33,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
     String dropdownValue = list.first;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VisitorHomeScreen(),
-                  ));
-            },
-            icon: const Icon(Icons.home)),
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => const VisitorFormScreen(),
-              //     ));
-            },
-            icon: const Icon(
-              Icons.add_circle_outline_rounded,
-            ),
-          ),
-        ],
+        title: const Text('Appointment Form'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
