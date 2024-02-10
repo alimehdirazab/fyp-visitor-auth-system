@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:fyp/core/ui.dart';
-import 'package:fyp/logic/cubits/user_cubit/user_cubit.dart';
-import 'package:fyp/logic/cubits/user_cubit/user_state.dart';
+import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
+import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_login_provider.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_signup_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
@@ -18,7 +18,7 @@ import 'package:provider/provider.dart';
 class VisitorLoginScreen extends StatefulWidget {
   const VisitorLoginScreen({super.key});
 
-  static const String routeName = "login";
+  static const String routeName = "visitorLogin";
 
   @override
   State<VisitorLoginScreen> createState() => _VisitorLoginScreenState();
@@ -28,9 +28,9 @@ class _VisitorLoginScreenState extends State<VisitorLoginScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<VisitorLoginProvider>(context);
-    return BlocListener<UserCubit, UserState>(
+    return BlocListener<VisitorCubit, VisitorState>(
       listener: (context, state) {
-        if (state is UserLoggedInState) {
+        if (state is VisitorLoggedInState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
         }

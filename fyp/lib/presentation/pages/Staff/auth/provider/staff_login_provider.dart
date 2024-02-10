@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
-import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_state.dart';
 
-class VisitorLoginProvider with ChangeNotifier {
+class StaffLoginProvider with ChangeNotifier {
   final BuildContext context;
-  VisitorLoginProvider(this.context) {
+  StaffLoginProvider(this.context) {
     _listenToUserCubit();
   }
   bool isLoading = false;
@@ -19,14 +19,14 @@ class VisitorLoginProvider with ChangeNotifier {
 
   void _listenToUserCubit() {
     _userSubscription =
-        BlocProvider.of<VisitorCubit>(context).stream.listen((userState) {
-      if (userState is VisitorLoadingState) {
+        BlocProvider.of<StaffCubit>(context).stream.listen((staffState) {
+      if (staffState is StaffLoadingState) {
         isLoading = true;
         error = "";
         notifyListeners();
-      } else if (userState is VisitorErrorState) {
+      } else if (staffState is StaffErrorState) {
         isLoading = false;
-        error = userState.message;
+        error = staffState.message;
         notifyListeners();
       } else {
         isLoading = false;
@@ -42,7 +42,7 @@ class VisitorLoginProvider with ChangeNotifier {
 
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
-    BlocProvider.of<VisitorCubit>(context)
+    BlocProvider.of<StaffCubit>(context)
         .signIn(email: email, password: password);
   }
 

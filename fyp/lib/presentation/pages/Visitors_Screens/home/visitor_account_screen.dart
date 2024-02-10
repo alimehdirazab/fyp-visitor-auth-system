@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fyp/logic/cubits/user_cubit/user_cubit.dart';
+import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 
@@ -24,7 +24,7 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
           children: [
             PrimaryButton(
               onPressed: () {
-                BlocProvider.of<UserCubit>(context).signOut();
+                BlocProvider.of<VisitorCubit>(context).signOut();
                 Navigator.popUntil(context, (route) => route.isFirst);
                 Navigator.pushReplacementNamed(
                     context, LoadingScreen.routeName);

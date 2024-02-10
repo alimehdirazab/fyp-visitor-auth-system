@@ -2,11 +2,9 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/core/ui.dart';
-import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
-import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_signup_provider.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_state.dart';
+import 'package:fyp/presentation/pages/Staff/auth/provider/staff_login_provider.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/link_button.dart';
@@ -14,29 +12,29 @@ import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/primary_textfield.dart';
 import 'package:provider/provider.dart';
 
-class VisitorSignupScreen extends StatefulWidget {
-  const VisitorSignupScreen({super.key});
+class StaffLoginScreen extends StatefulWidget {
+  const StaffLoginScreen({super.key});
 
-  static const String routeName = "signup";
+  static const String routeName = "staffLogin";
 
   @override
-  State<VisitorSignupScreen> createState() => _VisitorSignupScreenState();
+  State<StaffLoginScreen> createState() => _StaffLoginScreenState();
 }
 
-class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
+class _StaffLoginScreenState extends State<StaffLoginScreen> {
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<VisitorSignupProvider>(context);
-    return BlocListener<VisitorCubit, VisitorState>(
+    final provider = Provider.of<StaffLoginProvider>(context);
+    return BlocListener<StaffCubit, StaffState>(
       listener: (context, state) {
-        if (state is VisitorLoggedInState) {
+        if (state is StaffLoggedInState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
         }
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Sign Up'),
+          title: const Text('Staff Log In '),
           centerTitle: true,
           elevation: 0,
         ),
@@ -46,7 +44,7 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Text('Create Account ', style: TextStyles.heading2),
+              Text('Log In ', style: TextStyles.heading2),
               const GapWidget(),
               (provider.error != "")
                   ? Text(
@@ -80,39 +78,34 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
                 },
                 labelText: "Password",
               ),
-              const GapWidget(),
-              PrimaryTextField(
-                obscureText: true,
-                controller: provider.cPasswordController,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Confirm Your Paasword!";
-                  }
-                  if (value.trim() != provider.passwordController.text.trim()) {
-                    return "passwords do not match!";
-                  }
-                  return null;
-                },
-                labelText: "Confirm Password",
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  LinkButton(
+                    onPressed: () {},
+                    text: "Forget Password",
+                  ),
+                ],
               ),
               const GapWidget(),
               PrimaryButton(
-                onPressed: provider.createAccount,
-                text: (provider.isLoading) ? "..." : "Create Account",
+                onPressed: provider.logIn,
+                text: (provider.isLoading) ? "..." : "log In",
               ),
               const GapWidget(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text(
-                    "Already have an account ",
+                    "Don't have an account? ",
                     style: TextStyle(fontSize: 16),
                   ),
                   LinkButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      // Navigator.pushNamed(
+                      //     context, VisitorSignupScreen.routeName);
                     },
-                    text: "Log In",
+                    text: "Sign Up",
                   ),
                 ],
               )

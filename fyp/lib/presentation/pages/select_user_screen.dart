@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/presentation/pages/Staf_Sreens/staf_login_screen.dart';
+import 'package:fyp/presentation/pages/Staff/auth/staff_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 
 class SelectUserScreen extends StatefulWidget {
@@ -60,11 +60,8 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const StafLoginScreen(),
-                            ));
+                        Navigator.pushNamed(
+                            context, StaffLoginScreen.routeName);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -72,26 +69,20 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                         minimumSize: const Size(double.infinity, 50),
                       ),
                       child: const Text(
-                        'Staf',
+                        'Staff',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const StafLoginScreen(),
-                            ));
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
                             const Color.fromARGB(255, 41, 148, 219),
                         minimumSize: const Size(double.infinity, 50),
                       ),
                       child: const Text(
-                        'Security',
+                        'Admin',
                         style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
                     )

@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:fyp/logic/services/preferences.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 const String BASE_URL = "https://vms-backend-seven.vercel.app";

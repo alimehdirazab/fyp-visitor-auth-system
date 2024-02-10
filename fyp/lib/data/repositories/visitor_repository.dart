@@ -1,14 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
-import 'package:fyp/data/models/user/user_model.dart';
-import 'package:fyp/logic/services/preferences.dart';
+import 'package:fyp/data/models/visitor/visitor_model.dart';
 
-class UserRepository {
+class VisitorRepository {
   final _api = Api();
 
-  Future<UserModel> createAccount(
+  Future<VisitorModel> createAccount(
       {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
@@ -29,13 +27,13 @@ class UserRepository {
       // String refreshToken = apiResponse.data["refreshToken"];
       // Preferences.saveTokens(accessToken, refreshToken);
 
-      return UserModel.fromJson(apiResponse.data);
+      return VisitorModel.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }
   }
 
-  Future<UserModel> signIn(
+  Future<VisitorModel> signIn(
       {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
@@ -60,7 +58,7 @@ class UserRepository {
       // String refreshToken = apiResponse.data["refreshToken"];
       // Preferences.saveTokens(accessToken, refreshToken);
 
-      return UserModel.fromJson(apiResponse.data);
+      return VisitorModel.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }

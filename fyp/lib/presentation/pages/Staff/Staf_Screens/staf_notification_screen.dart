@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/presentation/pages/Staf_Sreens/staf_home_screen.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
 
 class StafNotificationScreen extends StatelessWidget {
   const StafNotificationScreen({super.key});
@@ -16,7 +16,7 @@ class StafNotificationScreen extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const StafHomeScreen(),
+                      builder: (context) => const StaffHomeScreen(),
                     ));
               },
               icon: const Icon(

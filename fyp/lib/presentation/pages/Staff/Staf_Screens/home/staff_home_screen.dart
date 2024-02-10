@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/main.dart';
-import 'package:fyp/presentation/pages/Staf_Sreens/staf_notification_screen.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/staf_notification_screen.dart';
 
-class StafHomeScreen extends StatelessWidget {
-  const StafHomeScreen({super.key});
+class StaffHomeScreen extends StatefulWidget {
+  const StaffHomeScreen({super.key});
+  static const String routeName = "staffHomeScreen";
+  @override
+  State<StaffHomeScreen> createState() => _StaffHomeScreenState();
+}
 
+class _StaffHomeScreenState extends State<StaffHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Meetings'),
+        title: const Text('Staff Home Screen'),
         centerTitle: true,
         actions: [
           IconButton(

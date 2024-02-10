@@ -1,12 +1,12 @@
-class UserModel {
+class VisitorModel {
   int? status;
   String? res;
   String? message;
   Data? data;
 
-  UserModel({this.status, this.res, this.message, this.data});
+  VisitorModel({this.status, this.res, this.message, this.data});
 
-  UserModel.fromJson(Map<String, dynamic> json) {
+  VisitorModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     res = json['res'];
     message = json['message'];
