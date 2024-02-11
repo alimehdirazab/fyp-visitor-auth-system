@@ -66,7 +66,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
 
   Widget card(String name, String reason, String status) {
     return Card(
-      color: const Color.fromARGB(230, 255, 255, 255),
+      color: const Color.fromARGB(255, 255, 255, 255),
       elevation: 1,
       child: ListTile(
         title: Text(name),

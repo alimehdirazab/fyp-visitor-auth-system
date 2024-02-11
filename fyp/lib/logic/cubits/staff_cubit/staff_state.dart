@@ -7,8 +7,8 @@ class StaffInitialState extends StaffState {}
 class StaffLoadingState extends StaffState {}
 
 class StaffLoggedInState extends StaffState {
-  StaffModel staffModel;
-  StaffLoggedInState(this.staffModel);
+  StaffData staffData;
+  StaffLoggedInState(this.staffData);
 }
 
 class StaffLoggedOutState extends StaffState {}

@@ -38,7 +38,7 @@ class StaffRepository {
     }
   }
 
-  Future<StaffModel> signIn(
+  Future<StaffData> signIn(
       {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
@@ -63,9 +63,9 @@ class StaffRepository {
       // String refreshToken = apiResponse.data["refreshToken"];
       // Preferences.saveTokens(accessToken, refreshToken);
       // log(apiResponse.data.toString());
-      StaffModel stf = StaffModel.fromJson(apiResponse.data);
-      log(stf.data.toString() + "dddd");
-      return StaffModel.fromJson(apiResponse.data);
+      // StaffData stf = StaffData.fromJson(apiResponse.data);
+      // log(stf.role.toString() + "dddd");
+      return StaffData.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }

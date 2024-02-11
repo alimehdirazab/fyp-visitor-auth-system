@@ -41,12 +41,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     //Staff Screens Navigation
     StaffState staffState = BlocProvider.of<StaffCubit>(context).state;
     if (staffState is StaffLoggedInState) {
-      StaffModel staffModel = staffState.staffModel;
+      StaffData staffData = staffState.staffData;
       // log(staffModel.data!.role.toString());
-      if (staffModel.data!.role.toString() == 'staff') {
+      if (staffData.role == 'staff') {
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacementNamed(context, StaffHomeScreen.routeName);
-      } else if (staffModel.data!.role.toString() == 'guard') {
+      } else if (staffData.role == 'guard') {
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacementNamed(context, SecurityHomeScreen.routeName);
       } else {

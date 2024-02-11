@@ -26,43 +26,41 @@ class StaffCubit extends Cubit<StaffState> {
   }
 
   void _emitLoggedInState({
-    required StaffModel staffModel,
+    required StaffData staffData,
     required String email,
     required String password,
   }) async {
     await StaffPreferences.saveStaffDetails(email, password);
-    emit(StaffLoggedInState(staffModel));
+    emit(StaffLoggedInState(staffData));
     log('Details Saved!');
   }
 
   void signIn({required String email, required String password}) async {
     emit(StaffLoadingState());
     try {
-      StaffModel staffModel =
+      StaffData staffData =
           await _staffRepository.signIn(email: email, password: password);
-
-      log(staffModel.message.toString());
       _emitLoggedInState(
-          staffModel: staffModel, email: email, password: password);
+          staffData: staffData, email: email, password: password);
     } catch (ex) {
       emit(StaffErrorState(ex.toString()));
     }
   }
 
-  void createAccount(
-      {required String email,
-      required String password,
-      required String role}) async {
-    emit(StaffLoadingState());
-    try {
-      StaffModel staffModel = await _staffRepository.createAccount(
-          email: email, password: password, role: role);
-      _emitLoggedInState(
-          staffModel: staffModel, email: email, password: password);
-    } catch (ex) {
-      emit(StaffErrorState(ex.toString()));
-    }
-  }
+  // void createAccount(
+  //     {required String email,
+  //     required String password,
+  //     required String role}) async {
+  //   emit(StaffLoadingState());
+  //   try {
+  //     StaffModel staffModel = await _staffRepository.createAccount(
+  //         email: email, password: password, role: role);
+  //     _emitLoggedInState(
+  //         staffModel: staffModel, email: email, password: password);
+  //   } catch (ex) {
+  //     emit(StaffErrorState(ex.toString()));
+  //   }
+  // }
 
   void signOut() async {
     await StaffPreferences.clear();

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/main.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
 
 class StafNotificationScreen extends StatelessWidget {
@@ -42,17 +43,31 @@ class StafNotificationScreen extends StatelessWidget {
   }
 
   Widget card(String name, String reason) {
-    return Card(
-      color: const Color.fromARGB(230, 255, 255, 255),
-      elevation: 1,
-      child: ListTile(
-        title: Text(name),
-        subtitle: Text(reason),
-        trailing: Column(
+    return SizedBox(
+      // height: mq.height / 5,
+      child: Card(
+        color: const Color.fromARGB(230, 255, 255, 255),
+        elevation: 1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            button('Accept', const Color.fromARGB(255, 89, 172, 91)),
-            const SizedBox(height: 5),
-            button('Reject ', Color.fromARGB(255, 175, 73, 66)),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(name),
+                Text(reason),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                button('Accept', const Color.fromARGB(255, 89, 172, 91)),
+                // const SizedBox(height: 5),
+                button('Reject ', const Color.fromARGB(255, 175, 73, 66)),
+              ],
+            )
           ],
         ),
       ),
@@ -63,7 +78,7 @@ class StafNotificationScreen extends StatelessWidget {
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
-          backgroundColor: color, minimumSize: const Size(60, 20)),
+          backgroundColor: color, minimumSize: const Size(60, 14)),
       child: Text(
         name,
         style: const TextStyle(color: Colors.white),
