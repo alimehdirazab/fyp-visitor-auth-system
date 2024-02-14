@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_page.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_invite_visitor_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_profile_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/staf_notification_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/my_drawer.dart';
@@ -16,7 +17,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
   List<Widget> pages = const [
     StaffHomePage(),
     StaffProfilePage(),
-    StaffProfilePage(),
+    StaffInviteVisitorPage(),
     StaffProfilePage(),
   ];
   int currentIndex = 0;
