@@ -6,6 +6,7 @@ import 'package:fyp/core/routes.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
 import 'package:fyp/presentation/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // late Size mq = MediaQuery.of(context).size;
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => VisitorCubit()),
@@ -37,7 +39,8 @@ class MyApp extends StatelessWidget {
         title: 'Smiu Visitor Authorization System',
         theme: Themes.defaultTheme,
         onGenerateRoute: Routes.onGenerateRoutes,
-        initialRoute: SplashScreen.routeName,
+        // initialRoute: SplashScreen.routeName,
+        initialRoute: StaffHomeScreen.routeName,
       ),
     );
   }

@@ -5,15 +5,19 @@ class AppColors {
   static Color text = const Color(0xff212121);
   static Color textLight = const Color(0xFF8A8A8A);
   static Color white = const Color(0xffffffff);
+  static Color bgColor = Colors.grey.shade100;
 }
 
 class Themes {
   static ThemeData defaultTheme = ThemeData(
       brightness: Brightness.light,
-      scaffoldBackgroundColor: AppColors.white,
+      scaffoldBackgroundColor: AppColors.bgColor,
+      drawerTheme: DrawerThemeData(
+        backgroundColor: Colors.grey.shade800,
+      ),
       appBarTheme: AppBarTheme(
         elevation: 0,
-        backgroundColor: AppColors.white,
+        backgroundColor: AppColors.bgColor,
         iconTheme: IconThemeData(
           color: AppColors.text,
         ),
@@ -24,8 +28,8 @@ class Themes {
         ),
       ),
       colorScheme: ColorScheme.light(
-        primary: AppColors.accent,
-        secondary: AppColors.accent,
+        primary: AppColors.bgColor,
+        secondary: AppColors.bgColor,
       ));
 }
 

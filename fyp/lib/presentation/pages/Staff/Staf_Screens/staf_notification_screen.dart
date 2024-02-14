@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/main.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/notification_alert_box.dart';
 
 class StafNotificationScreen extends StatelessWidget {
   const StafNotificationScreen({super.key});
@@ -32,6 +33,9 @@ class StafNotificationScreen extends StatelessWidget {
           scrollDirection: Axis.vertical,
           child: Column(
             children: [
+              const NotificationAlertBox(
+                  text: "visitor Bilal Ahmed Enterd in Universit",
+                  time: "9:45 am"),
               card('Ali Mehdi Raza', 'For Fyp Meeting'),
               card('Elon Musk', 'Meeting For StarLink New Project'),
               card('Bilal Khatri', 'For Meeting'),

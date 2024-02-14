@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/main.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_page.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_profile_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/staf_notification_screen.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/my_drawer.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 
 class StaffHomeScreen extends StatefulWidget {
   const StaffHomeScreen({super.key});
@@ -10,11 +13,19 @@ class StaffHomeScreen extends StatefulWidget {
 }
 
 class _StaffHomeScreenState extends State<StaffHomeScreen> {
+  List<Widget> pages = const [
+    StaffHomePage(),
+    StaffProfilePage(),
+    StaffProfilePage(),
+    StaffProfilePage(),
+  ];
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('Staff Home Screen'),
+        title: const Text('WELCOME Staff Name'),
         centerTitle: true,
         actions: [
           IconButton(
@@ -31,53 +42,52 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
               ))
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                    width: mq.width * 0.70,
-                    child: const TextField(
-                      decoration: InputDecoration(hintText: "Search here..."),
-                    )),
-                IconButton(onPressed: () {}, icon: const Icon(Icons.filter_alt))
-              ],
-            ),
-            const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                children: [
-                  card('Ali Mehdi Raza', 'For Fyp Meeting', 'pending'),
-                  card('Elon Musk', 'Meeting For StarLink New Project',
-                      'pending'),
-                  card('Bilal Khatri', 'For Meeting', 'Visited'),
-                ],
-              ),
-            ),
-          ],
-        ),
+      body: pages[currentIndex],
+      drawer: MyDrawer(
+        homeButtonTap: () {
+          Navigator.popUntil(context, (route) => route.isFirst);
+          Navigator.pushReplacementNamed(context, StaffHomeScreen.routeName);
+        },
+        logOutButtonTap: () {},
+        profileButtonTap: () {},
       ),
-    );
-  }
-
-  Widget card(String name, String reason, String status) {
-    return Card(
-      color: const Color.fromARGB(255, 255, 255, 255),
-      elevation: 1,
-      child: ListTile(
-        title: Text(name),
-        subtitle: Text(reason),
-        trailing: Column(
-          children: [
-            const Text('10:30 \nWednesday'),
-            Text(status,
-                style: TextStyle(
-                    color: status == 'pending' ? Colors.red : Colors.green))
-          ],
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              // horizontal: 15,
+              //vertical: 20,
+              ),
+          child: GNav(
+            backgroundColor: Colors.black,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            gap: 8,
+            onTabChange: (index) {
+              setState(() {
+                currentIndex = index;
+              });
+            },
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: "Home",
+              ),
+              GButton(
+                icon: Icons.list,
+                text: "Log",
+              ),
+              GButton(
+                icon: Icons.insert_invitation,
+                text: "Invites",
+              ),
+              GButton(
+                icon: Icons.supervised_user_circle,
+                text: "Profile",
+              ),
+            ],
+          ),
         ),
       ),
     );
