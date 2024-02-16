@@ -28,8 +28,8 @@ class Themes {
         ),
       ),
       colorScheme: ColorScheme.light(
-        primary: AppColors.bgColor,
-        secondary: AppColors.bgColor,
+        primary: AppColors.accent,
+        secondary: AppColors.accent,
       ));
 }
 

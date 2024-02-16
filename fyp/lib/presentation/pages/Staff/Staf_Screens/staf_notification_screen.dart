@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/main.dart';
-import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/notification_alert_box.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/notification_request_box.dart';
 

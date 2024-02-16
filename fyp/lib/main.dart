@@ -6,6 +6,7 @@ import 'package:fyp/core/routes.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
 import 'package:fyp/presentation/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         theme: Themes.defaultTheme,
         onGenerateRoute: Routes.onGenerateRoutes,
         // initialRoute: SplashScreen.routeName,
-        initialRoute: StaffHomeScreen.routeName,
+        initialRoute: SecurityHomeScreen.routeName,
       ),
     );
   }
