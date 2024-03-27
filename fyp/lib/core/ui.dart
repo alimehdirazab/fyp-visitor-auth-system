@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   static Color accent = const Color(0xff1ab7c3);
+  static Color primaryColor = const Color(0xff5A9F68);
+  static Color secondaryColor = const Color(0xff5A9F68);
   static Color text = const Color(0xff212121);
   static Color textLight = const Color(0xFF8A8A8A);
   static Color white = const Color(0xffffffff);
-  static Color bgColor = Colors.grey.shade100;
+  static Color bgColor = const Color(0xffF5F5F5);
 }
 
 class Themes {
@@ -28,8 +30,8 @@ class Themes {
         ),
       ),
       colorScheme: ColorScheme.light(
-        primary: AppColors.accent,
-        secondary: AppColors.accent,
+        primary: AppColors.primaryColor,
+        secondary: AppColors.secondaryColor,
       ));
 }
 

@@ -20,7 +20,7 @@ class PrimaryTextField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(7),
+          borderRadius: BorderRadius.circular(16),
         ),
         labelText: labelText,
       ),

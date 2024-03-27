@@ -33,32 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     mq = MediaQuery.of(context).size;
     return Scaffold(
-      body: Stack(
-        children: [
-          //app icon
-          Positioned(
-            width: mq.width * 0.50,
-            top: mq.height * 0.15,
-            right: mq.width * 0.25,
-            child: Image.asset('assets/images/smiu_logo.png'),
-          ),
-          Positioned(
-            width: mq.width * 0.50,
-            top: mq.height * 0.35,
-            right: mq.width * 0.30,
-            child: Image.asset('assets/images/smiu_qrcode.png'),
-          ),
-          Positioned(
-            bottom: mq.height * 0.15,
-            width: mq.width,
-            child: const Text(
-              'SMIU\nVisitor Authorization System',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontSize: 18, color: Colors.black54, letterSpacing: 2),
-            ),
-          ),
-        ],
+      body: Center(
+        child: Image.asset('assets/images/splash_logo.png'),
       ),
     );
   }

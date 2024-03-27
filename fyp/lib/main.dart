@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         theme: Themes.defaultTheme,
         onGenerateRoute: Routes.onGenerateRoutes,
         // initialRoute: SplashScreen.routeName,
-        initialRoute: SecurityHomeScreen.routeName,
+        initialRoute: SplashScreen.routeName,
       ),
     );
   }

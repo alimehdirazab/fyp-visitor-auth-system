@@ -8,6 +8,7 @@ import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_si
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_signup_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
+import 'package:fyp/presentation/pages/auth_options_screen.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
 import 'package:fyp/presentation/pages/select_user_screen.dart';
 import 'package:fyp/presentation/pages/splash_screen.dart';
@@ -29,6 +30,11 @@ class Routes {
       case SelectUserScreen.routeName:
         return CupertinoPageRoute(
           builder: (context) => const SelectUserScreen(),
+        );
+
+      case AuthOptionScreen.routeName:
+        return CupertinoPageRoute(
+          builder: (context) => const AuthOptionScreen(),
         );
 
       case VisitorLoginScreen.routeName:

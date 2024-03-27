@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
 import 'package:fyp/presentation/pages/Staff/auth/staff_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
+import 'package:fyp/presentation/pages/auth_options_screen.dart';
+import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:fyp/presentation/widgets/primary_button.dart';
 
 class SelectUserScreen extends StatefulWidget {
   const SelectUserScreen({super.key});
@@ -17,77 +21,45 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(16),
           child: Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 30),
-                      child: Image.asset('assets/images/smiu_logo.png'),
-                    ),
-                    const Text(
-                      'Visitor Authorization System',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        letterSpacing: 2,
-                      ),
-                    ),
-                  ],
+                const GapWidget(size: 20),
+                Text(
+                  'WELCOME',
+                  style: TextStyle(
+                      fontSize: 48,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                      letterSpacing: 0,
+                      color: Theme.of(context).colorScheme.primary),
                 ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, VisitorLoginScreen.routeName);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 41, 148, 219),
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      child: const Text(
-                        'Visitor',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushNamed(
-                            context, StaffLoginScreen.routeName);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 41, 148, 219),
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      child: const Text(
-                        'Staff',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            const Color.fromARGB(255, 41, 148, 219),
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      child: const Text(
-                        'Admin',
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    )
-                  ],
-                )
+                const Text(
+                  'Visitor Authorization System',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const GapWidget(size: 30),
+                Image.asset('assets/images/click_hand.png'),
+                const GapWidget(size: 30),
+                PrimaryButton(
+                    text: 'Visitor',
+                    icon: 'assets/icons/visitor_icon.png',
+                    onPressed: () {
+                      Navigator.pushNamed(context, AuthOptionScreen.routeName);
+                    }),
+                const GapWidget(size: 10),
+                PrimaryButton(
+                    text: 'Staff',
+                    icon: 'assets/icons/staff_icon.png',
+                    onPressed: () {
+                      Navigator.pushNamed(context, StaffLoginScreen.routeName);
+                    }),
+                const GapWidget(size: 10),
+                PrimaryButton(
+                    text: 'Security',
+                    icon: 'assets/icons/security_icon.png',
+                    onPressed: () {}),
               ],
             ),
           ),
