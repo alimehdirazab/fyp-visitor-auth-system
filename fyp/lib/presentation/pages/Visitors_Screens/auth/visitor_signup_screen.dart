@@ -9,6 +9,7 @@ import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_scree
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:fyp/presentation/widgets/google_button.dart';
 import 'package:fyp/presentation/widgets/link_button.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/primary_textfield.dart';
@@ -35,88 +36,96 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
         }
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Sign Up'),
-          centerTitle: true,
-          elevation: 0,
-        ),
+        appBar: AppBar(),
         body: SafeArea(
             child: Form(
           key: provider.formKey,
-          child: ListView(
-            padding: const EdgeInsets.all(16),
-            children: [
-              Text('Create Account ', style: TextStyles.heading2),
-              const GapWidget(),
-              (provider.error != "")
-                  ? Text(
-                      provider.error,
-                      style: const TextStyle(color: Colors.red),
-                    )
-                  : const SizedBox(),
-              const GapWidget(),
-              PrimaryTextField(
-                controller: provider.emailController,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Email Address is Required!";
-                  }
-                  if (!EmailValidator.validate(value.trim())) {
-                    return "Invalid Email Address";
-                  }
-                  return null;
-                },
-                labelText: "Email Address",
-              ),
-              const GapWidget(),
-              PrimaryTextField(
-                obscureText: true,
-                controller: provider.passwordController,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Paasword is required!";
-                  }
-                  return null;
-                },
-                labelText: "Password",
-              ),
-              const GapWidget(),
-              PrimaryTextField(
-                obscureText: true,
-                controller: provider.cPasswordController,
-                validator: (value) {
-                  if (value == null || value.trim().isEmpty) {
-                    return "Confirm Your Paasword!";
-                  }
-                  if (value.trim() != provider.passwordController.text.trim()) {
-                    return "passwords do not match!";
-                  }
-                  return null;
-                },
-                labelText: "Confirm Password",
-              ),
-              const GapWidget(),
-              PrimaryButton(
-                onPressed: provider.createAccount,
-                text: (provider.isLoading) ? "..." : "Create Account",
-              ),
-              const GapWidget(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
                 children: [
-                  const Text(
-                    "Already have an account ",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  LinkButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+                  Text('Create Account ', style: TextStyles.heading2),
+                  const GapWidget(),
+                  (provider.error != "")
+                      ? Text(
+                          provider.error,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : const SizedBox(),
+                  const GapWidget(),
+                  PrimaryTextField(
+                    controller: provider.emailController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "Email Address is Required!";
+                      }
+                      if (!EmailValidator.validate(value.trim())) {
+                        return "Invalid Email Address";
+                      }
+                      return null;
                     },
-                    text: "Log In",
+                    labelText: "Email Address",
                   ),
+                  const GapWidget(),
+                  PrimaryTextField(
+                    obscureText: true,
+                    controller: provider.passwordController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "Paasword is required!";
+                      }
+                      return null;
+                    },
+                    labelText: "Password",
+                  ),
+                  const GapWidget(),
+                  PrimaryTextField(
+                    obscureText: true,
+                    controller: provider.cPasswordController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return "Confirm Your Paasword!";
+                      }
+                      if (value.trim() !=
+                          provider.passwordController.text.trim()) {
+                        return "passwords do not match!";
+                      }
+                      return null;
+                    },
+                    labelText: "Confirm Password",
+                  ),
+                  const GapWidget(),
+                  PrimaryButton(
+                    onPressed: provider.createAccount,
+                    text: (provider.isLoading) ? "..." : "Create Account",
+                  ),
+                  const GapWidget(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      LinkButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, VisitorLoginScreen.routeName);
+                        },
+                        text: "Already have an account?",
+                      ),
+                    ],
+                  ),
+                  const GapWidget(size: 16),
+                  Text(
+                    'or',
+                    style: TextStyle(color: Colors.grey[500]),
+                  ),
+                  const GapWidget(size: 16),
+                  GoogleButton(
+                    onTap: () {},
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         )),
       ),
