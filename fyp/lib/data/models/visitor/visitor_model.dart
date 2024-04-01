@@ -32,6 +32,7 @@ class Data {
   Null? name;
   Null? profilePic;
   String? email;
+  bool? emailVerified;
   Null? phone;
 
   Data(
@@ -41,6 +42,7 @@ class Data {
       this.name,
       this.profilePic,
       this.email,
+      this.emailVerified,
       this.phone});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -50,6 +52,7 @@ class Data {
     name = json['name'];
     profilePic = json['profilePic'];
     email = json['email'];
+    emailVerified = json['emailVerified'];
     phone = json['phone'];
   }
 
@@ -61,6 +64,7 @@ class Data {
     data['name'] = this.name;
     data['profilePic'] = this.profilePic;
     data['email'] = this.email;
+    data['emailVerified'] = this.emailVerified;
     data['phone'] = this.phone;
     return data;
   }

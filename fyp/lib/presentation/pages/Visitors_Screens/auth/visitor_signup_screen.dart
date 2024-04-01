@@ -8,6 +8,7 @@ import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_si
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
+import 'package:fyp/presentation/pages/otp_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/google_button.dart';
 import 'package:fyp/presentation/widgets/link_button.dart';
@@ -30,7 +31,8 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
     final provider = Provider.of<VisitorSignupProvider>(context);
     return BlocListener<VisitorCubit, VisitorState>(
       listener: (context, state) {
-        if (state is VisitorLoggedInState) {
+        if (state is VisitorLoggedInState ||
+            state is VisitorEmailVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
         }
@@ -98,7 +100,9 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
                   ),
                   const GapWidget(),
                   PrimaryButton(
-                    onPressed: provider.createAccount,
+                    //  onPressed: provider.createAccount,
+                    onPressed: () => Navigator.pushReplacementNamed(
+                        context, OtpScreen.routeName),
                     text: (provider.isLoading) ? "..." : "Create Account",
                   ),
                   const GapWidget(),

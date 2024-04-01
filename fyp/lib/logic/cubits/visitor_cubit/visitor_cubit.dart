@@ -51,8 +51,12 @@ class VisitorCubit extends Cubit<VisitorState> {
     try {
       VisitorModel userModel = await _visitorRepository.createAccount(
           email: email, password: password);
-      _emitLoggedInState(
-          userModel: userModel, email: email, password: password);
+      if (userModel.data?.emailVerified == true) {
+        emit(VisitorEmailVerifiedState(false));
+      } else {
+        _emitLoggedInState(
+            userModel: userModel, email: email, password: password);
+      }
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));
     }

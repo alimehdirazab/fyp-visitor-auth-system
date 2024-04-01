@@ -10,6 +10,7 @@ import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_signup_scre
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 import 'package:fyp/presentation/pages/auth_options_screen.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
+import 'package:fyp/presentation/pages/otp_screen.dart';
 import 'package:fyp/presentation/pages/select_user_screen.dart';
 import 'package:fyp/presentation/pages/splash_screen.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +52,11 @@ class Routes {
             create: (context) => VisitorSignupProvider(context),
             child: const VisitorSignupScreen(),
           ),
+        );
+
+      case OtpScreen.routeName:
+        return CupertinoPageRoute(
+          builder: (context) => const OtpScreen(),
         );
 
       case VisitorHomeScreen.routeName:
