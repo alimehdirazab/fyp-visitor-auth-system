@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/core/ui.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_account_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_appointments_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_form_screen.dart';
@@ -24,9 +25,19 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(onPressed: () {}, icon: const Icon(Icons.list)),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
+        ],
+      ),
       body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
+
+        // selectedItemColor: Theme.of(context).colorScheme.primary,
+        // selectedIconTheme:
+        //     IconThemeData(color: Theme.of(context).colorScheme.primary),
         onTap: (index) {
           setState(() {
             currentIndex = index;
@@ -34,10 +45,26 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
         },
         items: const [
           BottomNavigationBarItem(
-              icon: Icon(Icons.home), label: "Appointments"),
+            icon: Icon(
+              Icons.home,
+              size: 35,
+            ),
+            label: "Appointments",
+          ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.add_circle), label: "Fill Form"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Account"),
+            icon: Icon(
+              Icons.add_circle,
+              size: 35,
+            ),
+            label: "Fill Form",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: 35,
+            ),
+            label: "Account",
+          ),
         ],
       ),
     );

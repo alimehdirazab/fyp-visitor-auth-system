@@ -34,6 +34,7 @@ class _AuthOptionScreenState extends State<AuthOptionScreen> {
                 PrimaryButton(
                     text: 'Create Account',
                     onPressed: () {
+                      Navigator.popUntil(context, (route) => false);
                       Navigator.pushNamed(
                           context, VisitorSignupScreen.routeName);
                     }),
