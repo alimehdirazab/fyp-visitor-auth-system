@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
+import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:fyp/presentation/widgets/meeting_card.dart';
 import 'package:fyp/presentation/widgets/searchable_dropdown_button.dart';
 import 'package:fyp/presentation/widgets/total_value_card.dart';
 
@@ -23,39 +25,21 @@ class _StaffHomePageState extends State<StaffHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // SizedBox(
-            //   width: mq.width,
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       SizedBox(
-            //         width: mq.width * 0.70,
-            //         child: const TextField(
-            //           decoration: InputDecoration(hintText: "Search here..."),
-            //         ),
-            //       ),
-            //       IconButton(
-            //           onPressed: () {}, icon: const Icon(Icons.filter_alt))
-            //     ],
-            //   ),
-            // ),
-            //const GapWidget(),
             const SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
                   TotalValueCard(
-                    total: 20,
+                    total: 19,
                     value: 'Visitors Expacted',
-                    color: Colors.blue,
-                    icon: Icons.group,
+                    color: Color(0XFFB4DBFF),
+                    image: 'assets/images/m1.png',
                   ),
                   TotalValueCard(
-                    total: 20,
-                    value: 'Completed Meetings',
-                    color: Colors.green,
-                    icon: Icons.done,
-                  ),
+                      total: 13,
+                      value: 'Completed Meetings',
+                      color: Color(0XFFD1FFDB),
+                      image: 'assets/images/m2.png'),
                 ],
               ),
             ),
@@ -64,21 +48,18 @@ class _StaffHomePageState extends State<StaffHomePage> {
               child: Row(
                 children: [
                   TotalValueCard(
-                    total: 20,
-                    value: 'Cancel Meetings',
-                    color: Colors.red,
-                    icon: Icons.person_off,
-                  ),
+                      total: 3,
+                      value: 'Cancel Meetings',
+                      color: Color(0XFFFFC5C5),
+                      image: 'assets/images/m3.png'),
                   TotalValueCard(
-                    total: 20,
-                    value: 'Pending Meetings ',
-                    color: Colors.orange,
-                    icon: Icons.group,
-                  ),
+                      total: 4,
+                      value: 'Pending Meetings ',
+                      color: Color(0XFFFFDEAC),
+                      image: 'assets/images/m4.png'),
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,33 +71,39 @@ class _StaffHomePageState extends State<StaffHomePage> {
                     CustomDropdownButton(items: filters),
                   ],
                 ),
-                card('Ali Mehdi Raza', 'For Fyp Meeting', 'pending'),
-                card(
-                    'Elon Musk', 'Meeting For StarLink New Project', 'pending'),
-                card('Bilal Khatri', 'For Meeting', 'Visited'),
+                MeetingCard(
+                  name: 'Ali Mehdi Raza',
+                  subTitle: 'For Fyp Meeting',
+                  time: '10:20 Am',
+                  date: '07/04/2024',
+                  day: 'SATURDAY',
+                  status: 'Pending',
+                  onTap: () {},
+                ),
+                const GapWidget(size: -8),
+                MeetingCard(
+                  name: 'Elon Musk',
+                  subTitle: 'Meeting For StarLink New Project',
+                  time: '10:20 Am',
+                  date: '09/04/2024',
+                  day: 'Monday',
+                  status: 'Cancel',
+                  onTap: () {},
+                ),
+                const GapWidget(size: -8),
+                MeetingCard(
+                  name: 'Bilal Khatri',
+                  subTitle: 'For Meeting',
+                  time: '11:00 Am',
+                  date: '07/04/2024',
+                  day: 'SATURDAY',
+                  status: 'Visited',
+                  onTap: () {},
+                ),
+                const GapWidget(size: -8),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget card(String name, String reason, String status) {
-    return Card(
-      child: Container(
-        color: Colors.white,
-        child: ListTile(
-          title: Text(name),
-          subtitle: Text(reason),
-          trailing: Column(
-            children: [
-              const Text('10:30 \nWednesday'),
-              Text(status,
-                  style: TextStyle(
-                      color: status == 'pending' ? Colors.red : Colors.green))
-            ],
-          ),
         ),
       ),
     );

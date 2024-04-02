@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_invite_visitor_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_profile_page.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_search_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/staf_notification_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/my_drawer.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -16,7 +17,7 @@ class StaffHomeScreen extends StatefulWidget {
 class _StaffHomeScreenState extends State<StaffHomeScreen> {
   List<Widget> pages = const [
     StaffHomePage(),
-    StaffProfilePage(),
+    StaffSearchPage(),
     StaffInviteVisitorPage(),
     StaffProfilePage(),
   ];
@@ -24,7 +25,6 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         title: const Text('WELCOME Staff Name'),
         centerTitle: true,
@@ -52,44 +52,45 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
         logOutButtonTap: () {},
         profileButtonTap: () {},
       ),
-      bottomNavigationBar: Container(
-        color: Colors.black,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              // horizontal: 15,
-              //vertical: 20,
-              ),
-          child: GNav(
-            backgroundColor: Colors.black,
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade800,
-            gap: 8,
-            onTabChange: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            tabs: const [
-              GButton(
-                icon: Icons.home,
-                text: "Home",
-              ),
-              GButton(
-                icon: Icons.list,
-                text: "Log",
-              ),
-              GButton(
-                icon: Icons.insert_invitation,
-                text: "Invites",
-              ),
-              GButton(
-                icon: Icons.supervised_user_circle,
-                text: "Profile",
-              ),
-            ],
+      bottomNavigationBar: BottomNavigationBar(
+        // backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home,
+              size: 35,
+            ),
+            label: "Home",
           ),
-        ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.search,
+              size: 35,
+            ),
+            label: "Search",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.calendar_month_sharp,
+              size: 35,
+            ),
+            label: "Invites",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person,
+              size: 35,
+            ),
+            label: "Profile",
+          ),
+        ],
       ),
     );
   }

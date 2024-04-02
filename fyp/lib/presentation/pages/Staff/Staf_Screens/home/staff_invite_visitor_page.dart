@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:fyp/presentation/widgets/meeting_card.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 
 class StaffInviteVisitorPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _StaffInviteVisitorPageState extends State<StaffInviteVisitorPage> {
   DateTime date = DateTime.now();
 
   List<String> names = [
+    "Select Name",
     "Ali Mehdi",
     "Bilal Khatri",
     "Ishaque ul Hassan",
@@ -67,7 +69,10 @@ class _StaffInviteVisitorPageState extends State<StaffInviteVisitorPage> {
                         const GapWidget(),
                         CustomDropdownButton(items: names),
                         const GapWidget(),
-                        Text('${date.day}:${date.month}:${date.year}'),
+                        Text(
+                          '${date.day}:${date.month}:${date.year}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         ElevatedButton(
                             onPressed: () async {
                               final DateTime? selectedDate =
@@ -83,7 +88,10 @@ class _StaffInviteVisitorPageState extends State<StaffInviteVisitorPage> {
                             },
                             child: const Text('Choose Date')),
                         const GapWidget(),
-                        Text('${time.hour}:${time.minute}'),
+                        Text(
+                          '${time.hour}:${time.minute}',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         ElevatedButton(
                           onPressed: () async {
                             final TimeOfDay? timeOfDay = await showTimePicker(
@@ -100,6 +108,8 @@ class _StaffInviteVisitorPageState extends State<StaffInviteVisitorPage> {
                         ),
                         const GapWidget(),
                         PrimaryButton(text: "Invite", onPressed: () {}),
+                        const GapWidget(),
+                        const GapWidget(),
                       ],
                     ),
                   ),
@@ -108,39 +118,76 @@ class _StaffInviteVisitorPageState extends State<StaffInviteVisitorPage> {
             },
           ),
         ),
+        const GapWidget(),
         Expanded(
             child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: DataTable(
-            columns: const <DataColumn>[
-              DataColumn(label: Text('Visitor Name')),
-              DataColumn(label: Text('Day')),
-              DataColumn(label: Text('Time')),
-              DataColumn(label: Text('Date')),
-              DataColumn(label: Text('Status')),
-            ],
-            rows: const [
-              DataRow(
-                cells: [
-                  DataCell(Text('Bilal Ahmed')),
-                  DataCell(Text('Monday')),
-                  DataCell(Text('10/02/2024')),
-                  DataCell(Text('10:40 am')),
-                  DataCell(Text('Visited')),
-                ],
-              ),
-              DataRow(
-                cells: [
-                  DataCell(Text('Ishaque Ahmed')),
-                  DataCell(Text('Monday')),
-                  DataCell(Text('10/02/2024')),
-                  DataCell(Text('12:00 pm')),
-                  DataCell(Text('Panding')),
-                ],
-              ),
-            ],
-          ),
-        ))
+                scrollDirection: Axis.vertical,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      MeetingCard(
+                        name: 'Ali Mehdi Raza',
+                        subTitle: 'For Fyp Meeting',
+                        time: '10:20 Am',
+                        date: '07/04/2024',
+                        day: 'SATURDAY',
+                        status: 'Pending',
+                        onTap: () {},
+                      ),
+                      const GapWidget(size: -8),
+                      MeetingCard(
+                        name: 'Elon Musk',
+                        subTitle: 'Meeting For StarLink New Project',
+                        time: '10:20 Am',
+                        date: '09/04/2024',
+                        day: 'Monday',
+                        status: 'Cancel',
+                        onTap: () {},
+                      ),
+                      const GapWidget(size: -8),
+                      MeetingCard(
+                        name: 'Bilal Khatri',
+                        subTitle: 'For Meeting',
+                        time: '11:00 Am',
+                        date: '07/04/2024',
+                        day: 'SATURDAY',
+                        status: 'Visited',
+                        onTap: () {},
+                      ),
+                      const GapWidget(size: -8),
+                      MeetingCard(
+                        name: 'Ali Mehdi Raza',
+                        subTitle: 'For Fyp Meeting',
+                        time: '10:20 Am',
+                        date: '07/04/2024',
+                        day: 'SATURDAY',
+                        status: 'Pending',
+                        onTap: () {},
+                      ),
+                      const GapWidget(size: -8),
+                      MeetingCard(
+                        name: 'Elon Musk',
+                        subTitle: 'Meeting For StarLink New Project',
+                        time: '10:20 Am',
+                        date: '09/04/2024',
+                        day: 'Monday',
+                        status: 'Cancel',
+                        onTap: () {},
+                      ),
+                      const GapWidget(size: -8),
+                      MeetingCard(
+                        name: 'Bilal Khatri',
+                        subTitle: 'For Meeting',
+                        time: '11:00 Am',
+                        date: '07/04/2024',
+                        day: 'SATURDAY',
+                        status: 'Visited',
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                )))
       ],
     );
   }

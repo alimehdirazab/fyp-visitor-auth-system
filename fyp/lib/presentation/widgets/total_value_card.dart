@@ -8,13 +8,13 @@ class TotalValueCard extends StatelessWidget {
   final int total;
   final String value;
   final Color color;
-  final IconData icon;
+  final String image;
   const TotalValueCard({
     super.key,
     required this.total,
     required this.value,
     required this.color,
-    required this.icon,
+    required this.image,
   });
 
   @override
@@ -29,33 +29,19 @@ class TotalValueCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Image.asset(image),
+              Text(value,
+                  style: TextStyles.body1.copyWith(
+                    color: Colors.black,
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                  )),
               Text(
                 total.toString(),
                 style: TextStyles.heading3.copyWith(
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
               ),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    CupertinoIcons.calendar,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    ' Today',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-              // const GapWidget(),
-              Icon(
-                icon,
-                color: Colors.white,
-              ),
-              Text(value,
-                  style: TextStyles.body1
-                      .copyWith(color: Colors.white, fontSize: 13)),
             ],
           ),
         ),

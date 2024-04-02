@@ -27,17 +27,15 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
               child: Row(
                 children: [
                   TotalValueCard(
-                    total: 20,
-                    value: 'Visitors Expacted',
-                    color: Colors.blue,
-                    icon: Icons.group,
-                  ),
+                      total: 20,
+                      value: 'Visitors Expacted',
+                      color: Colors.blue,
+                      image: 'assets/images/m1.png'),
                   TotalValueCard(
-                    total: 20,
-                    value: 'Completed Meetings',
-                    color: Colors.green,
-                    icon: Icons.done,
-                  ),
+                      total: 20,
+                      value: 'Completed Meetings',
+                      color: Colors.green,
+                      image: 'assets/images/m1.png'),
                 ],
               ),
             ),
@@ -46,17 +44,15 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
               child: Row(
                 children: [
                   TotalValueCard(
-                    total: 20,
-                    value: 'Cancel Meetings',
-                    color: Colors.red,
-                    icon: Icons.person_off,
-                  ),
+                      total: 20,
+                      value: 'Cancel Meetings',
+                      color: Colors.red,
+                      image: 'assets/images/m1.png'),
                   TotalValueCard(
-                    total: 20,
-                    value: 'Pending Meetings ',
-                    color: Colors.orange,
-                    icon: Icons.group,
-                  ),
+                      total: 20,
+                      value: 'Pending Meetings ',
+                      color: Colors.orange,
+                      image: 'assets/images/m1.png'),
                 ],
               ),
             ),

@@ -54,19 +54,17 @@ class MeetingCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
             ),
-            trailing: Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(' $date   $time'),
-                  Text(day),
-                  Text(
-                    status ?? '',
-                    style: TextStyle(color: statusColor),
-                  ),
-                ],
-              ),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(' $date   $time'),
+                Text(day),
+                Text(
+                  status ?? '',
+                  style: TextStyle(color: statusColor),
+                ),
+              ],
             ),
           ),
         ),
