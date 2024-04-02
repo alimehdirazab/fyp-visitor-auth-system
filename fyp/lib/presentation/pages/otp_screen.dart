@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:fyp/core/ui.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/link_button.dart';
 import 'package:fyp/presentation/widgets/otp_box.dart';
@@ -38,14 +40,16 @@ class _OtpScreenState extends State<OtpScreen> {
                       color: Theme.of(context).colorScheme.primary,
                       fontSize: 20)),
               const GapWidget(size: 30),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  OtpBox(),
-                  OtpBox(),
-                  OtpBox(),
-                  OtpBox(),
-                ],
+              const Form(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OtpBox(),
+                    OtpBox(),
+                    OtpBox(),
+                    OtpBox(),
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -57,7 +61,10 @@ class _OtpScreenState extends State<OtpScreen> {
               const GapWidget(size: 30),
               PrimaryButton(
                 text: 'Submit',
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacementNamed(
+                      context, VisitorHomeScreen.routeName);
+                },
               ),
             ],
           ),
