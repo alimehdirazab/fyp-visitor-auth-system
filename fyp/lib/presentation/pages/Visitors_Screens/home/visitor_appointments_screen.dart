@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/visitor_qrcode_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/visitor_wait_screen.dart';
+import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:fyp/presentation/widgets/meeting_card.dart';
 
 class VisitorAppointmentsScreen extends StatefulWidget {
   const VisitorAppointmentsScreen({super.key});
@@ -19,18 +21,30 @@ class _VisitorAppointmentsScreenState extends State<VisitorAppointmentsScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const VisitorWaitScreen(),
-                      ));
-                },
-                child: card('Ameen Khowaja', 'Computer Science')),
-            InkWell(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              MeetingCard(
+                  name: 'Mansoor Ahmed Khuhro',
+                  subTitle: 'Computer Science',
+                  date: '13/4/2024',
+                  day: 'Wednesday',
+                  time: '10:30 Am',
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const VisitorWaitScreen(),
+                        ));
+                  }),
+              const GapWidget(size: -8),
+              MeetingCard(
+                name: 'Addmission Department',
+                subTitle: 'Addmission Department',
+                date: '13/4/2024',
+                day: 'Wednesday',
+                time: '10:30 Am',
                 onTap: () {
                   Navigator.push(
                       context,
@@ -38,10 +52,17 @@ class _VisitorAppointmentsScreenState extends State<VisitorAppointmentsScreen> {
                         builder: (context) => const VisitorQrcodeScreen(),
                       ));
                 },
-                child: card('Irfan Ali Kandhro', 'Computer Science')),
-            card('Mansoor Ahmed Khuhro', 'Computer Science'),
-            card('Addmission Department', 'Addmission Department'),
-          ],
+              ),
+              const GapWidget(size: -8),
+              const MeetingCard(
+                name: 'Asif Ali Wagan',
+                subTitle: 'Computer Science',
+                date: '13/4/2024',
+                day: 'Wednesday',
+                time: '10:30 Am',
+              )
+            ],
+          ),
         ),
       ),
       //bottomNavigationBar: Bottom,

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_form_screen.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 
 class VisitorWaitScreen extends StatelessWidget {
   const VisitorWaitScreen({super.key});
@@ -9,26 +7,11 @@ class VisitorWaitScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VisitorHomeScreen(),
-                  ));
-            },
-            icon: const Icon(Icons.home)),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const VisitorFormScreen(),
-                  ));
-            },
+            onPressed: () {},
             icon: const Icon(
-              Icons.add_circle_outline_rounded,
+              Icons.notifications,
             ),
           ),
         ],
@@ -37,7 +20,11 @@ class VisitorWaitScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
+            SizedBox(
+              width: 100,
+              height: 100,
+              child: CircularProgressIndicator.adaptive(),
+            ),
             Text(
               'Waiting For Permission',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),

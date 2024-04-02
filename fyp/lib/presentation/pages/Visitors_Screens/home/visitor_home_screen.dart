@@ -63,7 +63,7 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
               Icons.person,
               size: 35,
             ),
-            label: "Account",
+            label: "Profile",
           ),
         ],
       ),
