@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/staff_notification_screen.dart';
 import 'package:fyp/presentation/pages/Staff/auth/provider/staff_login_provider.dart';
 import 'package:fyp/presentation/pages/Staff/auth/staff_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_login_provider.dart';
@@ -75,6 +76,11 @@ class Routes {
       case StaffHomeScreen.routeName:
         return CupertinoPageRoute(
           builder: (context) => const StaffHomeScreen(),
+        );
+
+      case StaffNotificationScreen.routeName:
+        return CupertinoPageRoute(
+          builder: (context) => const StaffNotificationScreen(),
         );
 
       case SecurityHomeScreen.routeName:

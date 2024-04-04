@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
+
 import 'package:fyp/presentation/pages/Staff/auth/staff_login_screen.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
+
 import 'package:fyp/presentation/pages/auth_options_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';

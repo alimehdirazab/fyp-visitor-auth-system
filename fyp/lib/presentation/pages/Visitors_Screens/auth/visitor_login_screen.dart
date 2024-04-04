@@ -7,7 +7,7 @@ import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_login_provider.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_signup_screen.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
+
 import 'package:fyp/presentation/pages/loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/google_button.dart';

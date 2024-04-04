@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/core/ui.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_invite_visitor_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_profile_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_search_page.dart';
-import 'package:fyp/presentation/pages/Staff/Staf_Screens/staf_notification_screen.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/staff_notification_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/my_drawer.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class StaffHomeScreen extends StatefulWidget {
   const StaffHomeScreen({super.key});
@@ -26,16 +26,15 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('WELCOME Staff Name'),
+        title: Text(
+          'WELCOME STAFF NAME',
+          style: TextStyles.body1.copyWith(fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const StafNotificationScreen(),
-                    ));
+                Navigator.pushNamed(context, StaffNotificationScreen.routeName);
               },
               icon: const Icon(
                 Icons.notifications_active_rounded,
