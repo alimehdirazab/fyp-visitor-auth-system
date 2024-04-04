@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/widgets/visitor_upload_Button.dart';
@@ -136,6 +137,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     VisitorUploadButton(
                       width: 100,

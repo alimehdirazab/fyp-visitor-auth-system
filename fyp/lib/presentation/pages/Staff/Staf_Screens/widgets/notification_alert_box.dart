@@ -16,12 +16,12 @@ class NotificationAlertBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Card(
+      elevation: 0.2,
       child: InkWell(
         hoverColor: Colors.grey[50],
         onTap: onTap,
-        child: Container(
+        child: Ink(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             color: Colors.white,
@@ -50,7 +50,7 @@ class NotificationAlertBox extends StatelessWidget {
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyles.body2
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.w500, fontSize: 13),
                     ),
                     Text(
                       time,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/core/ui.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/staff_visitor_details_screen.dart';
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/meeting_card.dart';
@@ -78,7 +79,10 @@ class _StaffHomePageState extends State<StaffHomePage> {
                   date: '07/04/2024',
                   day: 'SATURDAY',
                   status: 'Pending',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(
+                        context, StaffVisitorDetailsScreen.routeName);
+                  },
                 ),
                 const GapWidget(size: -8),
                 MeetingCard(
