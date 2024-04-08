@@ -15,22 +15,38 @@ class StaffCubit extends Cubit<StaffState> {
 
   void _initialize() async {
     final userDetails = await StaffPreferences.fetchStaffDetails();
-    String? email = userDetails["email"];
-    String? password = userDetails["password"];
+    String? accessToken = userDetails["accessToken"];
+    String? refreshToken = userDetails["refreshToken"];
+    String? email = userDetails["email"]; // Add this
+    String? password = userDetails["password"]; // Add this
     //String? role = userDetails["role"];
-    if (email == null || password == null) {
+    if (accessToken == null ||
+        refreshToken == null ||
+        email == null ||
+        password == null) {
       emit(StaffLoggedOutState());
     } else {
-      signIn(email: email, password: password);
+      signIn(
+          email: email,
+          password: password); // Call signIn with email and password
     }
   }
 
   void _emitLoggedInState({
     required StaffData staffData,
+    required String accessToken,
+    required String refreshToken,
     required String email,
     required String password,
+    required String role,
   }) async {
-    await StaffPreferences.saveStaffDetails(email, password);
+    await StaffPreferences.saveStaffDetails(
+      accessToken,
+      refreshToken,
+      email,
+      password,
+      role,
+    ); // Store email and password
     emit(StaffLoggedInState(staffData));
     log('Details Saved!');
   }
@@ -40,8 +56,17 @@ class StaffCubit extends Cubit<StaffState> {
     try {
       StaffData staffData =
           await _staffRepository.signIn(email: email, password: password);
+
+      String accessToken = staffData.accessToken.toString();
+      String refreshToken = staffData.refreshToken.toString();
+      String role = staffData.role.toString();
       _emitLoggedInState(
-          staffData: staffData, email: email, password: password);
+          staffData: staffData,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          email: email,
+          password: password,
+          role: role);
     } catch (ex) {
       emit(StaffErrorState(ex.toString()));
     }

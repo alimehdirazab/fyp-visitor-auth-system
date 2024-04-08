@@ -2,11 +2,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
+// import 'package:fyp/logic/services/visitor_preferences.dart';
 
 class VisitorRepository {
   final _api = Api();
 
-  Future<VisitorModel> createAccount(
+  Future<VisitorData> createAccount(
       {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
@@ -25,15 +26,17 @@ class VisitorRepository {
 
       // String accessToken = apiResponse.data["accessToken"];
       // String refreshToken = apiResponse.data["refreshToken"];
-      // Preferences.saveTokens(accessToken, refreshToken);
 
-      return VisitorModel.fromJson(apiResponse.data);
+      // // Save tokens
+      // await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken);
+
+      return VisitorData.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }
   }
 
-  Future<VisitorModel> signIn(
+  Future<VisitorData> signIn(
       {required String email, required String password}) async {
     try {
       Response response = await _api.sendRequest.post(
@@ -56,9 +59,11 @@ class VisitorRepository {
 
       // String accessToken = apiResponse.data["accessToken"];
       // String refreshToken = apiResponse.data["refreshToken"];
-      // Preferences.saveTokens(accessToken, refreshToken);
 
-      return VisitorModel.fromJson(apiResponse.data);
+      // // Save tokens
+      // await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken);
+
+      return VisitorData.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
     }

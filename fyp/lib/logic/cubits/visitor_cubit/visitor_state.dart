@@ -12,8 +12,8 @@ class VisitorEmailVerifiedState extends VisitorState {
 }
 
 class VisitorLoggedInState extends VisitorState {
-  VisitorModel visitorModel;
-  VisitorLoggedInState(this.visitorModel);
+  VisitorData visitorData;
+  VisitorLoggedInState(this.visitorData);
 }
 
 class VisitorLoggedOutState extends VisitorState {}

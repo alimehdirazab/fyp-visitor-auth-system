@@ -10,7 +10,7 @@ class StaffModel {
     status = json['status'];
     res = json['res'];
     message = json['message'];
-    data = json['data'] != null ? StaffData.fromJson(json['data']) : null;
+    data = json['data'] != null ? new StaffData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -29,22 +29,23 @@ class StaffData {
   String? accessToken;
   String? refreshToken;
   int? id;
-  String? name;
-  String? profilePic;
+  Null? name;
+  Null? profilePic;
   String? email;
-  String? username;
+  bool? emailVerified;
+  Null? username;
   String? role;
 
-  StaffData({
-    this.accessToken,
-    this.refreshToken,
-    this.id,
-    this.name,
-    this.profilePic,
-    this.email,
-    this.username,
-    this.role,
-  });
+  StaffData(
+      {this.accessToken,
+      this.refreshToken,
+      this.id,
+      this.name,
+      this.profilePic,
+      this.email,
+      this.emailVerified,
+      this.username,
+      this.role});
 
   StaffData.fromJson(Map<String, dynamic> json) {
     accessToken = json['accessToken'];
@@ -53,6 +54,7 @@ class StaffData {
     name = json['name'];
     profilePic = json['profilePic'];
     email = json['email'];
+    emailVerified = json['emailVerified'];
     username = json['username'];
     role = json['role'];
   }
@@ -65,6 +67,7 @@ class StaffData {
     data['name'] = this.name;
     data['profilePic'] = this.profilePic;
     data['email'] = this.email;
+    data['emailVerified'] = this.emailVerified;
     data['username'] = this.username;
     data['role'] = this.role;
     return data;
