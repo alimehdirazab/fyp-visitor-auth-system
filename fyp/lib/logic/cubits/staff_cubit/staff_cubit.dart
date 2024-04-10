@@ -20,10 +20,7 @@ class StaffCubit extends Cubit<StaffState> {
     String? email = userDetails["email"]; // Add this
     String? password = userDetails["password"]; // Add this
     //String? role = userDetails["role"];
-    if (accessToken == null ||
-        refreshToken == null ||
-        email == null ||
-        password == null) {
+    if (email == null || password == null) {
       emit(StaffLoggedOutState());
     } else {
       signIn(
@@ -89,6 +86,7 @@ class StaffCubit extends Cubit<StaffState> {
 
   void signOut() async {
     await StaffPreferences.clear();
+    _staffRepository.cancelTokenRefreshTimer();
     emit(StaffLoggedOutState());
   }
 }
