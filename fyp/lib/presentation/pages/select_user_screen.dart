@@ -23,44 +23,49 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Center(
-            child: Column(
-              children: [
-                const GapWidget(size: 20),
-                Text(
-                  'WELCOME',
-                  style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.normal,
-                      letterSpacing: 0,
-                      color: Theme.of(context).colorScheme.primary),
-                ),
-                const Text(
-                  'Visitor Authorization System',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const GapWidget(size: 30),
-                Image.asset('assets/images/click_hand.png'),
-                const GapWidget(size: 30),
-                PrimaryButton(
-                    text: 'Visitor',
-                    icon: 'assets/icons/visitor_icon.png',
-                    onPressed: () {
-                      Navigator.pushNamed(context, AuthOptionScreen.routeName);
-                    }),
-                const GapWidget(size: 10),
-                PrimaryButton(
-                    text: 'Staff',
-                    icon: 'assets/icons/staff_icon.png',
-                    onPressed: () {
-                      Navigator.pushNamed(context, StaffLoginScreen.routeName);
-                    }),
-                const GapWidget(size: 10),
-                PrimaryButton(
-                    text: 'Security',
-                    icon: 'assets/icons/security_icon.png',
-                    onPressed: () {}),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  const GapWidget(size: 20),
+                  Text(
+                    'WELCOME',
+                    style: TextStyle(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.normal,
+                        letterSpacing: 0,
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                  const Text(
+                    'Visitor Authorization System',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const GapWidget(size: 30),
+                  Image.asset('assets/images/click_hand.png'),
+                  const GapWidget(size: 30),
+                  PrimaryButton(
+                      text: 'Visitor',
+                      icon: 'assets/icons/visitor_icon.png',
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, AuthOptionScreen.routeName);
+                      }),
+                  const GapWidget(size: 10),
+                  PrimaryButton(
+                      text: 'Staff',
+                      icon: 'assets/icons/staff_icon.png',
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, StaffLoginScreen.routeName);
+                      }),
+                  const GapWidget(size: 10),
+                  PrimaryButton(
+                      text: 'Security',
+                      icon: 'assets/icons/security_icon.png',
+                      onPressed: () {}),
+                ],
+              ),
             ),
           ),
         ),

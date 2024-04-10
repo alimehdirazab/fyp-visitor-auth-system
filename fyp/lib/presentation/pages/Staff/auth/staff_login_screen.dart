@@ -94,11 +94,11 @@ class _StaffLoginScreenState extends State<StaffLoginScreen> {
                   ),
                   const GapWidget(),
                   PrimaryButton(
-                    // onPressed: provider.logIn,
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, StaffHomeScreen.routeName);
-                    },
+                    onPressed: provider.logIn,
+                    // onPressed: () {
+                    //   Navigator.pushReplacementNamed(
+                    //       context, StaffHomeScreen.routeName);
+                    // },
                     text: (provider.isLoading) ? "..." : "login",
                   ),
                   const GapWidget(),

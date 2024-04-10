@@ -2,7 +2,7 @@ class VisitorModel {
   int? status;
   String? res;
   String? message;
-  Data? data;
+  VisitorData? data;
 
   VisitorModel({this.status, this.res, this.message, this.data});
 
@@ -10,7 +10,7 @@ class VisitorModel {
     status = json['status'];
     res = json['res'];
     message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    data = json['data'] != null ? new VisitorData.fromJson(json['data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -25,7 +25,7 @@ class VisitorModel {
   }
 }
 
-class Data {
+class VisitorData {
   String? accessToken;
   String? refreshToken;
   int? id;
@@ -35,7 +35,7 @@ class Data {
   bool? emailVerified;
   Null? phone;
 
-  Data(
+  VisitorData(
       {this.accessToken,
       this.refreshToken,
       this.id,
@@ -45,7 +45,7 @@ class Data {
       this.emailVerified,
       this.phone});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  VisitorData.fromJson(Map<String, dynamic> json) {
     accessToken = json['accessToken'];
     refreshToken = json['refreshToken'];
     id = json['id'];

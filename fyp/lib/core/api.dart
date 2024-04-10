@@ -9,9 +9,13 @@ const Map<String, dynamic> DEFAULT_HEADERS = {
 class Api {
   final Dio _dio = Dio();
 
-  Api() {
+  Api({String? accessToken}) {
     _dio.options.baseUrl = BASE_URL;
     _dio.options.headers = DEFAULT_HEADERS;
+
+    if (accessToken != null) {
+      _dio.options.headers['Authorization'] = 'Bearer $accessToken';
+    }
 
     _dio.options.connectTimeout = const Duration(seconds: 20); // 5 seconds
     _dio.options.receiveTimeout = const Duration(seconds: 20); // 5 seconds

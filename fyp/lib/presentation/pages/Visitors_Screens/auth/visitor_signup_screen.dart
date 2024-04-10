@@ -100,9 +100,9 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
                   ),
                   const GapWidget(),
                   PrimaryButton(
-                    //  onPressed: provider.createAccount,
-                    onPressed: () => Navigator.pushReplacementNamed(
-                        context, OtpScreen.routeName),
+                    onPressed: provider.createAccount,
+                    // onPressed: () => Navigator.pushReplacementNamed(
+                    //     context, OtpScreen.routeName),
                     text: (provider.isLoading) ? "..." : "Create Account",
                   ),
                   const GapWidget(),

@@ -4,9 +4,22 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
 import 'package:fyp/data/models/staff/staff_model.dart';
+import 'package:fyp/logic/services/staff_preferences.dart';
 
 class StaffRepository {
-  final _api = Api();
+  String? accessToken;
+  Api _api;
+
+  StaffRepository() : _api = Api() {
+    _getAccessToken();
+  }
+
+  Future _getAccessToken() async {
+    // Fetch access token from SharedPreferences
+    final preferences = await StaffPreferences.fetchStaffDetails();
+    accessToken = preferences['accessToken'];
+    _api = Api(accessToken: accessToken);
+  }
 
   Future<StaffModel> createAccount(
       {required String email,

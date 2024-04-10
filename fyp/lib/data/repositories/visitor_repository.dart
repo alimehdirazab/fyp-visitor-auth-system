@@ -2,10 +2,23 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
+import 'package:fyp/logic/services/visitor_preferences.dart';
 // import 'package:fyp/logic/services/visitor_preferences.dart';
 
 class VisitorRepository {
-  final _api = Api();
+  String? accessToken;
+  Api _api;
+
+  VisitorRepository() : _api = Api() {
+    _getAccessToken();
+  }
+
+  Future _getAccessToken() async {
+    // Fetch access token from SharedPreferences
+    final preferences = await VisitorPreferences.fetchVisitorDetails();
+    accessToken = preferences['accessToken'];
+    _api = Api(accessToken: accessToken);
+  }
 
   Future<VisitorData> createAccount(
       {required String email, required String password}) async {
