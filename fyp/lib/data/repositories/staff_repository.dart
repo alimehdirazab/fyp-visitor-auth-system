@@ -55,10 +55,6 @@ class StaffRepository {
         throw apiResponse.message.toString();
       }
 
-      // String accessToken = apiResponse.data["accessToken"];
-      // String refreshToken = apiResponse.data["refreshToken"];
-      // Preferences.saveTokens(accessToken, refreshToken);
-
       return StaffModel.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
@@ -86,12 +82,6 @@ class StaffRepository {
         throw apiResponse.message.toString();
       }
 
-      // String accessToken = apiResponse.data["accessToken"];
-      // String refreshToken = apiResponse.data["refreshToken"];
-      // Preferences.saveTokens(accessToken, refreshToken);
-      // log(apiResponse.data.toString());
-      // StaffData stf = StaffData.fromJson(apiResponse.data);
-      // log(stf.role.toString() + "dddd");
       return StaffData.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;

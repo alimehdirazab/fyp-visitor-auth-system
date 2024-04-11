@@ -51,12 +51,6 @@ class VisitorRepository {
         throw apiResponse.message.toString();
       }
 
-      // String accessToken = apiResponse.data["accessToken"];
-      // String refreshToken = apiResponse.data["refreshToken"];
-
-      // // Save tokens
-      // await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken);
-
       return VisitorData.fromJson(apiResponse.data);
     } catch (ex) {
       rethrow;
@@ -84,13 +78,30 @@ class VisitorRepository {
         throw apiResponse.message.toString();
       }
 
-      // String accessToken = apiResponse.data["accessToken"];
-      // String refreshToken = apiResponse.data["refreshToken"];
-
-      // // Save tokens
-      // await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken);
-
       return VisitorData.fromJson(apiResponse.data);
+    } catch (ex) {
+      rethrow;
+    }
+  }
+
+  Future<bool> verifyEmail(
+      {required int visitorId, required String verificationOTP}) async {
+    try {
+      Response response = await _api.sendRequest.post(
+        '/api/v1/visitors/verify-email',
+        data: jsonEncode({
+          "userId": visitorId,
+          "verificationOTP": verificationOTP,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseData = jsonDecode(response.data);
+        bool emailVerified = responseData['data']['emailVerified'];
+        return emailVerified;
+      } else {
+        throw 'Failed to verify email: ${response.data}';
+      }
     } catch (ex) {
       rethrow;
     }
@@ -115,9 +126,10 @@ class VisitorRepository {
         String newRefreshToken = responseData["refreshToken"];
         String? email = visitorData["email"];
         String? password = visitorData["password"];
+        String? visitorId = visitorData["id"];
 
         await VisitorPreferences.saveVisitorDetails(
-            newAccessToken, newRefreshToken, email!, password!);
+            newAccessToken, newRefreshToken, email!, password!, visitorId!);
       } catch (error) {
         // Handle error when refreshing tokens
         print("Error refreshing tokens: $error");

@@ -36,12 +36,14 @@ class VisitorCubit extends Cubit<VisitorState> {
     required String refreshToken,
     required String email,
     required String password,
+    required String visitorId,
   }) async {
     await VisitorPreferences.saveVisitorDetails(
       accessToken,
       refreshToken,
       email,
       password,
+      visitorId,
     );
     emit(VisitorLoggedInState(visitorData));
     log('Details Saved!');
@@ -55,14 +57,22 @@ class VisitorCubit extends Cubit<VisitorState> {
 
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
+      String visitorId = visitorData.id.toString();
 
-      _emitLoggedInState(
-        visitorData: visitorData,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        email: email,
-        password: password,
-      );
+      if (visitorData.emailVerified == false) {
+        emit(VisitorEmailNotVerifiedState());
+        await VisitorPreferences.saveVisitorDetails(
+            accessToken, refreshToken, email, password, visitorId);
+      } else {
+        _emitLoggedInState(
+          visitorData: visitorData,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          email: email,
+          password: password,
+          visitorId: visitorId,
+        );
+      }
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));
     }
@@ -76,26 +86,39 @@ class VisitorCubit extends Cubit<VisitorState> {
 
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
+      String visitorId = visitorData.id.toString();
 
-      _emitLoggedInState(
-        visitorData: visitorData,
-        accessToken: accessToken,
-        refreshToken: refreshToken,
-        email: email,
-        password: password,
-      );
+      if (visitorData.emailVerified == false) {
+        emit(VisitorEmailNotVerifiedState());
+        await VisitorPreferences.saveVisitorDetails(
+            accessToken, refreshToken, email, password, visitorId);
+      } else {
+        _emitLoggedInState(
+          visitorData: visitorData,
+          accessToken: accessToken,
+          refreshToken: refreshToken,
+          email: email,
+          password: password,
+          visitorId: visitorId,
+        );
+      }
+    } catch (ex) {
+      emit(VisitorErrorState(ex.toString()));
+    }
+  }
 
-      // if (visitorData.emailVerified == false) {
-      //   emit(VisitorEmailVerifiedState(false));
-      // } else {
-      //   _emitLoggedInState(
-      //     visitorData: visitorData,
-      //     accessToken: accessToken,
-      //     refreshToken: refreshToken,
-      //     email: email,
-      //     password: password,
-      //   );
-      // }
+  void verifyEmail(
+      {required int visitorId, required String verificationOTP}) async {
+    emit(VisitorLoadingState());
+    try {
+      bool emailVerified = await _visitorRepository.verifyEmail(
+          visitorId: visitorId, verificationOTP: verificationOTP);
+
+      if (emailVerified) {
+        emit(VisitorEmailVerifiedState());
+      } else {
+        emit(VisitorErrorState('Failed to verify email'));
+      }
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));
     }

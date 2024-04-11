@@ -6,10 +6,9 @@ class VisitorInitialState extends VisitorState {}
 
 class VisitorLoadingState extends VisitorState {}
 
-class VisitorEmailVerifiedState extends VisitorState {
-  final bool isEmailVerified;
-  VisitorEmailVerifiedState(this.isEmailVerified);
-}
+class VisitorEmailVerifiedState extends VisitorState {}
+
+class VisitorEmailNotVerifiedState extends VisitorState {}
 
 class VisitorLoggedInState extends VisitorState {
   VisitorData visitorData;
