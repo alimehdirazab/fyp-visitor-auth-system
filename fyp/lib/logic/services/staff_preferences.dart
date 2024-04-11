@@ -14,7 +14,7 @@ class StaffPreferences {
     await instance.setString(_refreshTokenKey, refreshToken);
     await instance.setString(_emailKey, email);
     await instance.setString(_passwordKey, password);
-    await instance.setString(_roleKey, role); // Save role
+    await instance.setString(_roleKey, role);
   }
 
   static Future<Map<String, String?>> fetchStaffDetails() async {
@@ -24,6 +24,7 @@ class StaffPreferences {
     String? email = instance.getString(_emailKey);
     String? password = instance.getString(_passwordKey);
     String? role = instance.getString(_roleKey); // Fetch role
+
     return {
       "accessToken": accessToken,
       "refreshToken": refreshToken,

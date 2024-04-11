@@ -37,9 +37,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
     } else if (visitorState is VisitorLoggedOutState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
-    } else if (visitorState is VisitorErrorState) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacementNamed(context, VisitorLoginScreen.routeName);
+      // } else if (visitorState is VisitorErrorState) {
+      //   Navigator.popUntil(context, (route) => route.isFirst);
+      //   Navigator.pushReplacementNamed(context, VisitorLoginScreen.routeName);
     }
     //Staff Screens Navigation
     StaffState staffState = BlocProvider.of<StaffCubit>(context).state;
@@ -59,9 +59,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
     } else if (staffState is StaffLoggedOutState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
-    } else if (staffState is StaffErrorState) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacementNamed(context, StaffLoginScreen.routeName);
+      // } else if (staffState is StaffErrorState) {
+      //   Navigator.popUntil(context, (route) => route.isFirst);
+      //   Navigator.pushReplacementNamed(context, StaffLoginScreen.routeName);
     }
   }
 
@@ -75,10 +75,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<VisitorCubit, VisitorState>(
-      listener: (context, state) {
-        goToNextScreen();
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<VisitorCubit, VisitorState>(
+          listener: (context, state) {
+            goToNextScreen();
+          },
+        ),
+        BlocListener<StaffCubit, StaffState>(
+          listener: (context, state) {
+            goToNextScreen();
+          },
+        ),
+      ],
       child: const Scaffold(
         body: Center(
           child: CircularProgressIndicator.adaptive(),

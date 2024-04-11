@@ -77,17 +77,25 @@ class VisitorCubit extends Cubit<VisitorState> {
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
 
-      if (visitorData.emailVerified == false) {
-        emit(VisitorEmailVerifiedState(false));
-      } else {
-        _emitLoggedInState(
-          visitorData: visitorData,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          email: email,
-          password: password,
-        );
-      }
+      _emitLoggedInState(
+        visitorData: visitorData,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        email: email,
+        password: password,
+      );
+
+      // if (visitorData.emailVerified == false) {
+      //   emit(VisitorEmailVerifiedState(false));
+      // } else {
+      //   _emitLoggedInState(
+      //     visitorData: visitorData,
+      //     accessToken: accessToken,
+      //     refreshToken: refreshToken,
+      //     email: email,
+      //     password: password,
+      //   );
+      // }
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));
     }
@@ -95,6 +103,7 @@ class VisitorCubit extends Cubit<VisitorState> {
 
   void signOut() async {
     await VisitorPreferences.clear();
+    _visitorRepository.cancelTokenRefreshTimer();
     emit(VisitorLoggedOutState());
   }
 }

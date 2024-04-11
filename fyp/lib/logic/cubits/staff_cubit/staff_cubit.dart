@@ -20,7 +20,11 @@ class StaffCubit extends Cubit<StaffState> {
     String? email = userDetails["email"]; // Add this
     String? password = userDetails["password"]; // Add this
     //String? role = userDetails["role"];
-    if (email == null || password == null) {
+
+    if (email == null ||
+        password == null ||
+        accessToken == null ||
+        refreshToken == null) {
       emit(StaffLoggedOutState());
     } else {
       signIn(
@@ -57,6 +61,7 @@ class StaffCubit extends Cubit<StaffState> {
       String accessToken = staffData.accessToken.toString();
       String refreshToken = staffData.refreshToken.toString();
       String role = staffData.role.toString();
+
       _emitLoggedInState(
           staffData: staffData,
           accessToken: accessToken,
