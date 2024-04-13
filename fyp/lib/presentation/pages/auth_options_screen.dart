@@ -22,30 +22,33 @@ class _AuthOptionScreenState extends State<AuthOptionScreen> {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Center(
-            child: Column(
-              children: [
-                Image.asset('assets/images/auth.png'),
-                Text('Visitor Authentication \n      SMI University',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium!
-                        .copyWith(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 150),
-                PrimaryButton(
-                    text: 'Create Account',
-                    onPressed: () {
-                      Navigator.popUntil(context, (route) => false);
-                      Navigator.pushNamed(
-                          context, VisitorSignupScreen.routeName);
-                    }),
-                const GapWidget(),
-                LinkButton(
-                    text: 'Login',
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, VisitorLoginScreen.routeName);
-                    }),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Image.asset('assets/images/auth.png'),
+                  Text('Visitor Authentication \n      SMI University',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium!
+                          .copyWith(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 150),
+                  PrimaryButton(
+                      text: 'Create Account',
+                      onPressed: () {
+                        Navigator.popUntil(context, (route) => false);
+                        Navigator.pushNamed(
+                            context, VisitorSignupScreen.routeName);
+                      }),
+                  const GapWidget(),
+                  LinkButton(
+                      text: 'Login',
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, VisitorLoginScreen.routeName);
+                      }),
+                ],
+              ),
             ),
           ),
         ),

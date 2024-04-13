@@ -110,6 +110,25 @@ class VisitorRepository {
     }
   }
 
+  Future resendOtp({required String email}) async {
+    try {
+      Response response = await _api.sendRequest.post(
+        '/api/v1/visitors/resend-email-verification',
+        data: jsonEncode({
+          "email": email,
+        }),
+      );
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status != 200) {
+        throw apiResponse.message.toString();
+      }
+      return apiResponse.status;
+    } catch (ex) {
+      rethrow;
+    }
+  }
+
   Future<void> refreshTokens() async {
     // Retrieve refresh token
     final visitorData = await VisitorPreferences.fetchVisitorDetails();
@@ -131,8 +150,8 @@ class VisitorRepository {
         String? password = visitorData["password"];
         String? visitorId = visitorData["id"];
 
-        await VisitorPreferences.saveVisitorDetails(
-            newAccessToken, newRefreshToken, email!, password!, visitorId!);
+        await VisitorPreferences.saveVisitorDetails(newAccessToken,
+            newRefreshToken, email!, password!, visitorId!, true);
       } catch (error) {
         // Handle error when refreshing tokens
         print("Error refreshing tokens: $error");

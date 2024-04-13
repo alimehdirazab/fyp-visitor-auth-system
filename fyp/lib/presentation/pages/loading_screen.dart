@@ -32,7 +32,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, VisitorHomeScreen.routeName);
     } else if (visitorState is VisitorEmailNotVerifiedState) {
-      Navigator.popUntil(context, (route) => route.isFirst);
+      //Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, OtpScreen.routeName);
     } else if (visitorState is VisitorEmailVerifiedState) {
       Navigator.popUntil(context, (route) => route.isFirst);
@@ -40,9 +40,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
     } else if (visitorState is VisitorLoggedOutState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
-      // } else if (visitorState is VisitorErrorState) {
-      //   Navigator.popUntil(context, (route) => route.isFirst);
-      //   Navigator.pushReplacementNamed(context, VisitorLoginScreen.routeName);
+    } else if (visitorState is VisitorErrorState) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacementNamed(context, VisitorLoginScreen.routeName);
     }
     //Staff Screens Navigation
     StaffState staffState = BlocProvider.of<StaffCubit>(context).state;

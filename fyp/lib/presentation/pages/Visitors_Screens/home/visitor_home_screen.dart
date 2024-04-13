@@ -31,7 +31,7 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
         ],
       ),
-      body: screens[currentIndex],
+      body: SafeArea(child: screens[currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
 

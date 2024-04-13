@@ -19,11 +19,16 @@ class VisitorCubit extends Cubit<VisitorState> {
     String? refreshToken = userDetails["refreshToken"];
     String? email = userDetails["email"];
     String? password = userDetails["password"];
+    bool emailVerified = userDetails["emailVerified"];
 
     if (accessToken == null ||
         refreshToken == null ||
         email == null ||
         password == null) {
+      emit(VisitorLoggedOutState());
+    } else if (emailVerified == false) {
+      await VisitorPreferences.clear();
+      _visitorRepository.cancelTokenRefreshTimer();
       emit(VisitorLoggedOutState());
     } else {
       signIn(email: email, password: password);
@@ -37,14 +42,10 @@ class VisitorCubit extends Cubit<VisitorState> {
     required String email,
     required String password,
     required String visitorId,
+    required bool emailVerified,
   }) async {
     await VisitorPreferences.saveVisitorDetails(
-      accessToken,
-      refreshToken,
-      email,
-      password,
-      visitorId,
-    );
+        accessToken, refreshToken, email, password, visitorId, emailVerified);
     emit(VisitorLoggedInState(visitorData));
     log('Details Saved!');
   }
@@ -58,11 +59,12 @@ class VisitorCubit extends Cubit<VisitorState> {
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
       String visitorId = visitorData.id.toString();
+      bool emailVerified = visitorData.emailVerified!;
 
       if (visitorData.emailVerified == false) {
         emit(VisitorEmailNotVerifiedState());
-        await VisitorPreferences.saveVisitorDetails(
-            accessToken, refreshToken, email, password, visitorId);
+        await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken,
+            email, password, visitorId, emailVerified);
       } else {
         _emitLoggedInState(
           visitorData: visitorData,
@@ -71,6 +73,7 @@ class VisitorCubit extends Cubit<VisitorState> {
           email: email,
           password: password,
           visitorId: visitorId,
+          emailVerified: emailVerified,
         );
       }
     } catch (ex) {
@@ -87,11 +90,12 @@ class VisitorCubit extends Cubit<VisitorState> {
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
       String visitorId = visitorData.id.toString();
+      bool emailVerified = visitorData.emailVerified!;
 
       if (visitorData.emailVerified == false) {
         emit(VisitorEmailNotVerifiedState());
-        await VisitorPreferences.saveVisitorDetails(
-            accessToken, refreshToken, email, password, visitorId);
+        await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken,
+            email, password, visitorId, emailVerified);
       } else {
         _emitLoggedInState(
           visitorData: visitorData,
@@ -100,6 +104,7 @@ class VisitorCubit extends Cubit<VisitorState> {
           email: email,
           password: password,
           visitorId: visitorId,
+          emailVerified: emailVerified,
         );
       }
     } catch (ex) {
@@ -119,6 +124,20 @@ class VisitorCubit extends Cubit<VisitorState> {
       } else {
         emit(VisitorEmailNotVerifiedState());
       }
+    } catch (ex) {
+      emit(VisitorErrorState(ex.toString()));
+    }
+  }
+
+  void resendOtp({required String email}) async {
+    emit(VisitorLoadingState());
+    try {
+      int statusCode = await _visitorRepository.resendOtp(email: email);
+      emit(VisitorOtpResentState());
+      if (statusCode != 200) {
+        emit(VisitorErrorState("Failed to resend OTP"));
+      }
+      emit(VisitorEmailVerifiedState());
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));
     }

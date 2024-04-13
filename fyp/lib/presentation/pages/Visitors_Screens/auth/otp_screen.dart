@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/core/ui.dart';
+import 'package:fyp/data/repositories/visitor_repository.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
@@ -74,7 +75,8 @@ class _OtpScreenState extends State<OtpScreen> {
         if (state is VisitorEmailVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
-        } else if (state is VisitorEmailNotVerifiedState) {
+        } else if (state is VisitorEmailNotVerifiedState ||
+            state is VisitorErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             backgroundColor: Colors.red,
             content: Text('Incorrect OTP, please try again.'),
@@ -84,78 +86,88 @@ class _OtpScreenState extends State<OtpScreen> {
       },
       child: Scaffold(
         appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              children: [
-                Text('OTP Verification', style: TextStyles.heading2),
-                const GapWidget(),
-                Text(
-                  'Enter the code from the email we sent to alimehdirazab@gmail.com',
-                  textAlign: TextAlign.center,
-                  style:
-                      TextStyles.body2.copyWith(color: const Color(0xff565656)),
-                ),
-                const GapWidget(size: 30),
-                Text('00:$_resendTimerSeconds',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 20)),
-                const GapWidget(size: 30),
-                Form(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: List.generate(
-                      6,
-                      (index) => Expanded(
-                        child: OtpBox(
-                          controller: _controllers[index],
-                          onChanged: (value) {
-                            if (value.isNotEmpty && index < 5) {
-                              FocusScope.of(context).nextFocus();
-                            }
-                          },
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Text('OTP Verification', style: TextStyles.heading2),
+                  const GapWidget(),
+                  Text(
+                    'Enter the code from the email we sent to alimehdirazab@gmail.com',
+                    textAlign: TextAlign.center,
+                    style: TextStyles.body2
+                        .copyWith(color: const Color(0xff565656)),
+                  ),
+                  const GapWidget(size: 30),
+                  Text('00:$_resendTimerSeconds',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 20)),
+                  const GapWidget(size: 30),
+                  Form(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(
+                        6,
+                        (index) => Expanded(
+                          child: OtpBox(
+                            controller: _controllers[index],
+                            onChanged: (value) {
+                              if (value.isNotEmpty && index < 5) {
+                                FocusScope.of(context).nextFocus();
+                              }
+                            },
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text('Don\'t receive the OTP? '),
-                    LinkButton(
-                      text: 'RESEND',
-                      onPressed: _isResendEnabled
-                          ? () {
-                              startResendTimer();
-                              // Implement resend logic
-                            }
-                          : null,
-                    ),
-                  ],
-                ),
-                const GapWidget(size: 30),
-                PrimaryButton(
-                  text: 'Submit',
-                  onPressed: () {
-                    String otp = _controllers
-                        .map((controller) => controller.text)
-                        .join();
-                    if (otp.length != 6) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        backgroundColor: Colors.red,
-                        content: Text('Please enter a valid OTP.'),
-                        duration: Duration(seconds: 3),
-                      ));
-                    } else {
-                      verifyEmail(context, otp);
-                    }
-                  },
-                ),
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text('Don\'t receive the OTP? '),
+                      LinkButton(
+                        text: 'RESEND',
+                        onPressed: _isResendEnabled
+                            ? () async {
+                                startResendTimer();
+                                final userDetails = await VisitorPreferences
+                                    .fetchVisitorDetails();
+                                String? email = userDetails["email"];
+                                BlocProvider.of<VisitorCubit>(context)
+                                    .resendOtp(email: email!);
+                              }
+                            : null,
+                      ),
+                    ],
+                  ),
+                  const GapWidget(size: 30),
+                  PrimaryButton(
+                    text: (context.watch<VisitorCubit>().state
+                            is VisitorLoadingState)
+                        ? '...'
+                        : 'Submit',
+                    onPressed: () {
+                      String otp = _controllers
+                          .map((controller) => controller.text)
+                          .join();
+                      if (otp.length != 6) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text('Please enter a valid OTP.'),
+                          duration: Duration(seconds: 3),
+                        ));
+                      } else {
+                        verifyEmail(context, otp);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -15,8 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 late Size mq;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences instance = await SharedPreferences.getInstance();
-  instance.clear();
+  // SharedPreferences instance = await SharedPreferences.getInstance();
+  // instance.clear();
 
   Bloc.observer = MyBlocOberver();
   runApp(const MyApp());

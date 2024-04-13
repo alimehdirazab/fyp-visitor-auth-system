@@ -10,6 +10,8 @@ class VisitorEmailVerifiedState extends VisitorState {}
 
 class VisitorEmailNotVerifiedState extends VisitorState {}
 
+class VisitorOtpResentState extends VisitorState {}
+
 class VisitorLoggedInState extends VisitorState {
   VisitorData visitorData;
   VisitorLoggedInState(this.visitorData);
