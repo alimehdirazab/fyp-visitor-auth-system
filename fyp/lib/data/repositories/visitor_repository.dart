@@ -94,11 +94,14 @@ class VisitorRepository {
           "verificationOTP": verificationOTP,
         }),
       );
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (response.statusCode == 200) {
+      if (apiResponse.status == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.data);
         bool emailVerified = responseData['data']['emailVerified'];
         return emailVerified;
+      } else if (apiResponse.status == 400) {
+        return false;
       } else {
         throw 'Failed to verify email: ${response.data}';
       }

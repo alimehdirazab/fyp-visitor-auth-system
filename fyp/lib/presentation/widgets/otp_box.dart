@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class OtpBox extends StatelessWidget {
-  const OtpBox({super.key});
+  final TextEditingController controller;
+  final ValueChanged<String>? onChanged; // Add onChanged parameter
+
+  const OtpBox({Key? key, required this.controller, this.onChanged})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 64,
-      height: 68,
-      child: TextFormField(
-        onChanged: (value) {
-          if (value.length == 1) {
-            FocusScope.of(context).nextFocus();
-          }
-          if (value.length == 0) {
-            FocusScope.of(context).previousFocus();
-          }
-        },
-        onSaved: (pin) {},
-        style: Theme.of(context).textTheme.headlineLarge,
-        keyboardType: TextInputType.number,
-        textAlign: TextAlign.center,
-        inputFormatters: [
-          LengthLimitingTextInputFormatter(1),
-          FilteringTextInputFormatter.digitsOnly,
-        ],
-        decoration: InputDecoration(border: OutlineInputBorder()),
+    return Padding(
+      padding: const EdgeInsets.all(4.0),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.1,
+        height: MediaQuery.of(context).size.width * 0.2,
+        child: TextFormField(
+          controller: controller,
+          onChanged: onChanged, // Pass onChanged callback to TextFormField
+          style: Theme.of(context).textTheme.headlineMedium,
+          keyboardType: TextInputType.number,
+          textAlign: TextAlign.center,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(1),
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          decoration: const InputDecoration(border: OutlineInputBorder()),
+        ),
       ),
     );
   }

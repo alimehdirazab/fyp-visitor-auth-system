@@ -31,7 +31,8 @@ class _VisitorLoginScreenState extends State<VisitorLoginScreen> {
     final provider = Provider.of<VisitorLoginProvider>(context);
     return BlocListener<VisitorCubit, VisitorState>(
       listener: (context, state) {
-        if (state is VisitorLoggedInState) {
+        if (state is VisitorLoggedInState ||
+            state is VisitorEmailNotVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
         }

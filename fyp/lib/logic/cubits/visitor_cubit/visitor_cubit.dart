@@ -117,7 +117,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       if (emailVerified) {
         emit(VisitorEmailVerifiedState());
       } else {
-        emit(VisitorErrorState('Failed to verify email'));
+        emit(VisitorEmailNotVerifiedState());
       }
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));

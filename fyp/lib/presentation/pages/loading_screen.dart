@@ -12,7 +12,7 @@ import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen
 import 'package:fyp/presentation/pages/Staff/auth/staff_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
-import 'package:fyp/presentation/pages/otp_screen.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/auth/otp_screen.dart';
 import 'package:fyp/presentation/pages/select_user_screen.dart';
 
 class LoadingScreen extends StatefulWidget {
@@ -31,9 +31,12 @@ class _LoadingScreenState extends State<LoadingScreen> {
     if (visitorState is VisitorLoggedInState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, VisitorHomeScreen.routeName);
-    } else if (visitorState is VisitorEmailVerifiedState) {
+    } else if (visitorState is VisitorEmailNotVerifiedState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, OtpScreen.routeName);
+    } else if (visitorState is VisitorEmailVerifiedState) {
+      Navigator.popUntil(context, (route) => route.isFirst);
+      Navigator.pushReplacementNamed(context, VisitorHomeScreen.routeName);
     } else if (visitorState is VisitorLoggedOutState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);

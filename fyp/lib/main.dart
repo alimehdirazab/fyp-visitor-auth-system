@@ -6,6 +6,7 @@ import 'package:fyp/core/routes.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/auth/otp_screen.dart';
 
 import 'package:fyp/presentation/pages/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,8 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 late Size mq;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // SharedPreferences instance = await SharedPreferences.getInstance();
-  // instance.clear();
+  SharedPreferences instance = await SharedPreferences.getInstance();
+  instance.clear();
 
   Bloc.observer = MyBlocOberver();
   runApp(const MyApp());
@@ -38,8 +39,8 @@ class MyApp extends StatelessWidget {
         title: 'Smiu Visitor Authorization System',
         theme: Themes.defaultTheme,
         onGenerateRoute: Routes.onGenerateRoutes,
-        // initialRoute: SplashScreen.routeName,
         initialRoute: SplashScreen.routeName,
+        //initialRoute: OtpScreen.routeName,
       ),
     );
   }
