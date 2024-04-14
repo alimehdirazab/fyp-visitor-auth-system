@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
 
 import 'package:fyp/presentation/pages/Staff/auth/staff_login_screen.dart';
 
@@ -63,7 +64,10 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                   PrimaryButton(
                       text: 'Security',
                       icon: 'assets/icons/security_icon.png',
-                      onPressed: () {}),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                            context, SecurityHomeScreen.routeName);
+                      }),
                 ],
               ),
             ),

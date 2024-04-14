@@ -14,58 +14,83 @@ class SecurityHomeScreen extends StatefulWidget {
 }
 
 class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
-  int currentIndex = 0;
+  int _selectedIndex = 0;
   List<Widget> pages = const [
     SecurityHomePage(),
     SecurityExchangeDutyPage(),
     SecurtiyScanVisitorPage(),
     SecurityProfilePage()
   ];
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Security Home Screen'),
       ),
-      body: pages[currentIndex],
-      bottomNavigationBar: Container(
-        color: Colors.black,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-              // horizontal: 15,
-              //vertical: 20,
+      body: pages[_selectedIndex],
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: FloatingActionButton(
+          onPressed: () {
+            // Add your functionality here
+          },
+          backgroundColor: Colors.green,
+          child: Icon(Icons.search),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          BottomNavigationBar(
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home',
               ),
-          child: GNav(
-            backgroundColor: Colors.black,
-            color: Colors.white,
-            activeColor: Colors.white,
-            tabBackgroundColor: Colors.grey.shade800,
-            gap: 8,
-            onTabChange: (index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            tabs: const [
-              GButton(
-                icon: Icons.home,
-                text: "Home",
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
               ),
-              GButton(
-                icon: Icons.list,
-                text: "Scan",
+              BottomNavigationBarItem(
+                icon: SizedBox.shrink(), // Empty icon
+                label: '', // Empty label
               ),
-              GButton(
-                icon: Icons.insert_invitation,
-                text: "Change Duty",
+              BottomNavigationBarItem(
+                icon: Icon(Icons.notifications),
+                label: 'Notifications',
               ),
-              GButton(
-                icon: Icons.supervised_user_circle,
-                text: "Profile",
+              BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle),
+                label: 'Profile',
               ),
             ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            selectedIconTheme: IconThemeData(color: Colors.green),
+            unselectedIconTheme: IconThemeData(color: Colors.grey),
+            backgroundColor: Colors.white,
+            selectedLabelStyle: TextStyle(color: Colors.black),
+            unselectedLabelStyle: TextStyle(color: Colors.black),
           ),
-        ),
+          // Positioned(
+          //   bottom: 16,
+          //   child: FloatingActionButton(
+          //     onPressed: () {
+          //       // Add your functionality here
+          //     },
+          //     backgroundColor: Colors.green,
+          //     child: Icon(Icons.search),
+          //   ),
+          // ),
+        ],
       ),
     );
   }
