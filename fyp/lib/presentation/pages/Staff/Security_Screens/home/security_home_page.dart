@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
+import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:fyp/presentation/widgets/meeting_card.dart';
 import 'package:fyp/presentation/widgets/total_value_card.dart';
 
 class SecurityHomePage extends StatefulWidget {
@@ -27,15 +29,16 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
               child: Row(
                 children: [
                   TotalValueCard(
-                      total: 20,
-                      value: 'Visitors Expacted',
-                      color: Colors.blue,
-                      image: 'assets/images/m1.png'),
+                    total: 19,
+                    value: 'Visitors Expacted',
+                    color: Color(0XFFB4DBFF),
+                    image: 'assets/images/m1.png',
+                  ),
                   TotalValueCard(
-                      total: 20,
+                      total: 13,
                       value: 'Completed Meetings',
-                      color: Colors.green,
-                      image: 'assets/images/m1.png'),
+                      color: Color(0XFFD1FFDB),
+                      image: 'assets/images/m2.png'),
                 ],
               ),
             ),
@@ -44,15 +47,15 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
               child: Row(
                 children: [
                   TotalValueCard(
-                      total: 20,
+                      total: 3,
                       value: 'Cancel Meetings',
-                      color: Colors.red,
-                      image: 'assets/images/m1.png'),
+                      color: Color(0XFFFFC5C5),
+                      image: 'assets/images/m3.png'),
                   TotalValueCard(
-                      total: 20,
+                      total: 4,
                       value: 'Pending Meetings ',
-                      color: Colors.orange,
-                      image: 'assets/images/m1.png'),
+                      color: Color(0XFFFFDEAC),
+                      image: 'assets/images/m4.png'),
                 ],
               ),
             ),
@@ -67,33 +70,42 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
                     CustomDropdownButton(items: filters),
                   ],
                 ),
-                card('Ali Mehdi Raza', 'For Fyp Meeting', 'pending'),
-                card(
-                    'Elon Musk', 'Meeting For StarLink New Project', 'pending'),
-                card('Bilal Khatri', 'For Meeting', 'Visited'),
+                MeetingCard(
+                  name: 'Ali Mehdi Raza',
+                  subTitle: 'For Fyp Meeting',
+                  time: '10:20 Am',
+                  date: '07/04/2024',
+                  day: 'SATURDAY',
+                  status: 'Pending',
+                  onTap: () {
+                    // Navigator.pushNamed(
+                    //     context, StaffVisitorDetailsScreen.routeName);
+                  },
+                ),
+                const GapWidget(size: -8),
+                MeetingCard(
+                  name: 'Elon Musk',
+                  subTitle: 'Meeting For StarLink New Project',
+                  time: '10:20 Am',
+                  date: '09/04/2024',
+                  day: 'Monday',
+                  status: 'Cancel',
+                  onTap: () {},
+                ),
+                const GapWidget(size: -8),
+                MeetingCard(
+                  name: 'Bilal Khatri',
+                  subTitle: 'For Meeting',
+                  time: '11:00 Am',
+                  date: '07/04/2024',
+                  day: 'SATURDAY',
+                  status: 'Visited',
+                  onTap: () {},
+                ),
+                const GapWidget(size: -8),
               ],
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget card(String name, String reason, String status) {
-    return Card(
-      child: Container(
-        color: Colors.white,
-        child: ListTile(
-          title: Text(name),
-          subtitle: Text(reason),
-          trailing: Column(
-            children: [
-              const Text('10:30 \nWednesday'),
-              Text(status,
-                  style: TextStyle(
-                      color: status == 'pending' ? Colors.red : Colors.green))
-            ],
-          ),
         ),
       ),
     );
