@@ -19,7 +19,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
     SecurityHomePage(),
     SecurityExchangeDutyPage(),
     SecurtiyScanVisitorPage(),
-    SecurityProfilePage()
+    SecurityProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -50,35 +50,48 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
         alignment: Alignment.bottomCenter,
         children: [
           BottomNavigationBar(
-            items: <BottomNavigationBarItem>[
+            // backgroundColor: Colors.white,
+            type: BottomNavigationBarType.fixed,
+            currentIndex: _selectedIndex,
+            onTap: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+            items: const [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+                icon: Icon(
+                  Icons.home,
+                  size: 35,
+                ),
+                label: "Home",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.search),
-                label: 'Search',
+                icon: Icon(
+                  Icons.search,
+                  size: 35,
+                ),
+                label: "Search",
               ),
               BottomNavigationBarItem(
                 icon: SizedBox.shrink(), // Empty icon
                 label: '', // Empty label
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.notifications),
-                label: 'Notifications',
+                icon: Icon(
+                  Icons.calendar_month_sharp,
+                  size: 35,
+                ),
+                label: "Invites",
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle),
-                label: 'Profile',
+                icon: Icon(
+                  Icons.person,
+                  size: 35,
+                ),
+                label: "Profile",
               ),
             ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            selectedIconTheme: IconThemeData(color: Colors.green),
-            unselectedIconTheme: IconThemeData(color: Colors.grey),
-            backgroundColor: Colors.white,
-            selectedLabelStyle: TextStyle(color: Colors.black),
-            unselectedLabelStyle: TextStyle(color: Colors.black),
           ),
           // Positioned(
           //   bottom: 16,
