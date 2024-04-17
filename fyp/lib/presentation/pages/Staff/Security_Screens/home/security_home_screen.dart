@@ -3,7 +3,6 @@ import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_exch
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_profile_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_scan_visitor_page.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class SecurityHomeScreen extends StatefulWidget {
   const SecurityHomeScreen({super.key});
@@ -19,14 +18,12 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
     SecurityHomePage(),
     SecurityExchangeDutyPage(),
     SecurtiyScanVisitorPage(),
+    SecurtiyScanVisitorPage(),
     SecurityProfilePage(),
   ];
+  final PageStorageBucket bucket = PageStorageBucket();
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  Widget currentScreen = const SecurityHomePage();
 
   @override
   Widget build(BuildContext context) {
@@ -34,76 +31,159 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
       appBar: AppBar(
         title: const Text('Security Home Screen'),
       ),
-      body: pages[_selectedIndex],
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: FloatingActionButton(
-          onPressed: () {
-            // Add your functionality here
-          },
-          backgroundColor: Colors.green,
-          child: Icon(Icons.search),
-        ),
+      body: PageStorage(
+        bucket: bucket,
+        child: currentScreen,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your functionality here
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(Icons.qr_code_scanner),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          BottomNavigationBar(
-            // backgroundColor: Colors.white,
-            type: BottomNavigationBarType.fixed,
-            currentIndex: _selectedIndex,
-            onTap: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  size: 35,
-                ),
-                label: "Home",
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 10,
+        child: Container(
+          height: 60,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = const SecurityHomePage();
+                        _selectedIndex = 0;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.home,
+                          color: _selectedIndex == 0
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                        ),
+                        // Icon
+                        Text(
+                          'Home',
+                          style: TextStyle(
+                            color: _selectedIndex == 0
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.grey,
+                          ),
+                        ),
+                        // Text
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = const SecurityExchangeDutyPage();
+                        _selectedIndex = 1;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.search,
+                          color: _selectedIndex == 1
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                        ),
+                        // Icon
+                        Text(
+                          'Search',
+                          style: TextStyle(
+                            color: _selectedIndex == 1
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.grey,
+                          ),
+                        ),
+                        // Text
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.search,
-                  size: 35,
-                ),
-                label: "Search",
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox.shrink(), // Empty icon
-                label: '', // Empty label
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.calendar_month_sharp,
-                  size: 35,
-                ),
-                label: "Invites",
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person,
-                  size: 35,
-                ),
-                label: "Profile",
-              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = const SecurityHomePage();
+                        _selectedIndex = 3;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.notifications_off_rounded,
+                          color: _selectedIndex == 3
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                        ),
+                        // Icon
+                        Text(
+                          'Red List',
+                          style: TextStyle(
+                            color: _selectedIndex == 3
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.grey,
+                          ),
+                        ),
+                        // Text
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentScreen = const SecurityExchangeDutyPage();
+                        _selectedIndex = 4;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.person,
+                          color: _selectedIndex == 4
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.grey,
+                        ),
+                        // Icon
+                        Text(
+                          'Profile',
+                          style: TextStyle(
+                            color: _selectedIndex == 4
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.grey,
+                          ),
+                        ),
+                        // Text
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
-          // Positioned(
-          //   bottom: 16,
-          //   child: FloatingActionButton(
-          //     onPressed: () {
-          //       // Add your functionality here
-          //     },
-          //     backgroundColor: Colors.green,
-          //     child: Icon(Icons.search),
-          //   ),
-          // ),
-        ],
+        ),
       ),
     );
   }
