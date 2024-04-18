@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_exchange_duty_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_profile_page.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_red_list_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_scan_visitor_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_search_page.dart';
+import 'package:fyp/presentation/pages/Staff/Staf_Screens/staff_notification_screen.dart';
 
 class SecurityHomeScreen extends StatefulWidget {
   const SecurityHomeScreen({super.key});
@@ -18,7 +20,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
   List<Widget> pages = const [
     SecurityHomePage(),
     SecuritySearchPage(),
-    SecurtiyScanVisitorPage(),
+    SecurityRedListPage(),
     SecurityProfilePage(),
   ];
   final PageStorageBucket bucket = PageStorageBucket();
@@ -28,8 +30,28 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Security Home Screen'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, StaffNotificationScreen.routeName);
+              },
+              icon: const Icon(
+                Icons.published_with_changes_outlined,
+                color: Colors.black,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, StaffNotificationScreen.routeName);
+              },
+              icon: const Icon(
+                Icons.notifications_active_rounded,
+                color: Colors.black,
+              )),
+        ],
       ),
       body: PageStorage(
         bucket: bucket,
