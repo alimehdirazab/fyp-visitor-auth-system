@@ -3,6 +3,7 @@ import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_exch
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_profile_page.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_scan_visitor_page.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_search_page.dart';
 
 class SecurityHomeScreen extends StatefulWidget {
   const SecurityHomeScreen({super.key});
@@ -16,8 +17,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
   int _selectedIndex = 0;
   List<Widget> pages = const [
     SecurityHomePage(),
-    SecurityExchangeDutyPage(),
-    SecurtiyScanVisitorPage(),
+    SecuritySearchPage(),
     SecurtiyScanVisitorPage(),
     SecurityProfilePage(),
   ];
@@ -58,7 +58,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const SecurityHomePage();
+                        currentScreen = pages[0];
                         _selectedIndex = 0;
                       });
                     },
@@ -88,7 +88,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const SecurityExchangeDutyPage();
+                        currentScreen = pages[1];
                         _selectedIndex = 1;
                       });
                     },
@@ -123,7 +123,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const SecurityHomePage();
+                        currentScreen = pages[2];
                         _selectedIndex = 3;
                       });
                     },
@@ -153,7 +153,7 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
                     minWidth: 40,
                     onPressed: () {
                       setState(() {
-                        currentScreen = const SecurityExchangeDutyPage();
+                        currentScreen = pages[3];
                         _selectedIndex = 4;
                       });
                     },
