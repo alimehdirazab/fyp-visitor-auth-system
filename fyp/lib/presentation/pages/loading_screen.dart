@@ -45,27 +45,27 @@ class _LoadingScreenState extends State<LoadingScreen> {
       Navigator.pushReplacementNamed(context, VisitorLoginScreen.routeName);
     }
     //Staff Screens Navigation
-    StaffState staffState = BlocProvider.of<StaffCubit>(context).state;
-    if (staffState is StaffLoggedInState) {
-      StaffData staffData = staffState.staffData;
-      // log(staffModel.data!.role.toString());
-      if (staffData.role == 'staff') {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, StaffHomeScreen.routeName);
-      } else if (staffData.role == 'guard') {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, SecurityHomeScreen.routeName);
-      } else {
-        Navigator.popUntil(context, (route) => route.isFirst);
-        Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
-      }
-    } else if (staffState is StaffLoggedOutState) {
-      Navigator.popUntil(context, (route) => route.isFirst);
-      Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
-      // } else if (staffState is StaffErrorState) {
-      //   Navigator.popUntil(context, (route) => route.isFirst);
-      //   Navigator.pushReplacementNamed(context, StaffLoginScreen.routeName);
-    }
+    // StaffState staffState = BlocProvider.of<StaffCubit>(context).state;
+    // if (staffState is StaffLoggedInState) {
+    //   StaffData staffData = staffState.staffData;
+    //   // log(staffModel.data!.role.toString());
+    //   if (staffData.role == 'staff') {
+    //     Navigator.popUntil(context, (route) => route.isFirst);
+    //     Navigator.pushReplacementNamed(context, StaffHomeScreen.routeName);
+    //   } else if (staffData.role == 'guard') {
+    //     Navigator.popUntil(context, (route) => route.isFirst);
+    //     Navigator.pushReplacementNamed(context, SecurityHomeScreen.routeName);
+    //   } else {
+    //     Navigator.popUntil(context, (route) => route.isFirst);
+    //     Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
+    //   }
+    // } else if (staffState is StaffLoggedOutState) {
+    //   Navigator.popUntil(context, (route) => route.isFirst);
+    //   Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
+    //   // } else if (staffState is StaffErrorState) {
+    //   //   Navigator.popUntil(context, (route) => route.isFirst);
+    //   //   Navigator.pushReplacementNamed(context, StaffLoginScreen.routeName);
+    // }
   }
 
   @override
@@ -85,11 +85,11 @@ class _LoadingScreenState extends State<LoadingScreen> {
             goToNextScreen();
           },
         ),
-        BlocListener<StaffCubit, StaffState>(
-          listener: (context, state) {
-            goToNextScreen();
-          },
-        ),
+        // BlocListener<StaffCubit, StaffState>(
+        //   listener: (context, state) {
+        //     goToNextScreen();
+        //   },
+        // ),
       ],
       child: const Scaffold(
         body: Center(

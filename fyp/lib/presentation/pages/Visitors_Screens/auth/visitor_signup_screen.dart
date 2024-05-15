@@ -33,8 +33,7 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
       listener: (context, state) {
         if (state is VisitorLoggedInState ||
             state is VisitorEmailNotVerifiedState ||
-            state is VisitorEmailVerifiedState ||
-            state is VisitorErrorState) {
+            state is VisitorEmailVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
         }

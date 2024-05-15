@@ -19,7 +19,7 @@ class VisitorCubit extends Cubit<VisitorState> {
     String? refreshToken = userDetails["refreshToken"];
     String? email = userDetails["email"];
     String? password = userDetails["password"];
-    bool emailVerified = userDetails["emailVerified"];
+    bool? emailVerified = userDetails["emailVerified"];
 
     if (accessToken == null ||
         refreshToken == null ||

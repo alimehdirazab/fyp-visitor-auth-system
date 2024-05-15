@@ -33,8 +33,7 @@ class _VisitorLoginScreenState extends State<VisitorLoginScreen> {
       listener: (context, state) {
         if (state is VisitorLoggedInState ||
             state is VisitorEmailNotVerifiedState ||
-            state is VisitorEmailVerifiedState ||
-            state is VisitorErrorState) {
+            state is VisitorEmailVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
           Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
         }
@@ -49,9 +48,15 @@ class _VisitorLoginScreenState extends State<VisitorLoginScreen> {
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const GapWidget(size: -6),
-                  Text('Login ', style: TextStyles.heading2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Login ', style: TextStyles.heading2),
+                    ],
+                  ),
                   const GapWidget(),
                   const GapWidget(),
                   (provider.error != "")
@@ -120,9 +125,14 @@ class _VisitorLoginScreenState extends State<VisitorLoginScreen> {
                     ],
                   ),
                   const GapWidget(size: 16),
-                  Text(
-                    'or',
-                    style: TextStyle(color: Colors.grey[500]),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'or',
+                        style: TextStyle(color: Colors.grey[500]),
+                      ),
+                    ],
                   ),
                   const GapWidget(size: 16),
                   GoogleButton(
