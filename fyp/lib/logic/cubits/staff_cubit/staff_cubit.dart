@@ -88,6 +88,11 @@ class StaffCubit extends Cubit<StaffState> {
   //   }
   // }
 
+  // Future<Map<String, dynamic>> getUserDetails() async {
+  //   final userDetails = await _staffRepository.getUserDetails();
+  //   return userDetails;
+  // }
+
   void signOut() async {
     await StaffPreferences.clear();
     _staffRepository.cancelTokenRefreshTimer();

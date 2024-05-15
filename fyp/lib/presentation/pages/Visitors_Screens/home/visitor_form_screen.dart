@@ -1,6 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:fyp/data/models/staff/staff_details_model.dart';
+import 'package:fyp/data/models/staff/staff_model.dart';
+import 'package:fyp/data/repositories/staff_repository.dart';
+import 'package:fyp/data/repositories/visitor_repository.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/widgets/visitor_upload_Button.dart';
@@ -17,7 +22,12 @@ class VisitorFormScreen extends StatefulWidget {
 }
 
 class _VisitorFormScreenState extends State<VisitorFormScreen> {
+  final VisitorRepository _visitorRepository = VisitorRepository();
+  List<String> _staffNames = ['Select Name'];
   String? _selectedGender;
+
+  List<String>? staffNames;
+
   List<String> departments = <String>[
     'Select Department',
     'Computer Science',
@@ -27,15 +37,42 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
     'Admission',
     'Transport',
   ];
-  List<String> staffNames = <String>[
-    'Select Staff Name',
-    'John Doe',
-    'Jane Smith',
-    'Michael Johnson',
-    'Emily Davis',
-    'David Wilson',
-    'Sarah Thompson',
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+    // getStaffNames();
+  }
+
+  // Future<void> getStaffNames() async {
+  //   try {
+  //     List<StaffDetailsModel> staffDetails =
+  //         await _visitorRepository.getStaffDetails();
+
+  //     // Check if 'staff' field exists in the response and is a List
+  //     if (staffDetails.containsKey('staff') && staffDetails['staff'] is List) {
+  //       List<dynamic> staffList = staffDetails['staff'];
+
+  //       // Extract names from staff list
+  //       List<String> names = [];
+  //       for (var staff in staffList) {
+  //         // Ensure each item in the list is a map
+  //         if (staff is Map<String, dynamic> && staff.containsKey('name')) {
+  //           names.add(staff['name'] as String);
+  //         }
+  //       }
+
+  //       // Update _staffNames with the extracted names
+  //       setState(() {
+  //         _staffNames.addAll(names);
+  //       });
+  //     } else {
+  //       print('Error: Staff field not found or not a List in response');
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching staff names: $e');
+  //   }
+  // }
 
   final border = const OutlineInputBorder(
     borderSide: BorderSide(
@@ -118,6 +155,24 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               const GapWidget(),
               const PrimaryTextField(labelText: 'Address'),
               const GapWidget(),
+              FutureBuilder<List<StaffDetailsModel>>(
+                future: _visitorRepository.getStaffDetails(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<String> values = snapshot.data!
+                        .map((value) => value.toString())
+                        .toList();
+                    return CustomDropdownButton(
+                      items: values,
+                    );
+                  }
+                },
+              ),
+              const GapWidget(),
               const PrimaryTextField(labelText: 'Purpose Of Visiting'),
               const GapWidget(),
               Row(
@@ -131,7 +186,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text('Select Staff Name*'),
-                  CustomDropdownButton(items: staffNames)
+                  CustomDropdownButton(items: _staffNames)
                 ],
               ),
               SingleChildScrollView(

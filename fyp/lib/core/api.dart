@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
-const String BASE_URL = "https://vms-backend-seven.vercel.app";
+const String BASE_URL =
+    "https://vms-backend-bilal-khatris-projects.vercel.app/";
 const Map<String, dynamic> DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
 };

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
+import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
 // import 'package:fyp/logic/services/visitor_preferences.dart';
@@ -159,6 +160,45 @@ class VisitorRepository {
     } else {
       // Handle case where refresh token is not available
       print("Refresh token not found.");
+    }
+  }
+
+  Future<List<StaffDetailsModel>> getStaffDetails() async {
+    try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      accessToken = preferences['accessToken'];
+      Response response = await _api.sendRequest.get(
+        '/api/v1/users',
+        options: Options(
+          headers: {
+            'Authorization':
+                'Bearer $accessToken', // Replace with your actual token
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      if (response.statusCode == 401) {
+        // Handle 401 Unauthorized error
+        throw Exception('Unauthorized: ${response.statusMessage}');
+      }
+
+      // Parse response data
+      List<dynamic> responseData = jsonDecode(response.data);
+
+      // Map response data to StaffDetailsModel
+      List<StaffDetailsModel> staffDetailsList = responseData.map((e) {
+        return StaffDetailsModel(
+          id: e['id'],
+          name: e['name'],
+          email: e['email'],
+          role: e['role'],
+        );
+      }).toList();
+
+      return staffDetailsList;
+    } catch (e) {
+      throw e.toString();
     }
   }
 
