@@ -9,6 +9,7 @@ import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_lo
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_signup_provider.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_signup_screen.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/home/provider/visitor_appointment_form_provider.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen.dart';
 import 'package:fyp/presentation/pages/auth_options_screen.dart';
 import 'package:fyp/presentation/pages/loading_screen.dart';
@@ -63,7 +64,9 @@ class Routes {
 
       case VisitorHomeScreen.routeName:
         return CupertinoPageRoute(
-          builder: (context) => const VisitorHomeScreen(),
+          builder: (context) => ChangeNotifierProvider(
+              create: (context) => VisitorAppointmentFormProvider(context),
+              child: const VisitorHomeScreen()),
         );
 
       case StaffLoginScreen.routeName:

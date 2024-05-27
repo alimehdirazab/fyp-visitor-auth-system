@@ -1,9 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
+import 'package:fyp/presentation/pages/Visitors_Screens/home/provider/visitor_appointment_form_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/widgets/visitor_upload_Button.dart';
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
@@ -11,6 +13,7 @@ import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/primary_textfield.dart';
 import 'package:flutter_searchable_dropdown/flutter_searchable_dropdown.dart';
+import 'package:provider/provider.dart';
 
 class VisitorFormScreen extends StatefulWidget {
   const VisitorFormScreen({Key? key}) : super(key: key);
@@ -20,22 +23,14 @@ class VisitorFormScreen extends StatefulWidget {
 }
 
 class _VisitorFormScreenState extends State<VisitorFormScreen> {
-  String? _selectedGender;
-  File? _cnicFrontImage;
-  File? _cnicBackImage;
-  File? _selfieImage;
+  File? _cnicFrontImagePath;
+  String _cnicFrontImageName = '';
+  File? _cnicBackImagePath;
+  String _cnicBackImageName = '';
+  File? _selfieImagePath;
+  String _selfieImageName = '';
 
   final ImagePicker _picker = ImagePicker();
-
-  final List<String> departments = <String>[
-    'Select Department',
-    'Computer Science',
-    'BBA',
-    'Education',
-    'Media Science',
-    'Admission',
-    'Transport',
-  ];
 
   @override
   void initState() {
@@ -47,192 +42,267 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
   Future<void> _getImage(ImageSource source, String buttonName) async {
     final pickedFile = await _picker.pickImage(source: source);
     setState(() {
-      switch (buttonName) {
-        case 'CNIC Front':
-          _cnicFrontImage = File(pickedFile!.path);
-          break;
-        case 'CNIC Back':
-          _cnicBackImage = File(pickedFile!.path);
-          break;
-        case 'Selfie':
-          _selfieImage = File(pickedFile!.path);
-          break;
+      if (pickedFile != null) {
+        switch (buttonName) {
+          case 'CNIC Front':
+            _cnicFrontImagePath = File(pickedFile.path);
+            _cnicFrontImageName = pickedFile.name;
+            Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
+                .cnicFrontPic = pickedFile.name;
+            break;
+          case 'CNIC Back':
+            _cnicBackImagePath = File(pickedFile.path);
+            _cnicBackImageName = pickedFile.name;
+            Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
+                .cnicBackPic = pickedFile.name;
+            break;
+          case 'Selfie':
+            _selfieImagePath = File(pickedFile.path);
+            _selfieImageName = pickedFile.name;
+            Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
+                .profilePic = pickedFile.name;
+            break;
+        }
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const GapWidget(size: -12),
-              const PrimaryTextField(labelText: 'Full Name'),
-              const GapWidget(),
-              Text(
-                'Select Gender',
-                style: TextStyle(
-                    fontSize: 16, color: Theme.of(context).colorScheme.primary),
-              ),
-              Row(
+    final provider = Provider.of<VisitorAppointmentFormProvider>(context);
+    TimeOfDay time = TimeOfDay.now();
+    DateTime date = DateTime.now();
+
+    return BlocListener<VisitorCubit, VisitorState>(
+      listener: (context, state) {
+        if (state is VisitorErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (state is VisitorDetailsUpdatedState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Visitor details updated successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+          // If the visitor details are updated successfully, save the appointment
+          provider.saveAppointment();
+        } else if (state is VisitorAppointmentSavedState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Appointment saved successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Form(
+          key: provider.formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Radio<String>(
-                    value: 'Male',
-                    groupValue: _selectedGender,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedGender = value;
-                      });
+                  const GapWidget(size: -12),
+                  PrimaryTextField(
+                    labelText: 'Full Name',
+                    controller: provider.nameController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Name is required';
+                      }
+                      return null;
                     },
                   ),
-                  const Text('Male'),
-                  Radio<String>(
-                    value: 'Female',
-                    groupValue: _selectedGender,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedGender = value;
-                      });
+                  const GapWidget(),
+                  PrimaryTextField(
+                    labelText: 'Mobile Number',
+                    keyboardType: TextInputType.phone,
+                    controller: provider.phoneController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Phone number is required';
+                      }
+                      return null;
                     },
                   ),
-                  const Text('Female'),
+                  const GapWidget(),
+                  BlocBuilder<VisitorCubit, VisitorState>(
+                    builder: (context, state) {
+                      if (state is VisitorInitialState) {
+                        return const Center(child: Text('Please wait...'));
+                      } else if (state is VisitorLoadingState) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (state is VisitorStaffDetailsLoadedState) {
+                        return Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SearchableDropdown.single(
+                            items: state.staff.map((staff) {
+                              return DropdownMenuItem<StaffDetailsData>(
+                                value: staff,
+                                child: Text(staff.name ?? 'No Name Found'),
+                              );
+                            }).toList(),
+                            onChanged: (StaffDetailsData? selectedUser) {
+                              if (selectedUser != null) {
+                                provider.userId = selectedUser.id;
+                                print('Selected user ID: ${selectedUser.id}');
+                              }
+                            },
+                            isExpanded: true,
+                            displayClearIcon:
+                                false, // Optional, hides clear icon
+                            hint: 'Select a user',
+                            searchHint: 'Search user by name',
+                          ),
+                        );
+                      } else if (state is VisitorErrorState) {
+                        return Center(child: Text(state.message));
+                      }
+                      return const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator.adaptive(),
+                      );
+                    },
+                  ),
+                  const GapWidget(),
+                  PrimaryTextField(
+                    labelText: 'Purpose Of Visiting',
+                    controller: provider.purposeController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Purpose is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const GapWidget(),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        VisitorUploadButton(
+                          width: 100,
+                          height: 30,
+                          text: 'CNIC Front',
+                          onTap: () {
+                            _getImage(ImageSource.camera, 'CNIC Front');
+                          },
+                        ),
+                        const GapWidget(),
+                        VisitorUploadButton(
+                          width: 100,
+                          height: 30,
+                          text: 'CNIC Back',
+                          onTap: () {
+                            _getImage(ImageSource.camera, 'CNIC Back');
+                          },
+                        ),
+                        const GapWidget(),
+                        VisitorUploadButton(
+                          width: 100,
+                          height: 30,
+                          text: 'Selfie',
+                          onTap: () {
+                            _getImage(ImageSource.camera, 'Selfie');
+                          },
+                        ),
+                        const GapWidget(),
+                      ],
+                    ),
+                  ),
+                  const GapWidget(size: -5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (_cnicFrontImagePath != null)
+                        ClipOval(
+                          child: Image.file(
+                            _cnicFrontImagePath!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      if (_cnicBackImagePath != null)
+                        ClipOval(
+                          child: Image.file(
+                            _cnicBackImagePath!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      if (_selfieImagePath != null)
+                        ClipOval(
+                          child: Image.file(
+                            _selfieImagePath!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const GapWidget(),
+                  Text(
+                    '${date.day}:${date.month}:${date.year}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        final DateTime? selectedDate = await showDatePicker(
+                            context: context,
+                            initialDate: date,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime(2099));
+                        if (selectedDate != null) {
+                          setState(() {
+                            date = selectedDate;
+                            provider.appointmentDate = date;
+                          });
+                        }
+                      },
+                      child: const Text('Choose Date')),
+                  const GapWidget(),
+                  Text(
+                    '${time.hour}:${time.minute}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final TimeOfDay? timeOfDay = await showTimePicker(
+                          context: context,
+                          initialTime: time,
+                          initialEntryMode: TimePickerEntryMode.dial);
+                      if (timeOfDay != null) {
+                        setState(() {
+                          time = timeOfDay;
+                          provider.appointmentTime = time;
+                        });
+                      }
+                    },
+                    child: const Text('Choose Time'),
+                  ),
+                  const GapWidget(),
+                  const GapWidget(),
+                  PrimaryButton(
+                    text: 'Submit',
+                    onPressed: () {
+                      provider.updateVisitorDetails();
+                    },
+                  )
                 ],
               ),
-              const PrimaryTextField(labelText: 'CNIC'),
-              const GapWidget(),
-              const PrimaryTextField(labelText: 'Mobile Number'),
-              const GapWidget(),
-              const PrimaryTextField(labelText: 'Email Address'),
-              const GapWidget(),
-              const PrimaryTextField(labelText: 'Address'),
-              const GapWidget(),
-              BlocBuilder<VisitorCubit, VisitorState>(
-                builder: (context, state) {
-                  if (state is VisitorInitialState) {
-                    return const Center(child: Text('Please wait...'));
-                  } else if (state is VisitorLoadingState) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is VisitorStaffDetailsLoadedState) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: SearchableDropdown.single(
-                        items: state.staff.map((staff) {
-                          return DropdownMenuItem<StaffDetailsData>(
-                            value: staff,
-                            child: Text(staff.name ?? 'No Name Found'),
-                          );
-                        }).toList(),
-                        onChanged: (StaffDetailsData? selectedUser) {
-                          if (selectedUser != null) {
-                            print('Selected user ID: ${selectedUser.id}');
-                          }
-                        },
-                        isExpanded: true,
-                        displayClearIcon: false, // Optional, hides clear icon
-                        hint: 'Select a user',
-                        searchHint: 'Search user by name',
-                      ),
-                    );
-                  } else if (state is VisitorErrorState) {
-                    return Center(child: Text(state.message));
-                  }
-                  return const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                },
-              ),
-              const GapWidget(),
-              const PrimaryTextField(labelText: 'Purpose Of Visiting'),
-              const GapWidget(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Select Department*'),
-                  CustomDropdownButton(items: departments)
-                ],
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    VisitorUploadButton(
-                      width: 100,
-                      height: 30,
-                      text: 'CNIC Front',
-                      onTap: () {
-                        _getImage(ImageSource.camera, 'CNIC Front');
-                      },
-                    ),
-                    const GapWidget(),
-                    VisitorUploadButton(
-                      width: 100,
-                      height: 30,
-                      text: 'CNIC Back',
-                      onTap: () {
-                        _getImage(ImageSource.camera, 'CNIC Back');
-                      },
-                    ),
-                    const GapWidget(),
-                    VisitorUploadButton(
-                      width: 100,
-                      height: 30,
-                      text: 'Selfie',
-                      onTap: () {
-                        _getImage(ImageSource.camera, 'Selfie');
-                      },
-                    ),
-                    const GapWidget(),
-                  ],
-                ),
-              ),
-              const GapWidget(size: -5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  if (_cnicFrontImage != null)
-                    ClipOval(
-                      child: Image.file(
-                        _cnicFrontImage!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  if (_cnicBackImage != null)
-                    ClipOval(
-                      child: Image.file(
-                        _cnicBackImage!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  if (_selfieImage != null)
-                    ClipOval(
-                      child: Image.file(
-                        _selfieImage!,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                ],
-              ),
-              const GapWidget(),
-              PrimaryButton(
-                text: 'Submit',
-                onPressed: () {
-                  // Add your submit logic here
-                },
-              )
-            ],
+            ),
           ),
         ),
       ),

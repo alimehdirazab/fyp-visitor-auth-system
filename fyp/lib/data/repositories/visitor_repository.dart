@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
+import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
@@ -203,6 +204,87 @@ class VisitorRepository {
     } catch (e) {
       // Catch any error that occurred during the process
       throw ('Error fetching staff details: $e');
+    }
+  }
+
+  Future<StaffDetailsData> updateVisitorDetails({
+    required String name,
+    required String phone,
+    required String profilePic,
+    required String cnicFrontPic,
+    required String cnicBackPic,
+  }) async {
+    try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
+      final visitorId = preferences['visitorId'];
+
+      final response = await _api.sendRequest.put(
+        '/api/v1/visitors/$visitorId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: jsonEncode({
+          "name": name,
+          "phone": phone,
+          "profilePic": profilePic,
+          "cnicFrontPic": cnicFrontPic,
+          "cnicBacPic": cnicBackPic,
+        }),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status == 200) {
+        return StaffDetailsData.fromJson(apiResponse.data);
+      } else {
+        throw ('Error updating visitor details: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ('Error updating visitor details: $e');
+    }
+  }
+
+  Future<AppointmentDataModel> createAppointment({
+    required String staffId,
+    required String date,
+    required String time,
+    required String purpose,
+  }) async {
+    try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
+      final visitorId = preferences['visitorId'];
+
+      final response = await _api.sendRequest.post(
+        '/api/v1/appointments',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: jsonEncode({
+          "visitorId": visitorId,
+          "userId": staffId,
+          "scheduleDate": date,
+          "scheduleTime": time,
+          "reason": purpose,
+        }),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status == 201) {
+        return AppointmentDataModel.fromJson(apiResponse.data);
+      } else {
+        throw ('Error creating appointment: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ('Error creating appointment: $e');
     }
   }
 

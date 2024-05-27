@@ -1,3 +1,4 @@
+import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 
@@ -17,6 +18,19 @@ class VisitorStaffDetailsLoadedState extends VisitorState {
   final List<StaffDetailsData> staff;
 
   VisitorStaffDetailsLoadedState(this.staff);
+}
+
+class VisitorDetailsUpdatedState extends VisitorState {
+  /// i use StaffDetailsData in this case because Visitor and a Staff have the same structure
+  final StaffDetailsData visitorData;
+
+  VisitorDetailsUpdatedState(this.visitorData);
+}
+
+class VisitorAppointmentSavedState extends VisitorState {
+  final AppointmentDataModel appointmentData;
+
+  VisitorAppointmentSavedState(this.appointmentData);
 }
 
 class VisitorLoggedInState extends VisitorState {

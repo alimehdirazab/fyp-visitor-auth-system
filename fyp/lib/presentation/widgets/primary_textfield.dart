@@ -6,6 +6,7 @@ class PrimaryTextField extends StatelessWidget {
   final bool obscureText;
   final bool enablefield;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
   const PrimaryTextField({
     super.key,
     required this.labelText,
@@ -13,13 +14,15 @@ class PrimaryTextField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.enablefield = true,
+    this.keyboardType,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: 70,
       child: TextFormField(
+        keyboardType: keyboardType,
         controller: controller,
         validator: validator,
         obscureText: obscureText,
