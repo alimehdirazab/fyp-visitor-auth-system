@@ -1,71 +1,95 @@
 class VisitorModel {
-  int? status;
-  String? res;
-  String? message;
-  VisitorData? data;
+  final int status;
+  final String res;
+  final String message;
+  final VisitorData data;
 
-  VisitorModel({this.status, this.res, this.message, this.data});
+  VisitorModel({
+    required this.status,
+    required this.res,
+    required this.message,
+    required this.data,
+  });
 
-  VisitorModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    res = json['res'];
-    message = json['message'];
-    data = json['data'] != null ? new VisitorData.fromJson(json['data']) : null;
+  factory VisitorModel.fromJson(Map<String, dynamic> json) {
+    return VisitorModel(
+      status: json['status'],
+      res: json['res'],
+      message: json['message'],
+      data: VisitorData.fromJson(json['data']),
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['res'] = this.res;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
+    return {
+      'status': status,
+      'res': res,
+      'message': message,
+      'data': data.toJson(),
+    };
   }
 }
 
 class VisitorData {
-  String? accessToken;
-  String? refreshToken;
-  int? id;
-  Null? name;
-  Null? profilePic;
-  String? email;
-  bool? emailVerified;
-  Null? phone;
+  final String accessToken;
+  final String refreshToken;
+  final String id;
+  final String? name;
+  final String? profilePic;
+  final String? cnicFrontPic;
+  final String? cnicBackPic;
+  final String email;
+  final bool emailVerified;
+  final String? phone;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  VisitorData(
-      {this.accessToken,
-      this.refreshToken,
-      this.id,
-      this.name,
-      this.profilePic,
-      this.email,
-      this.emailVerified,
-      this.phone});
+  VisitorData({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.id,
+    this.name,
+    this.profilePic,
+    this.cnicFrontPic,
+    this.cnicBackPic,
+    required this.email,
+    required this.emailVerified,
+    this.phone,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  VisitorData.fromJson(Map<String, dynamic> json) {
-    accessToken = json['accessToken'];
-    refreshToken = json['refreshToken'];
-    id = json['id'];
-    name = json['name'];
-    profilePic = json['profilePic'];
-    email = json['email'];
-    emailVerified = json['emailVerified'];
-    phone = json['phone'];
+  factory VisitorData.fromJson(Map<String, dynamic> json) {
+    return VisitorData(
+      accessToken: json['accessToken'],
+      refreshToken: json['refreshToken'],
+      id: json['id'],
+      name: json['name'],
+      profilePic: json['profilePic'],
+      cnicFrontPic: json['cnicFrontPic'],
+      cnicBackPic: json['cnicBackPic'],
+      email: json['email'],
+      emailVerified: json['emailVerified'],
+      phone: json['phone'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['accessToken'] = this.accessToken;
-    data['refreshToken'] = this.refreshToken;
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['profilePic'] = this.profilePic;
-    data['email'] = this.email;
-    data['emailVerified'] = this.emailVerified;
-    data['phone'] = this.phone;
-    return data;
+    return {
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+      'id': id,
+      'name': name,
+      'profilePic': profilePic,
+      'cnicFrontPic': cnicFrontPic,
+      'cnicBackPic': cnicBackPic,
+      'email': email,
+      'emailVerified': emailVerified,
+      'phone': phone,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+    };
   }
 }

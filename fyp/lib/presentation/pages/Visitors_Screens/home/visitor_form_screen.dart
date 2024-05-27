@@ -1,18 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
-import 'package:fyp/data/models/staff/staff_model.dart';
-import 'package:fyp/data/repositories/staff_repository.dart';
-import 'package:fyp/data/repositories/visitor_repository.dart';
-import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
-
+import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
+import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/widgets/visitor_upload_Button.dart';
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/primary_textfield.dart';
+import 'package:flutter_searchable_dropdown/flutter_searchable_dropdown.dart';
 
 class VisitorFormScreen extends StatefulWidget {
   const VisitorFormScreen({Key? key}) : super(key: key);
@@ -22,13 +20,14 @@ class VisitorFormScreen extends StatefulWidget {
 }
 
 class _VisitorFormScreenState extends State<VisitorFormScreen> {
-  final VisitorRepository _visitorRepository = VisitorRepository();
-  List<String> _staffNames = ['Select Name'];
   String? _selectedGender;
+  File? _cnicFrontImage;
+  File? _cnicBackImage;
+  File? _selfieImage;
 
-  List<String>? staffNames;
+  final ImagePicker _picker = ImagePicker();
 
-  List<String> departments = <String>[
+  final List<String> departments = <String>[
     'Select Department',
     'Computer Science',
     'BBA',
@@ -41,52 +40,9 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
   @override
   void initState() {
     super.initState();
-    // getStaffNames();
+    // Fetch users when the screen initializes
+    context.read<VisitorCubit>().fetchUsers();
   }
-
-  // Future<void> getStaffNames() async {
-  //   try {
-  //     List<StaffDetailsModel> staffDetails =
-  //         await _visitorRepository.getStaffDetails();
-
-  //     // Check if 'staff' field exists in the response and is a List
-  //     if (staffDetails.containsKey('staff') && staffDetails['staff'] is List) {
-  //       List<dynamic> staffList = staffDetails['staff'];
-
-  //       // Extract names from staff list
-  //       List<String> names = [];
-  //       for (var staff in staffList) {
-  //         // Ensure each item in the list is a map
-  //         if (staff is Map<String, dynamic> && staff.containsKey('name')) {
-  //           names.add(staff['name'] as String);
-  //         }
-  //       }
-
-  //       // Update _staffNames with the extracted names
-  //       setState(() {
-  //         _staffNames.addAll(names);
-  //       });
-  //     } else {
-  //       print('Error: Staff field not found or not a List in response');
-  //     }
-  //   } catch (e) {
-  //     print('Error fetching staff names: $e');
-  //   }
-  // }
-
-  final border = const OutlineInputBorder(
-    borderSide: BorderSide(
-      color: Colors.black,
-      style: BorderStyle.solid,
-      width: 2,
-    ),
-  );
-
-  File? _cnicFrontImage;
-  File? _cnicBackImage;
-  File? _selfieImage;
-
-  final ImagePicker _picker = ImagePicker();
 
   Future<void> _getImage(ImageSource source, String buttonName) async {
     final pickedFile = await _picker.pickImage(source: source);
@@ -155,21 +111,40 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               const GapWidget(),
               const PrimaryTextField(labelText: 'Address'),
               const GapWidget(),
-              FutureBuilder<List<StaffDetailsModel>>(
-                future: _visitorRepository.getStaffDetails(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    return Text('Error: ${snapshot.error}');
-                  } else {
-                    List<String> values = snapshot.data!
-                        .map((value) => value.toString())
-                        .toList();
-                    return CustomDropdownButton(
-                      items: values,
+              BlocBuilder<VisitorCubit, VisitorState>(
+                builder: (context, state) {
+                  if (state is VisitorInitialState) {
+                    return const Center(child: Text('Please wait...'));
+                  } else if (state is VisitorLoadingState) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is VisitorStaffDetailsLoadedState) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: SearchableDropdown.single(
+                        items: state.staff.map((staff) {
+                          return DropdownMenuItem<StaffDetailsData>(
+                            value: staff,
+                            child: Text(staff.name ?? 'No Name Found'),
+                          );
+                        }).toList(),
+                        onChanged: (StaffDetailsData? selectedUser) {
+                          if (selectedUser != null) {
+                            print('Selected user ID: ${selectedUser.id}');
+                          }
+                        },
+                        isExpanded: true,
+                        displayClearIcon: false, // Optional, hides clear icon
+                        hint: 'Select a user',
+                        searchHint: 'Search user by name',
+                      ),
                     );
+                  } else if (state is VisitorErrorState) {
+                    return Center(child: Text(state.message));
                   }
+                  return const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator.adaptive(),
+                  );
                 },
               ),
               const GapWidget(),
@@ -180,13 +155,6 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                 children: [
                   const Text('Select Department*'),
                   CustomDropdownButton(items: departments)
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text('Select Staff Name*'),
-                  CustomDropdownButton(items: _staffNames)
                 ],
               ),
               SingleChildScrollView(

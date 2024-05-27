@@ -60,7 +60,7 @@ class _OtpScreenState extends State<OtpScreen> {
       final visitorData = await VisitorPreferences.fetchVisitorDetails();
       String? visitorId = visitorData["visitorId"];
       context.read<VisitorCubit>().verifyEmail(
-            visitorId: int.parse(visitorId!),
+            visitorId: visitorId!,
             verificationOTP: otp,
           );
     } catch (ex) {
@@ -157,7 +157,7 @@ class _OtpScreenState extends State<OtpScreen> {
                       if (otp.length != 6) {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Color.fromARGB(255, 151, 130, 128),
                           content: Text('Please enter a valid OTP.'),
                           duration: Duration(seconds: 3),
                         ));

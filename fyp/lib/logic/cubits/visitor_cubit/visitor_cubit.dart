@@ -47,6 +47,7 @@ class VisitorCubit extends Cubit<VisitorState> {
     await VisitorPreferences.saveVisitorDetails(
         accessToken, refreshToken, email, password, visitorId, emailVerified);
     emit(VisitorLoggedInState(visitorData));
+
     log('Details Saved!');
   }
 
@@ -113,7 +114,7 @@ class VisitorCubit extends Cubit<VisitorState> {
   }
 
   void verifyEmail(
-      {required int visitorId, required String verificationOTP}) async {
+      {required String visitorId, required String verificationOTP}) async {
     emit(VisitorLoadingState());
     try {
       bool emailVerified = await _visitorRepository.verifyEmail(
@@ -140,6 +141,16 @@ class VisitorCubit extends Cubit<VisitorState> {
       emit(VisitorEmailVerifiedState());
     } catch (ex) {
       emit(VisitorErrorState(ex.toString()));
+    }
+  }
+
+  Future<void> fetchUsers() async {
+    try {
+      emit(VisitorLoadingState());
+      final users = await _visitorRepository.fetchStaffDetails();
+      emit(VisitorStaffDetailsLoadedState(users));
+    } catch (e) {
+      emit(VisitorErrorState('Failed to fetch users'));
     }
   }
 

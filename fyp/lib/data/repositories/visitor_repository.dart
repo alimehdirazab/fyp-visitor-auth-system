@@ -86,10 +86,16 @@ class VisitorRepository {
   }
 
   Future<bool> verifyEmail(
-      {required int visitorId, required String verificationOTP}) async {
+      {required String visitorId, required String verificationOTP}) async {
     try {
       Response response = await _api.sendRequest.post(
         '/api/v1/visitors/verify-email',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
         data: jsonEncode({
           "userId": visitorId,
           "verificationOTP": verificationOTP,
@@ -97,7 +103,7 @@ class VisitorRepository {
       );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (apiResponse.status == 200) {
+      if (apiResponse.status == 201) {
         Map<String, dynamic> responseData = jsonDecode(response.data);
         bool emailVerified = responseData['data']['emailVerified'];
         return emailVerified;
@@ -163,42 +169,40 @@ class VisitorRepository {
     }
   }
 
-  Future<List<StaffDetailsModel>> getStaffDetails() async {
+  Future<List<StaffDetailsData>> fetchStaffDetails() async {
     try {
       final preferences = await VisitorPreferences.fetchVisitorDetails();
-      accessToken = preferences['accessToken'];
-      Response response = await _api.sendRequest.get(
+      final accessToken = preferences['accessToken'];
+
+      final response = await _api.sendRequest.get(
         '/api/v1/users',
         options: Options(
           headers: {
-            'Authorization':
-                'Bearer $accessToken', // Replace with your actual token
+            'Authorization': 'Bearer $accessToken',
             'Content-Type': 'application/json',
           },
         ),
       );
 
-      if (response.statusCode == 401) {
-        // Handle 401 Unauthorized error
-        throw Exception('Unauthorized: ${response.statusMessage}');
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      // Check if the response status is 200
+      if (apiResponse.status == 200) {
+        // Parse the response JSON into StaffDetailsModel
+        List<dynamic> responseData = apiResponse.data;
+        List<StaffDetailsData> staffDetailsList = responseData
+            .map((data) => StaffDetailsData.fromJson(data))
+            .toList();
+
+        // Return the list of StaffData from the model
+        return staffDetailsList;
+      } else {
+        // If the response status is not 200, throw an error
+        throw ('Error fetching staff details: ${response.statusCode}');
       }
-
-      // Parse response data
-      List<dynamic> responseData = jsonDecode(response.data);
-
-      // Map response data to StaffDetailsModel
-      List<StaffDetailsModel> staffDetailsList = responseData.map((e) {
-        return StaffDetailsModel(
-          id: e['id'],
-          name: e['name'],
-          email: e['email'],
-          role: e['role'],
-        );
-      }).toList();
-
-      return staffDetailsList;
     } catch (e) {
-      throw e.toString();
+      // Catch any error that occurred during the process
+      throw ('Error fetching staff details: $e');
     }
   }
 

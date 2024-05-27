@@ -1,75 +1,72 @@
 class StaffModel {
-  int? status;
-  String? res;
-  String? message;
-  StaffData? data;
+  final int status;
+  final String res;
+  final String message;
+  final StaffData data;
 
-  StaffModel({this.status, this.res, this.message, this.data});
+  StaffModel({
+    required this.status,
+    required this.res,
+    required this.message,
+    required this.data,
+  });
 
-  StaffModel.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    res = json['res'];
-    message = json['message'];
-    data = json['data'] != null ? new StaffData.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['res'] = this.res;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
+  factory StaffModel.fromJson(Map<String, dynamic> json) {
+    return StaffModel(
+      status: json['status'],
+      res: json['res'],
+      message: json['message'],
+      data: StaffData.fromJson(json['data']),
+    );
   }
 }
 
 class StaffData {
-  String? accessToken;
-  String? refreshToken;
-  int? id;
-  Null? name;
-  Null? profilePic;
-  String? email;
-  bool? emailVerified;
-  Null? username;
-  String? role;
+  final String accessToken;
+  final String refreshToken;
+  final String id;
+  final String? name;
+  final String? profilePic;
+  final String? cnicFrontPic;
+  final String? cnicBackPic;
+  final String email;
+  final bool emailVerified;
+  final String? username;
+  final String role;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
-  StaffData(
-      {this.accessToken,
-      this.refreshToken,
-      this.id,
-      this.name,
-      this.profilePic,
-      this.email,
-      this.emailVerified,
-      this.username,
-      this.role});
+  StaffData({
+    required this.accessToken,
+    required this.refreshToken,
+    required this.id,
+    this.name,
+    this.profilePic,
+    this.cnicFrontPic,
+    this.cnicBackPic,
+    required this.email,
+    required this.emailVerified,
+    this.username,
+    required this.role,
+    required this.createdAt,
+    required this.updatedAt,
+  });
 
-  StaffData.fromJson(Map<String, dynamic> json) {
-    accessToken = json['accessToken'];
-    refreshToken = json['refreshToken'];
-    id = json['id'];
-    name = json['name'];
-    profilePic = json['profilePic'];
-    email = json['email'];
-    emailVerified = json['emailVerified'];
-    username = json['username'];
-    role = json['role'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['accessToken'] = this.accessToken;
-    data['refreshToken'] = this.refreshToken;
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['profilePic'] = this.profilePic;
-    data['email'] = this.email;
-    data['emailVerified'] = this.emailVerified;
-    data['username'] = this.username;
-    data['role'] = this.role;
-    return data;
+  factory StaffData.fromJson(Map<String, dynamic> json) {
+    return StaffData(
+      accessToken: json['accessToken'],
+      refreshToken: json['refreshToken'],
+      id: json['id'],
+      name: json['name'],
+      profilePic: json['profilePic'],
+      cnicFrontPic: json['cnicFrontPic'],
+      cnicBackPic: json['cnicBacPic'],
+      email: json['email'],
+      emailVerified: json['emailVerified'],
+      username: json['username'],
+      role: json['role'],
+      createdAt: DateTime.parse(json['createdAt']),
+      updatedAt: DateTime.parse(json['updatedAt']),
+    );
   }
 }
