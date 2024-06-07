@@ -8,11 +8,15 @@ class VisitorInitialState extends VisitorState {}
 
 class VisitorLoadingState extends VisitorState {}
 
+// Email Verification States
 class VisitorEmailVerifiedState extends VisitorState {}
 
 class VisitorEmailNotVerifiedState extends VisitorState {}
 
 class VisitorOtpResentState extends VisitorState {}
+
+// Staff Details States
+class VisitorStaffDetailsLoadingState extends VisitorState {}
 
 class VisitorStaffDetailsLoadedState extends VisitorState {
   final List<StaffDetailsData> staff;
@@ -20,12 +24,28 @@ class VisitorStaffDetailsLoadedState extends VisitorState {
   VisitorStaffDetailsLoadedState(this.staff);
 }
 
+class VisitorStaffDetailsErrorState extends VisitorState {
+  final String message;
+  VisitorStaffDetailsErrorState(this.message);
+}
+
+// Visitor Details Update States
+class VisitorDetailsUpdatingState extends VisitorState {}
+
 class VisitorDetailsUpdatedState extends VisitorState {
-  /// i use StaffDetailsData in this case because Visitor and a Staff have the same structure
+  /// Using StaffDetailsData in this case because Visitor and a Staff have the same structure
   final StaffDetailsData visitorData;
 
   VisitorDetailsUpdatedState(this.visitorData);
 }
+
+class VisitorDetailsUpdateErrorState extends VisitorState {
+  final String message;
+  VisitorDetailsUpdateErrorState(this.message);
+}
+
+// Appointment States
+class VisitorAppointmentSavingState extends VisitorState {}
 
 class VisitorAppointmentSavedState extends VisitorState {
   final AppointmentDataModel appointmentData;
@@ -33,8 +53,14 @@ class VisitorAppointmentSavedState extends VisitorState {
   VisitorAppointmentSavedState(this.appointmentData);
 }
 
+class VisitorAppointmentSaveErrorState extends VisitorState {
+  final String message;
+  VisitorAppointmentSaveErrorState(this.message);
+}
+
+// Authentication States
 class VisitorLoggedInState extends VisitorState {
-  VisitorData visitorData;
+  final VisitorData visitorData;
   VisitorLoggedInState(this.visitorData);
 }
 

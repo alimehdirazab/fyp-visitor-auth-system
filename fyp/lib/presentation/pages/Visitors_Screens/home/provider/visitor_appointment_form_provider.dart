@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
@@ -10,6 +9,7 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
   VisitorAppointmentFormProvider(this.context) {
     _listenToUserCubit();
   }
+
   bool isLoading = false;
   String? error = "";
   final formKey = GlobalKey<FormState>();
@@ -18,8 +18,8 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
   final phoneController = TextEditingController();
   final purposeController = TextEditingController();
 
-  String? userId = "";
-  String? visitorId = "";
+  String? userId;
+  String? visitorId;
   DateTime? appointmentDate;
   TimeOfDay? appointmentTime;
   String? profilePic;
@@ -42,7 +42,6 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
       } else {
         isLoading = false;
         error = "";
-
         notifyListeners();
       }
     });
@@ -54,12 +53,25 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
     String name = nameController.text.trim();
     String phone = phoneController.text.trim();
 
+    // Check if required image fields are null
+    if (profilePic == null || cnicFrontPic == null || cnicBackPic == null) {
+      error = "Please upload all required images";
+      notifyListeners();
+      return;
+    }
+
+    // Logging for debugging
+    debugPrint("Updating visitor details with:");
+    debugPrint(
+        "Name: $name, Phone: $phone, ProfilePic: $profilePic, CNIC Front: $cnicFrontPic, CNIC Back: $cnicBackPic");
+
     BlocProvider.of<VisitorCubit>(context).updateVisitorDetails(
-        name: name,
-        phone: phone,
-        profilePic: profilePic!,
-        cnicFrontPic: cnicFrontPic!,
-        cnicBackPic: cnicBackPic!);
+      name: name,
+      phone: phone,
+      profilePic: profilePic!,
+      cnicFrontPic: cnicFrontPic!,
+      cnicBackPic: cnicBackPic!,
+    );
   }
 
   void saveAppointment() async {
@@ -67,11 +79,24 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
 
     String purpose = purposeController.text.trim();
 
+    // Check if userId, appointmentDate, or appointmentTime are null
+    if (userId == null || appointmentDate == null || appointmentTime == null) {
+      error = "Please complete all appointment details";
+      notifyListeners();
+      return;
+    }
+
+    // Logging for debugging
+    debugPrint("Saving appointment with:");
+    debugPrint(
+        "UserId: $userId, Date: $appointmentDate, Time: $appointmentTime, Purpose: $purpose");
+
     BlocProvider.of<VisitorCubit>(context).saveAppointment(
-        staffId: userId!,
-        date: appointmentDate.toString(),
-        time: appointmentTime.toString(),
-        purpose: purpose);
+      staffId: userId!,
+      date: appointmentDate.toString(),
+      time: appointmentTime.toString(),
+      purpose: purpose,
+    );
   }
 
   @override

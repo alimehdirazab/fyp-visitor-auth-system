@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/data/repositories/visitor_repository.dart';
@@ -62,7 +61,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       String visitorId = visitorData.id.toString();
       bool emailVerified = visitorData.emailVerified!;
 
-      if (visitorData.emailVerified == false) {
+      if (!emailVerified) {
         emit(VisitorEmailNotVerifiedState());
         await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken,
             email, password, visitorId, emailVerified);
@@ -93,7 +92,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       String visitorId = visitorData.id.toString();
       bool emailVerified = visitorData.emailVerified!;
 
-      if (visitorData.emailVerified == false) {
+      if (!emailVerified) {
         emit(VisitorEmailNotVerifiedState());
         await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken,
             email, password, visitorId, emailVerified);
@@ -145,12 +144,12 @@ class VisitorCubit extends Cubit<VisitorState> {
   }
 
   Future<void> fetchUsers() async {
+    emit(VisitorStaffDetailsLoadingState());
     try {
-      emit(VisitorLoadingState());
       final users = await _visitorRepository.fetchStaffDetails();
       emit(VisitorStaffDetailsLoadedState(users));
     } catch (e) {
-      emit(VisitorErrorState('Failed to fetch users'));
+      emit(VisitorStaffDetailsErrorState('Failed to fetch users'));
     }
   }
 
@@ -161,18 +160,8 @@ class VisitorCubit extends Cubit<VisitorState> {
     required String cnicFrontPic,
     required String cnicBackPic,
   }) async {
+    emit(VisitorDetailsUpdatingState());
     try {
-      emit(VisitorLoadingState());
-
-      // Add null checks for the parameters
-      if (name.isEmpty ||
-          phone.isEmpty ||
-          profilePic.isEmpty ||
-          cnicFrontPic.isEmpty ||
-          cnicBackPic.isEmpty) {
-        throw Exception('One or more parameters are null or empty');
-      }
-
       final visitorData = await _visitorRepository.updateVisitorDetails(
         name: name,
         phone: phone,
@@ -182,11 +171,11 @@ class VisitorCubit extends Cubit<VisitorState> {
       );
       emit(VisitorDetailsUpdatedState(visitorData));
     } catch (e) {
-      // Log the error message
-      print('Error updating visitor details: $e');
+      // // Log the error message
+      // print('Error updating visitor details: $e');
 
-      // Emit the VisitorErrorState with the actual error message
-      emit(VisitorErrorState('Failed to update details: $e'));
+      // Emit the VisitorDetailsUpdateErrorState with the actual error message
+      emit(VisitorDetailsUpdateErrorState('Failed to update details: $e'));
     }
   }
 
@@ -196,8 +185,8 @@ class VisitorCubit extends Cubit<VisitorState> {
     required String time,
     required String purpose,
   }) async {
+    emit(VisitorAppointmentSavingState());
     try {
-      emit(VisitorLoadingState());
       final appointmentData = await _visitorRepository.createAppointment(
         staffId: staffId,
         date: date,
@@ -206,7 +195,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       );
       emit(VisitorAppointmentSavedState(appointmentData));
     } catch (e) {
-      emit(VisitorErrorState('Failed to save appointment'));
+      emit(VisitorAppointmentSaveErrorState('Failed to save appointment'));
     }
   }
 

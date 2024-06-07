@@ -47,6 +47,7 @@ dependencies:
   image_picker: ^1.0.7
   flutter_searchable_dropdown: ^2.0.0
   dropdown_search: ^5.0.2
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_test:

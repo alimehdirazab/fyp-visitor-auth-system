@@ -75,7 +75,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
 
     return BlocListener<VisitorCubit, VisitorState>(
       listener: (context, state) {
-        if (state is VisitorErrorState) {
+        if (state is VisitorDetailsUpdateErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -91,6 +91,13 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
           );
           // If the visitor details are updated successfully, save the appointment
           provider.saveAppointment();
+        } else if (state is VisitorAppointmentSaveErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.red,
+            ),
+          );
         } else if (state is VisitorAppointmentSavedState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -134,11 +141,20 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                     },
                   ),
                   const GapWidget(),
+                  PrimaryTextField(
+                    labelText: 'Purpose Of Visiting',
+                    controller: provider.purposeController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Purpose is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  const GapWidget(),
                   BlocBuilder<VisitorCubit, VisitorState>(
                     builder: (context, state) {
-                      if (state is VisitorInitialState) {
-                        return const Center(child: Text('Please wait...'));
-                      } else if (state is VisitorLoadingState) {
+                      if (state is VisitorStaffDetailsLoadingState) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is VisitorStaffDetailsLoadedState) {
                         return Padding(
@@ -163,24 +179,13 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                             searchHint: 'Search user by name',
                           ),
                         );
-                      } else if (state is VisitorErrorState) {
+                      } else if (state is VisitorStaffDetailsErrorState) {
                         return Center(child: Text(state.message));
                       }
                       return const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: CircularProgressIndicator.adaptive(),
                       );
-                    },
-                  ),
-                  const GapWidget(),
-                  PrimaryTextField(
-                    labelText: 'Purpose Of Visiting',
-                    controller: provider.purposeController,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Purpose is required';
-                      }
-                      return null;
                     },
                   ),
                   const GapWidget(),
@@ -253,44 +258,73 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                     ],
                   ),
                   const GapWidget(),
-                  Text(
-                    '${date.day}:${date.month}:${date.year}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  ElevatedButton(
-                      onPressed: () async {
-                        final DateTime? selectedDate = await showDatePicker(
-                            context: context,
-                            initialDate: date,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2099));
-                        if (selectedDate != null) {
-                          setState(() {
-                            date = selectedDate;
-                            provider.appointmentDate = date;
-                          });
-                        }
-                      },
-                      child: const Text('Choose Date')),
-                  const GapWidget(),
-                  Text(
-                    '${time.hour}:${time.minute}',
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  ElevatedButton(
-                    onPressed: () async {
-                      final TimeOfDay? timeOfDay = await showTimePicker(
-                          context: context,
-                          initialTime: time,
-                          initialEntryMode: TimePickerEntryMode.dial);
-                      if (timeOfDay != null) {
-                        setState(() {
-                          time = timeOfDay;
-                          provider.appointmentTime = time;
-                        });
-                      }
-                    },
-                    child: const Text('Choose Time'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              final DateTime? selectedDate =
+                                  await showDatePicker(
+                                      context: context,
+                                      initialDate: date,
+                                      firstDate: DateTime.now(),
+                                      lastDate: DateTime(2099));
+                              if (selectedDate != null) {
+                                setState(() {
+                                  date = selectedDate;
+                                  provider.appointmentDate = date;
+                                });
+                              }
+                            },
+                            child: const Text('Choose Date'),
+                          ),
+                          provider.appointmentDate != null
+                              ? Text(
+                                  '${provider.appointmentDate?.day}:${provider.appointmentDate?.month}:${provider.appointmentDate?.year}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  '${date.day}:${date.month}:${date.year}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                        ],
+                      ),
+                      const GapWidget(),
+                      Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () async {
+                              final TimeOfDay? timeOfDay = await showTimePicker(
+                                  context: context,
+                                  initialTime: time,
+                                  initialEntryMode: TimePickerEntryMode.dial);
+                              if (timeOfDay != null) {
+                                setState(() {
+                                  time = timeOfDay;
+                                  provider.appointmentTime = time;
+                                });
+                              }
+                            },
+                            child: const Text('Choose Time'),
+                          ),
+                          provider.appointmentTime != null
+                              ? Text(
+                                  '${provider.appointmentTime?.hour}:${provider.appointmentTime?.minute}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  '${time.hour}:${time.minute}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                        ],
+                      ),
+                    ],
                   ),
                   const GapWidget(),
                   const GapWidget(),

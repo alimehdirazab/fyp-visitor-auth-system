@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
 import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
+import 'package:path/path.dart';
 // import 'package:fyp/logic/services/visitor_preferences.dart';
 
 class VisitorRepository {
@@ -204,6 +206,56 @@ class VisitorRepository {
     } catch (e) {
       // Catch any error that occurred during the process
       throw ('Error fetching staff details: $e');
+    }
+  }
+
+  Future<void> uploadPictures({
+    required String profilePicPath,
+    required String cnicFrontPicPath,
+    required String cnicBackPicPath,
+  }) async {
+    try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
+
+      String profilePicBase64 =
+          base64Encode(File(profilePicPath).readAsBytesSync());
+      String cnicFrontPicBase64 =
+          base64Encode(File(cnicFrontPicPath).readAsBytesSync());
+      String cnicBackPicBase64 =
+          base64Encode(File(cnicBackPicPath).readAsBytesSync());
+
+      String profilePicName = basename(profilePicPath);
+      String cnicFrontPicName = basename(cnicFrontPicPath);
+      String cnicBackPicName = basename(cnicBackPicPath);
+
+      FormData formData = FormData.fromMap({
+        "profilePic": profilePicBase64,
+        "profilePicName": profilePicName,
+        "cnicFrontPic": cnicFrontPicBase64,
+        "cnicFrontPicName": cnicFrontPicName,
+        "cnicBackPic": cnicBackPicBase64,
+        "cnicBackPicName": cnicBackPicName,
+      });
+
+      final response = await _api.sendRequest.post(
+        '/api/v1/images/upload',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'multipart/form-data',
+          },
+        ),
+        data: formData,
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status != 200) {
+        throw ('Error uploading pictures: ${apiResponse.message}');
+      }
+    } catch (e) {
+      throw ('Error uploading pictures: $e');
     }
   }
 
