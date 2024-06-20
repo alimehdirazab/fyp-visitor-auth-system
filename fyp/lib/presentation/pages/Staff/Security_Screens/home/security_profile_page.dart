@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
-import 'package:fyp/presentation/pages/loading_screen.dart';
+import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/profile_tile.dart';
@@ -74,7 +74,7 @@ class _SecurityProfilePageState extends State<SecurityProfilePage> {
                   BlocProvider.of<StaffCubit>(context).signOut();
                   Navigator.popUntil(context, (route) => route.isFirst);
                   Navigator.pushReplacementNamed(
-                      context, LoadingScreen.routeName);
+                      context, VisitorLoadingScreen.routeName);
                 },
                 text: "Log out",
               ),

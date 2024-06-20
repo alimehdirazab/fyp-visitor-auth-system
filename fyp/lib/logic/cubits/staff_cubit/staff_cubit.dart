@@ -93,6 +93,16 @@ class StaffCubit extends Cubit<StaffState> {
   //   return userDetails;
   // }
 
+  // Future<void> getUserById(String id) async {
+  //   emit(StaffLoadingState());
+  //   try {
+  //     StaffData staffData = await _staffRepository.getUserById(id);
+  //     emit(StaffGetByIdState(staffData));
+  //   } catch (ex) {
+  //     emit(StaffErrorState(ex.toString()));
+  //   }
+  // }
+
   void signOut() async {
     await StaffPreferences.clear();
     _staffRepository.cancelTokenRefreshTimer();

@@ -14,6 +14,7 @@ import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/primary_textfield.dart';
 import 'package:flutter_searchable_dropdown/flutter_searchable_dropdown.dart';
 import 'package:provider/provider.dart';
+import 'package:image/image.dart' as img;
 
 class VisitorFormScreen extends StatefulWidget {
   const VisitorFormScreen({Key? key}) : super(key: key);
@@ -43,28 +44,78 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
     final pickedFile = await _picker.pickImage(source: source);
     setState(() {
       if (pickedFile != null) {
-        switch (buttonName) {
-          case 'CNIC Front':
-            _cnicFrontImagePath = File(pickedFile.path);
-            _cnicFrontImageName = pickedFile.name;
-            Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
-                .cnicFrontPic = pickedFile.name;
-            break;
-          case 'CNIC Back':
-            _cnicBackImagePath = File(pickedFile.path);
-            _cnicBackImageName = pickedFile.name;
-            Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
-                .cnicBackPic = pickedFile.name;
-            break;
-          case 'Selfie':
-            _selfieImagePath = File(pickedFile.path);
-            _selfieImageName = pickedFile.name;
-            Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
-                .profilePic = pickedFile.name;
-            break;
+        final File imageFile = File(pickedFile.path);
+        final img.Image? image = img.decodeImage(imageFile.readAsBytesSync());
+
+        if (image != null) {
+          final img.Image resizedImage = img.copyResize(image, width: 500);
+
+          final File compressedImageFile = File(pickedFile.path)
+            ..writeAsBytesSync(img.encodeJpg(resizedImage, quality: 65));
+
+          switch (buttonName) {
+            case 'CNIC Front':
+              _cnicFrontImagePath = compressedImageFile;
+              _cnicFrontImageName = pickedFile.name;
+              break;
+            case 'CNIC Back':
+              _cnicBackImagePath = compressedImageFile;
+              _cnicBackImageName = pickedFile.name;
+              break;
+            case 'Selfie':
+              _selfieImagePath = compressedImageFile;
+              _selfieImageName = pickedFile.name;
+              break;
+          }
         }
       }
     });
+  }
+
+  Future<void> _uploadImagesAndSubmit() async {
+    try {
+      if (_cnicFrontImagePath == null ||
+          _cnicBackImagePath == null ||
+          _selfieImagePath == null) {
+        throw 'Please upload all required images.';
+      }
+
+      final visitorCubit = context.read<VisitorCubit>();
+
+      final cnicFrontUrl = await visitorCubit.uploadFile(
+        fileName: _cnicFrontImageName,
+        filePath: _cnicFrontImagePath!.path,
+      );
+      final cnicBackUrl = await visitorCubit.uploadFile(
+        fileName: _cnicBackImageName,
+        filePath: _cnicBackImagePath!.path,
+      );
+      final selfieUrl = await visitorCubit.uploadFile(
+        fileName: _selfieImageName,
+        filePath: _selfieImagePath!.path,
+      );
+
+      if (cnicFrontUrl.isNotEmpty &&
+          cnicBackUrl.isNotEmpty &&
+          selfieUrl.isNotEmpty) {
+        Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
+          ..cnicFrontPic = cnicFrontUrl
+          ..cnicBackPic = cnicBackUrl
+          ..profilePic = selfieUrl;
+
+        Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
+            .updateVisitorDetails();
+      } else {
+        throw 'Image upload failed';
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -330,8 +381,8 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                   const GapWidget(),
                   PrimaryButton(
                     text: 'Submit',
-                    onPressed: () {
-                      provider.updateVisitorDetails();
+                    onPressed: () async {
+                      await _uploadImagesAndSubmit();
                     },
                   )
                 ],

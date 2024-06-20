@@ -41,7 +41,7 @@ class StaffDetailsData {
   final String email;
   final bool emailVerified;
   final String? username;
-  final String role;
+  final String? role;
   final DateTime createdAt;
   final DateTime updatedAt;
 

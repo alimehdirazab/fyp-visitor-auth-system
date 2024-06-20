@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/data/repositories/visitor_repository.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
@@ -42,9 +43,25 @@ class VisitorCubit extends Cubit<VisitorState> {
     required String password,
     required String visitorId,
     required bool emailVerified,
+    required String phoneNumber,
+    required String visitorName,
+    required String profilePicture,
+    required String cnicBackPicture,
+    required String cnicFrontPicture,
   }) async {
     await VisitorPreferences.saveVisitorDetails(
-        accessToken, refreshToken, email, password, visitorId, emailVerified);
+      accessToken,
+      refreshToken,
+      email,
+      password,
+      visitorId,
+      emailVerified,
+      phoneNumber,
+      visitorName,
+      profilePicture,
+      cnicBackPicture,
+      cnicFrontPicture,
+    );
     emit(VisitorLoggedInState(visitorData));
 
     log('Details Saved!');
@@ -59,12 +76,29 @@ class VisitorCubit extends Cubit<VisitorState> {
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
       String visitorId = visitorData.id.toString();
-      bool emailVerified = visitorData.emailVerified!;
+      bool emailVerified = visitorData.emailVerified;
+      String phoneNumber = visitorData.phone.toString();
+      String visitorName = visitorData.name.toString();
+      String profilePicture = visitorData.profilePic.toString();
+      String cnicBackPicture = visitorData.cnicBackPic.toString();
+      String cnicFrontPicture = visitorData.cnicFrontPic.toString();
 
       if (!emailVerified) {
         emit(VisitorEmailNotVerifiedState());
-        await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken,
-            email, password, visitorId, emailVerified);
+
+        await VisitorPreferences.saveVisitorDetails(
+          accessToken,
+          refreshToken,
+          email,
+          password,
+          visitorId,
+          emailVerified,
+          phoneNumber,
+          visitorName,
+          profilePicture,
+          cnicBackPicture,
+          cnicFrontPicture,
+        );
       } else {
         _emitLoggedInState(
           visitorData: visitorData,
@@ -74,6 +108,11 @@ class VisitorCubit extends Cubit<VisitorState> {
           password: password,
           visitorId: visitorId,
           emailVerified: emailVerified,
+          phoneNumber: phoneNumber,
+          visitorName: visitorName,
+          profilePicture: profilePicture,
+          cnicBackPicture: cnicBackPicture,
+          cnicFrontPicture: cnicFrontPicture,
         );
       }
     } catch (ex) {
@@ -91,11 +130,27 @@ class VisitorCubit extends Cubit<VisitorState> {
       String refreshToken = visitorData.refreshToken.toString();
       String visitorId = visitorData.id.toString();
       bool emailVerified = visitorData.emailVerified!;
+      String phoneNumber = visitorData.phone.toString();
+      String visitorName = visitorData.name.toString();
+      String profilePicture = visitorData.profilePic.toString();
+      String cnicBackPicture = visitorData.cnicBackPic.toString();
+      String cnicFrontPicture = visitorData.cnicFrontPic.toString();
 
       if (!emailVerified) {
         emit(VisitorEmailNotVerifiedState());
-        await VisitorPreferences.saveVisitorDetails(accessToken, refreshToken,
-            email, password, visitorId, emailVerified);
+        await VisitorPreferences.saveVisitorDetails(
+          accessToken,
+          refreshToken,
+          email,
+          password,
+          visitorId,
+          emailVerified,
+          phoneNumber,
+          visitorName,
+          profilePicture,
+          cnicBackPicture,
+          cnicFrontPicture,
+        );
       } else {
         _emitLoggedInState(
           visitorData: visitorData,
@@ -105,6 +160,11 @@ class VisitorCubit extends Cubit<VisitorState> {
           password: password,
           visitorId: visitorId,
           emailVerified: emailVerified,
+          phoneNumber: phoneNumber,
+          visitorName: visitorName,
+          profilePicture: profilePicture,
+          cnicBackPicture: cnicBackPicture,
+          cnicFrontPicture: cnicFrontPicture,
         );
       }
     } catch (ex) {
@@ -153,6 +213,24 @@ class VisitorCubit extends Cubit<VisitorState> {
     }
   }
 
+  Future<String> uploadFile({
+    required String fileName,
+    required String filePath,
+  }) async {
+    try {
+      emit(VisitorImageUploadLoadingState());
+      final String fileUrl = await _visitorRepository.uploadFile(
+        fileName: fileName,
+        filePath: filePath,
+      );
+      emit(VisitorImageUploadSuccessState(fileUrl));
+      return fileUrl;
+    } catch (e) {
+      emit(VisitorImageUploadErrorState(e.toString()));
+      throw e; // Add a throw statement to ensure that a value is always returned
+    }
+  }
+
   Future<void> updateVisitorDetails({
     required String name,
     required String phone,
@@ -196,6 +274,17 @@ class VisitorCubit extends Cubit<VisitorState> {
       emit(VisitorAppointmentSavedState(appointmentData));
     } catch (e) {
       emit(VisitorAppointmentSaveErrorState('Failed to save appointment'));
+    }
+  }
+
+  Future<void> fetchAppointments() async {
+    emit(VisitorAppointmentFetchLoadingState());
+    try {
+      final appointments = await _visitorRepository.fetchAppointments();
+      emit(VisitorAppointmentFetchLoadedState(appointments));
+    } catch (e) {
+      emit(VisitorAppointmentFetchErrorState('Failed to fetch appointments'));
+      throw e;
     }
   }
 

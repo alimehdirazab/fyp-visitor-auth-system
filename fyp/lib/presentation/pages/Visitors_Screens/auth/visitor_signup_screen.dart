@@ -7,7 +7,7 @@ import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/provider/visitor_signup_provider.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/visitor_login_screen.dart';
 
-import 'package:fyp/presentation/pages/loading_screen.dart';
+import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/google_button.dart';
@@ -35,7 +35,8 @@ class _VisitorSignupScreenState extends State<VisitorSignupScreen> {
             state is VisitorEmailNotVerifiedState ||
             state is VisitorEmailVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
+          Navigator.pushReplacementNamed(
+              context, VisitorLoadingScreen.routeName);
         }
       },
       child: Scaffold(

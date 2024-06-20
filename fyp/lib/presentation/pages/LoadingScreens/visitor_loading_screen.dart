@@ -15,16 +15,16 @@ import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_home_screen
 import 'package:fyp/presentation/pages/Visitors_Screens/auth/otp_screen.dart';
 import 'package:fyp/presentation/pages/select_user_screen.dart';
 
-class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({super.key});
+class VisitorLoadingScreen extends StatefulWidget {
+  const VisitorLoadingScreen({super.key});
 
-  static const String routeName = "loadingScreen";
+  static const String routeName = "VisitorloadingScreen";
 
   @override
-  State<LoadingScreen> createState() => _LoadingScreenState();
+  State<VisitorLoadingScreen> createState() => _VisitorLoadingScreenState();
 }
 
-class _LoadingScreenState extends State<LoadingScreen> {
+class _VisitorLoadingScreenState extends State<VisitorLoadingScreen> {
   void goToNextScreen() {
     //Visitors Screen Navigation
     VisitorState visitorState = BlocProvider.of<VisitorCubit>(context).state;

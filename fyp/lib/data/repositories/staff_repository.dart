@@ -46,6 +46,7 @@ class StaffRepository {
           "email": email,
           "password": password,
           "role": role,
+          "fcmToken": password,
         }),
       );
 
@@ -73,6 +74,7 @@ class StaffRepository {
         data: jsonEncode({
           "email": email,
           "password": password,
+          "fcmToken": password,
         }),
       );
 

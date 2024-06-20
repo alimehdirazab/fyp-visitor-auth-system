@@ -8,6 +8,14 @@ class VisitorPreferences {
   static const String _visitorIdKey = "visitorId"; // Add visitorId key
   static const String _emailVerifiedKey =
       "emailVerified"; // Add emailVerified key
+  static const String _phoneNumberKey = "phoneNumber"; // Add phoneNumber key
+  static const String _visitorNameKey = "visitorName"; // Add visitorName key
+  static const String _profilePictureKey =
+      "profilePicture"; // Add profilePicture key
+  static const String _cnicBackPictureKey =
+      "cnicBackPicture"; // Add cnicBackPicture key
+  static const String _cnicFrontPictureKey =
+      "cnicFrontPicture"; // Add cnicFrontPicture key
 
   static Future<void> saveVisitorDetails(
       String accessToken,
@@ -15,7 +23,12 @@ class VisitorPreferences {
       String email,
       String password,
       String visitorId,
-      bool emailVerified) async {
+      bool emailVerified,
+      String phoneNumber,
+      String visitorName,
+      String profilePicture,
+      String cnicBackPicture,
+      String cnicFrontPicture) async {
     // Add email, password, visitorId, and emailVerified parameters
     SharedPreferences instance = await SharedPreferences.getInstance();
     await instance.setString(_accessTokenKey, accessToken);
@@ -25,6 +38,14 @@ class VisitorPreferences {
     await instance.setString(_visitorIdKey, visitorId); // Save visitorId
     await instance.setBool(
         _emailVerifiedKey, emailVerified); // Save emailVerified
+    await instance.setString(_phoneNumberKey, phoneNumber); // Save phoneNumber
+    await instance.setString(_visitorNameKey, visitorName); // Save visitorName
+    await instance.setString(
+        _profilePictureKey, profilePicture); // Save profilePicture
+    await instance.setString(
+        _cnicBackPictureKey, cnicBackPicture); // Save cnicBackPicture
+    await instance.setString(
+        _cnicFrontPictureKey, cnicFrontPicture); // Save cnicFrontPicture
   }
 
   static Future<Map<String, dynamic>> fetchVisitorDetails() async {
@@ -36,6 +57,17 @@ class VisitorPreferences {
     String? visitorId = instance.getString(_visitorIdKey); // Fetch visitorId
     bool? emailVerified =
         instance.getBool(_emailVerifiedKey); // Fetch emailVerified
+    String? phoneNumber =
+        instance.getString(_phoneNumberKey); // Fetch phoneNumber
+    String? visitorName =
+        instance.getString(_visitorNameKey); // Fetch visitorName
+    String? profilePicture =
+        instance.getString(_profilePictureKey); // Fetch profilePicture
+    String? cnicBackPicture =
+        instance.getString(_cnicBackPictureKey); // Fetch cnicBackPicture
+    String? cnicFrontPicture =
+        instance.getString(_cnicFrontPictureKey); // Fetch cnicFrontPicture
+
     return {
       "accessToken": accessToken,
       "refreshToken": refreshToken,
@@ -43,6 +75,11 @@ class VisitorPreferences {
       "password": password, // Return password
       "visitorId": visitorId, // Return visitorId
       "emailVerified": emailVerified, // Return emailVerified
+      "phoneNumber": phoneNumber, // Return phoneNumber
+      "visitorName": visitorName, // Return visitorName
+      "profilePicture": profilePicture, // Return profilePicture
+      "cnicBackPicture": cnicBackPicture, // Return cnicBackPicture
+      "cnicFrontPicture": cnicFrontPicture, // Return cnicFrontPicture
     };
   }
 

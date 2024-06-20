@@ -15,6 +15,21 @@ class VisitorEmailNotVerifiedState extends VisitorState {}
 
 class VisitorOtpResentState extends VisitorState {}
 
+/// Image Upload States
+
+class VisitorImageUploadLoadingState extends VisitorState {}
+
+class VisitorImageUploadSuccessState extends VisitorState {
+  final String imageUrl;
+
+  VisitorImageUploadSuccessState(this.imageUrl);
+}
+
+class VisitorImageUploadErrorState extends VisitorState {
+  final String message;
+  VisitorImageUploadErrorState(this.message);
+}
+
 // Staff Details States
 class VisitorStaffDetailsLoadingState extends VisitorState {}
 
@@ -56,6 +71,21 @@ class VisitorAppointmentSavedState extends VisitorState {
 class VisitorAppointmentSaveErrorState extends VisitorState {
   final String message;
   VisitorAppointmentSaveErrorState(this.message);
+}
+
+// Appointment Fetch States
+
+class VisitorAppointmentFetchLoadingState extends VisitorState {}
+
+class VisitorAppointmentFetchLoadedState extends VisitorState {
+  final List<AppointmentDataModel> appointmentData;
+
+  VisitorAppointmentFetchLoadedState(this.appointmentData);
+}
+
+class VisitorAppointmentFetchErrorState extends VisitorState {
+  final String message;
+  VisitorAppointmentFetchErrorState(this.message);
 }
 
 // Authentication States

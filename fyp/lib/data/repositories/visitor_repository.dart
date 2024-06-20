@@ -46,6 +46,7 @@ class VisitorRepository {
         data: jsonEncode({
           "email": email,
           "password": password,
+          "fcmToken": password,
         }),
       );
 
@@ -73,6 +74,7 @@ class VisitorRepository {
         data: jsonEncode({
           "email": email,
           "password": password,
+          "fcmToken": password,
         }),
       );
 
@@ -159,9 +161,24 @@ class VisitorRepository {
         String? email = visitorData["email"];
         String? password = visitorData["password"];
         String? visitorId = visitorData["id"];
+        String? phoneNumber = visitorData["phone"];
+        String? visitorName = visitorData["name"];
+        String? profilePicture = visitorData["profilePic"];
+        String? cnicBackPicture = visitorData["cnicBacPic"];
+        String? cnicFrontPicture = visitorData["cnicFrontPic"];
 
-        await VisitorPreferences.saveVisitorDetails(newAccessToken,
-            newRefreshToken, email!, password!, visitorId!, true);
+        await VisitorPreferences.saveVisitorDetails(
+            newAccessToken,
+            newRefreshToken,
+            email!,
+            password!,
+            visitorId!,
+            true,
+            phoneNumber!,
+            visitorName!,
+            profilePicture!,
+            cnicBackPicture!,
+            cnicFrontPicture!);
       } catch (error) {
         // Handle error when refreshing tokens
         print("Error refreshing tokens: $error");
@@ -209,53 +226,46 @@ class VisitorRepository {
     }
   }
 
-  Future<void> uploadPictures({
-    required String profilePicPath,
-    required String cnicFrontPicPath,
-    required String cnicBackPicPath,
+  Future<String> uploadFile({
+    required String fileName,
+    required String filePath,
   }) async {
     try {
       final preferences = await VisitorPreferences.fetchVisitorDetails();
       final accessToken = preferences['accessToken'];
 
-      String profilePicBase64 =
-          base64Encode(File(profilePicPath).readAsBytesSync());
-      String cnicFrontPicBase64 =
-          base64Encode(File(cnicFrontPicPath).readAsBytesSync());
-      String cnicBackPicBase64 =
-          base64Encode(File(cnicBackPicPath).readAsBytesSync());
+      // Read the file and encode it to base64
+      final File file = File(filePath);
+      final String base64String = base64Encode(file.readAsBytesSync());
 
-      String profilePicName = basename(profilePicPath);
-      String cnicFrontPicName = basename(cnicFrontPicPath);
-      String cnicBackPicName = basename(cnicBackPicPath);
+      // Prepare the request payload
+      final Map<String, dynamic> payload = {
+        'fileName': fileName,
+        'file': base64String,
+      };
 
-      FormData formData = FormData.fromMap({
-        "profilePic": profilePicBase64,
-        "profilePicName": profilePicName,
-        "cnicFrontPic": cnicFrontPicBase64,
-        "cnicFrontPicName": cnicFrontPicName,
-        "cnicBackPic": cnicBackPicBase64,
-        "cnicBackPicName": cnicBackPicName,
-      });
-
+      // Make the HTTP POST request
       final response = await _api.sendRequest.post(
         '/api/v1/images/upload',
         options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
-            'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
           },
         ),
-        data: formData,
+        data: jsonEncode(payload),
       );
 
-      ApiResponse apiResponse = ApiResponse.fromResponse(response);
-
-      if (apiResponse.status != 200) {
-        throw ('Error uploading pictures: ${apiResponse.message}');
+      // Check the response status
+      if (response.statusCode != 200) {
+        throw Exception('Upload failed');
       }
+
+      // Decode the response body
+      final Map<String, dynamic> data = jsonDecode(response.data);
+      return data['imageUrl']; // Assuming the response contains a 'url' field
     } catch (e) {
-      throw ('Error uploading pictures: $e');
+      throw Exception('Error uploading file: $e');
     }
   }
 
@@ -267,7 +277,9 @@ class VisitorRepository {
     required String cnicBackPic,
   }) async {
     try {
+      print(name + phone + profilePic);
       final preferences = await VisitorPreferences.fetchVisitorDetails();
+      print(name + phone + profilePic);
       final accessToken = preferences['accessToken'];
       final visitorId = preferences['visitorId'];
 
@@ -287,6 +299,7 @@ class VisitorRepository {
           "cnicBacPic": cnicBackPic,
         }),
       );
+      print("resonce:" + response.data);
 
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
@@ -337,6 +350,40 @@ class VisitorRepository {
       }
     } catch (e) {
       throw ('Error creating appointment: $e');
+    }
+  }
+
+  Future<List<AppointmentDataModel>> fetchAppointments() async {
+    try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
+      final visitorId = preferences['visitorId'];
+
+      final response = await _api.sendRequest.get(
+        '/api/v1/appointments/visitor/$visitorId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+      if (apiResponse.status == 200) {
+        // Directly handle the list of appointments from the response data
+        List<dynamic> responseData = apiResponse.data as List<dynamic>;
+        List<AppointmentDataModel> appointments = responseData
+            .map((data) =>
+                AppointmentDataModel.fromJson(data as Map<String, dynamic>))
+            .toList();
+        return appointments;
+      } else {
+        throw ('Error fetching appointments: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ('Error fetching appointments: $e');
     }
   }
 

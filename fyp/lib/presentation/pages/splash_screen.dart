@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fyp/main.dart';
-import 'package:fyp/presentation/pages/loading_screen.dart';
+import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -25,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
           statusBarColor: Colors.transparent,
         ),
       );
-      Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
+      Navigator.pushReplacementNamed(context, VisitorLoadingScreen.routeName);
     });
   }
 

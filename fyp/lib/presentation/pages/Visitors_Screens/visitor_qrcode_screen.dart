@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class VisitorQrcodeScreen extends StatelessWidget {
-  const VisitorQrcodeScreen({super.key});
+  final String? qrToken;
+  final String? visitorName;
+
+  const VisitorQrcodeScreen({
+    super.key,
+    required this.qrToken,
+    required this.visitorName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +48,7 @@ class VisitorQrcodeScreen extends StatelessWidget {
                           size: 30,
                         ),
                         Text(
-                          'Ali Mehdi Raza',
+                          visitorName ?? 'Unknown Visitor',
                           style: TextStyles.body1.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -52,13 +60,12 @@ class VisitorQrcodeScreen extends StatelessWidget {
                         ),
                         const GapWidget(size: 20),
                         Container(
-                          color: Colors.white,
-                          child: Image.asset(
-                            'assets/images/smiu_qrcode.png',
-                            height: 230,
-                            width: 230,
-                          ),
-                        )
+                            color: Colors.white,
+                            child: QrImageView(
+                              data: qrToken!,
+                              version: QrVersions.auto,
+                              size: 230,
+                            )),
                       ],
                     ),
                   ),
@@ -70,28 +77,14 @@ class VisitorQrcodeScreen extends StatelessWidget {
                     height: 75,
                     fit: BoxFit.cover,
                   ),
-                )
+                ),
               ],
             ),
             const GapWidget(),
-            const Text('Scan The QR Code From Security Guard')
+            const Text('Scan The QR Code From Security Guard'),
           ],
         ),
       ),
-      // body: Padding(
-      //   padding: const EdgeInsets.all(10.0),
-      //   child: Center(
-      //     child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      //       Image.asset('assets/images/smiu_qrcode.png'),
-      //       const Text(
-      //           'Show This QrCode To Security Guard To Enter In University\n\n'),
-      //       const Text(
-      //         'Note This Qr Code will only Activate Before 15 mints form Your Meeting Time',
-      //         style: TextStyle(fontWeight: FontWeight.bold),
-      //       ),
-      //     ]),
-      //   ),
-      // ),
     );
   }
 }

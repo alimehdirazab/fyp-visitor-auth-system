@@ -41,6 +41,7 @@ class VisitorData {
   final String email;
   final bool emailVerified;
   final String? phone;
+  final List<String> devices;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -55,6 +56,7 @@ class VisitorData {
     required this.email,
     required this.emailVerified,
     this.phone,
+    required this.devices,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -71,6 +73,7 @@ class VisitorData {
       email: json['email'],
       emailVerified: json['emailVerified'],
       phone: json['phone'],
+      devices: List<String>.from(json['devices']),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -88,6 +91,7 @@ class VisitorData {
       'email': email,
       'emailVerified': emailVerified,
       'phone': phone,
+      'devices': devices,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
     };

@@ -6,7 +6,7 @@ import 'package:fyp/data/repositories/visitor_repository.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
-import 'package:fyp/presentation/pages/loading_screen.dart';
+import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/link_button.dart';
 import 'package:fyp/presentation/widgets/otp_box.dart';
@@ -74,7 +74,8 @@ class _OtpScreenState extends State<OtpScreen> {
       listener: (context, state) {
         if (state is VisitorEmailVerifiedState) {
           Navigator.popUntil(context, (route) => route.isFirst);
-          Navigator.pushReplacementNamed(context, LoadingScreen.routeName);
+          Navigator.pushReplacementNamed(
+              context, VisitorLoadingScreen.routeName);
         } else if (state is VisitorEmailNotVerifiedState ||
             state is VisitorErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
