@@ -75,6 +75,8 @@ class _VisitorAppointmentsScreenState extends State<VisitorAppointmentsScreen> {
                                     qrToken: appointment.qrToken,
                                     visitorName: appointment.visitor.name ??
                                         'Unknown Visitor',
+                                    visitorProfilePicture:
+                                        appointment.visitor.profilePic,
                                   ),
                           ),
                         );

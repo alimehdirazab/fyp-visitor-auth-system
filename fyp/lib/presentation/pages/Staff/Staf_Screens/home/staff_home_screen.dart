@@ -15,6 +15,7 @@ class StaffHomeScreen extends StatefulWidget {
 }
 
 class _StaffHomeScreenState extends State<StaffHomeScreen> {
+  final PageStorageBucket _bucket = PageStorageBucket();
   List<Widget> pages = const [
     StaffHomePage(),
     StaffSearchPage(),
@@ -22,6 +23,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
     StaffProfilePage(),
   ];
   int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +44,10 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
               ))
         ],
       ),
-      body: pages[currentIndex],
+      body: PageStorage(
+        bucket: _bucket,
+        child: SafeArea(child: pages[currentIndex]),
+      ),
       drawer: MyDrawer(
         homeButtonTap: () {
           Navigator.popUntil(context, (route) => route.isFirst);

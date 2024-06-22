@@ -16,6 +16,8 @@ class VisitorHomeScreen extends StatefulWidget {
 class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
   int currentIndex = 1;
 
+  final PageStorageBucket _bucket = PageStorageBucket();
+
   List<Widget> screens = const [
     VisitorAppointmentsScreen(),
     VisitorFormScreen(),
@@ -31,7 +33,10 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications))
         ],
       ),
-      body: SafeArea(child: screens[currentIndex]),
+      body: PageStorage(
+        bucket: _bucket,
+        child: SafeArea(child: screens[currentIndex]),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
 

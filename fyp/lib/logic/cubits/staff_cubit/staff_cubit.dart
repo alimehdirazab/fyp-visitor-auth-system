@@ -39,13 +39,23 @@ class StaffCubit extends Cubit<StaffState> {
     required String email,
     required String password,
     required String role,
+    required String staffId,
+    required String name,
+    required String profilePic,
+    required String cnicFrontPicture,
+    required String cnicBackPicture,
   }) async {
     await StaffPreferences.saveStaffDetails(
+      staffId,
+      name,
+      profilePic,
+      cnicFrontPicture,
+      cnicBackPicture,
+      email,
+      role,
       accessToken,
       refreshToken,
-      email,
       password,
-      role,
     ); // Store email and password
     emit(StaffLoggedInState(staffData));
     log('Details Saved!');
@@ -60,14 +70,25 @@ class StaffCubit extends Cubit<StaffState> {
       String accessToken = staffData.accessToken.toString();
       String refreshToken = staffData.refreshToken.toString();
       String role = staffData.role.toString();
+      String staffId = staffData.id.toString();
+      String name = staffData.name.toString();
+      String profilePic = staffData.profilePic.toString();
+      String cnicFrontPicture = staffData.cnicFrontPic.toString();
+      String cnicBackPicture = staffData.cnicBackPic.toString();
 
       _emitLoggedInState(
-          staffData: staffData,
-          accessToken: accessToken,
-          refreshToken: refreshToken,
-          email: email,
-          password: password,
-          role: role);
+        staffData: staffData,
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        email: email,
+        password: password,
+        role: role,
+        staffId: staffId,
+        name: name,
+        profilePic: profilePic,
+        cnicFrontPicture: cnicFrontPicture,
+        cnicBackPicture: cnicBackPicture,
+      );
     } catch (ex) {
       emit(StaffErrorState(ex.toString()));
     }
@@ -102,6 +123,17 @@ class StaffCubit extends Cubit<StaffState> {
   //     emit(StaffErrorState(ex.toString()));
   //   }
   // }
+
+  Future<void> fetchAppointments() async {
+    emit(StaffAppointmentFetchLoadingState());
+    try {
+      final appointments = await _staffRepository.fetchAppointments();
+      emit(StaffAppointmentFetchLoadedState(appointments));
+    } catch (e) {
+      emit(StaffAppointmentFetchErrorState('Failed to fetch appointments'));
+      throw e;
+    }
+  }
 
   void signOut() async {
     await StaffPreferences.clear();

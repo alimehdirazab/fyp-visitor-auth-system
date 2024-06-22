@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
@@ -8,7 +7,6 @@ import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/provider/visitor_appointment_form_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/widgets/visitor_upload_Button.dart';
-import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/primary_textfield.dart';
@@ -125,7 +123,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
     DateTime date = DateTime.now();
 
     return BlocListener<VisitorCubit, VisitorState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is VisitorDetailsUpdateErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

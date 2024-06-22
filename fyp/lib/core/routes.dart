@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fyp/presentation/pages/LoadingScreens/staff_loading_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/staff_notification_screen.dart';
@@ -29,6 +30,11 @@ class Routes {
       case VisitorLoadingScreen.routeName:
         return CupertinoPageRoute(
           builder: (context) => const VisitorLoadingScreen(),
+        );
+
+      case StaffLoadingScreen.routeName:
+        return CupertinoPageRoute(
+          builder: (context) => const StaffLoadingScreen(),
         );
 
       case SelectUserScreen.routeName:

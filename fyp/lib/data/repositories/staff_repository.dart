@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
+import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_model.dart';
 import 'package:fyp/logic/services/staff_preferences.dart';
 
@@ -110,8 +111,23 @@ class StaffRepository {
         String? email = staffData["email"];
         String? password = staffData["password"];
         String? role = staffData["role"];
+        String? staffId = staffData["id"];
+        String? name = staffData["name"];
+        String? profilePic = staffData["profilePic"];
+        String? cnicFrontPic = staffData["cnicFrontPic"];
+        String? cnicBackPic = staffData["cnicBacPic"];
         await StaffPreferences.saveStaffDetails(
-            newAccessToken, newRefreshToken, email!, password!, role!);
+          newAccessToken,
+          newRefreshToken,
+          email!,
+          password!,
+          role!,
+          staffId!,
+          name!,
+          profilePic!,
+          cnicFrontPic!,
+          cnicBackPic!,
+        );
       } catch (error) {
         // Handle error when refreshing tokens
         print("Error refreshing tokens: $error");
@@ -119,6 +135,40 @@ class StaffRepository {
     } else {
       // Handle case where refresh token is not available
       print("Refresh token not found.");
+    }
+  }
+
+  Future<List<AppointmentDataModel>> fetchAppointments() async {
+    try {
+      final preferences = await StaffPreferences.fetchStaffDetails();
+      final accessToken = preferences['accessToken'];
+      final staffId = preferences['staffId'];
+
+      final response = await _api.sendRequest.get(
+        '/api/v1/appointments/user/$staffId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+      if (apiResponse.status == 200) {
+        // Directly handle the list of appointments from the response data
+        List<dynamic> responseData = apiResponse.data as List<dynamic>;
+        List<AppointmentDataModel> appointments = responseData
+            .map((data) =>
+                AppointmentDataModel.fromJson(data as Map<String, dynamic>))
+            .toList();
+        return appointments;
+      } else {
+        throw ('Error fetching appointments: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ('Error fetching appointments: $e');
     }
   }
 

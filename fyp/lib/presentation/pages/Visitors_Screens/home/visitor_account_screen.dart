@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
+import 'package:fyp/logic/services/visitor_preferences.dart';
 import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
@@ -14,6 +16,27 @@ class VisitorAccountScreen extends StatefulWidget {
 }
 
 class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
+  String? name;
+  String? email;
+  String? phone;
+  String? profilePicture;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchVisitorDetails();
+  }
+
+  Future<void> _fetchVisitorDetails() async {
+    final details = await VisitorPreferences.fetchVisitorDetails();
+    setState(() {
+      name = details['visitorName'];
+      email = details['email'];
+      phone = details['phoneNumber'];
+      profilePicture = details['profilePicture'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,12 +52,21 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                   Padding(
                     padding: const EdgeInsets.only(right: 3, bottom: 3),
                     child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/ali_mehdi_raza.jpg',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+                      child: profilePicture != null
+                          ? CachedNetworkImage(
+                              imageUrl: profilePicture!,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.person, size: 120),
+                            )
+                          : const Icon(
+                              Icons.person,
+                              size: 120,
+                            ),
                     ),
                   ),
                   CircleAvatar(
@@ -48,20 +80,20 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                 ],
               ),
               const GapWidget(size: 20),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.person,
                 title: 'Name',
-                subtitle: 'Ali Mehdi Raza',
+                subtitle: name ?? 'Add your name',
               ),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.email_outlined,
                 title: 'Email',
-                subtitle: 'alimehdirazab@gmail.com',
+                subtitle: email ?? 'Add your email',
               ),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.phone,
                 title: 'Phone',
-                subtitle: '+92 307 3064292',
+                subtitle: phone ?? 'Add your phone number',
               ),
               const ProfileTile(
                 leadingIcon: Icons.lock,
@@ -69,14 +101,17 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                 subtitle: '*********',
               ),
               const GapWidget(size: 20),
-              PrimaryButton(
-                onPressed: () {
-                  BlocProvider.of<VisitorCubit>(context).signOut();
-                  Navigator.popUntil(context, (route) => route.isFirst);
-                  Navigator.pushReplacementNamed(
-                      context, VisitorLoadingScreen.routeName);
-                },
-                text: "Log out",
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: PrimaryButton(
+                  onPressed: () {
+                    BlocProvider.of<VisitorCubit>(context).signOut();
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                    Navigator.pushReplacementNamed(
+                        context, VisitorLoadingScreen.routeName);
+                  },
+                  text: "Log out",
+                ),
               ),
             ],
           ),

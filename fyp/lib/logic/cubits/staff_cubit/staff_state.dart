@@ -1,3 +1,4 @@
+import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_model.dart';
 
 abstract class StaffState {}
@@ -32,4 +33,18 @@ class GetStaffByIdSuccessState extends StaffState {
 class GetStaffByIdErrorState extends StaffState {
   final String message;
   GetStaffByIdErrorState(this.message);
+}
+
+//----------------------------------------------------------------
+
+class StaffAppointmentFetchLoadingState extends StaffState {}
+
+class StaffAppointmentFetchLoadedState extends StaffState {
+  final List<AppointmentDataModel> appointmentData;
+  StaffAppointmentFetchLoadedState(this.appointmentData);
+}
+
+class StaffAppointmentFetchErrorState extends StaffState {
+  final String message;
+  StaffAppointmentFetchErrorState(this.message);
 }
