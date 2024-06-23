@@ -21,7 +21,7 @@ class _SecuritySearchPageState extends State<SecuritySearchPage> {
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                const SearchTextField(),
+                //const SearchTextField(),
                 const GapWidget(size: 10),
                 // MeetingCard(
                 //   name: 'Ali Mehdi Raza',

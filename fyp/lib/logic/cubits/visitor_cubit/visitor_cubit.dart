@@ -129,7 +129,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       String accessToken = visitorData.accessToken.toString();
       String refreshToken = visitorData.refreshToken.toString();
       String visitorId = visitorData.id.toString();
-      bool emailVerified = visitorData.emailVerified!;
+      bool emailVerified = visitorData.emailVerified;
       String phoneNumber = visitorData.phone.toString();
       String visitorName = visitorData.name.toString();
       String profilePicture = visitorData.profilePic.toString();

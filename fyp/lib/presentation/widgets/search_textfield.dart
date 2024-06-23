@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SearchTextField extends StatelessWidget {
-  const SearchTextField({super.key});
+  final ValueChanged<String> onChanged;
+
+  const SearchTextField({super.key, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +28,7 @@ class SearchTextField extends StatelessWidget {
                 contentPadding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               ),
+              onChanged: onChanged,
             ),
             CircleAvatar(
               radius: 25,

@@ -41,9 +41,9 @@ class _SplashScreenState extends State<SplashScreen> {
     final staffDetails = await StaffPreferences.fetchStaffDetails();
 
     // Navigate based on the presence of visitor or staff data
-    if (visitorDetails['email'] != '') {
+    if (visitorDetails['email'] != '' || visitorDetails['email'] != null) {
       Navigator.pushReplacementNamed(context, VisitorLoadingScreen.routeName);
-    } else if (staffDetails['email'] != '') {
+    } else if (staffDetails['email'] != '' || staffDetails['email'] != null) {
       Navigator.pushReplacementNamed(context, StaffLoadingScreen.routeName);
     } else {
       // Handle the case when neither visitor nor staff data is present

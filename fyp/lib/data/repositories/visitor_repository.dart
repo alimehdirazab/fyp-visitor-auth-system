@@ -93,6 +93,8 @@ class VisitorRepository {
   Future<bool> verifyEmail(
       {required String visitorId, required String verificationOTP}) async {
     try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
       Response response = await _api.sendRequest.post(
         '/api/v1/visitors/verify-email',
         options: Options(
@@ -108,7 +110,7 @@ class VisitorRepository {
       );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (apiResponse.status == 201) {
+      if (apiResponse.status == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.data);
         bool emailVerified = responseData['data']['emailVerified'];
         return emailVerified;

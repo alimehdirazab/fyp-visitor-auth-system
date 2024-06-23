@@ -29,7 +29,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'WELCOME STAFF NAME',
+          'WELCOME STAFF',
           style: TextStyles.body1.copyWith(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -57,7 +57,6 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
         profileButtonTap: () {},
       ),
       bottomNavigationBar: BottomNavigationBar(
-        // backgroundColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) {

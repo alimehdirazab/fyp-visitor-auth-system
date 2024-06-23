@@ -67,7 +67,7 @@ class _StaffInviteVisitorPageState extends State<StaffInviteVisitorPage> {
                           style: Theme.of(context).textTheme.titleLarge,
                         ),
                         const GapWidget(),
-                        CustomDropdownButton(items: names),
+                        // CustomDropdownButton(items: names),
                         const GapWidget(),
                         Text(
                           '${date.day}:${date.month}:${date.year}',

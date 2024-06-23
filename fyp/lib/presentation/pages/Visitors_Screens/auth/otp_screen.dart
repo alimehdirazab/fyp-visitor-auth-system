@@ -59,6 +59,7 @@ class _OtpScreenState extends State<OtpScreen> {
     try {
       final visitorData = await VisitorPreferences.fetchVisitorDetails();
       String? visitorId = visitorData["visitorId"];
+      // ignore: use_build_context_synchronously
       context.read<VisitorCubit>().verifyEmail(
             visitorId: visitorId!,
             verificationOTP: otp,

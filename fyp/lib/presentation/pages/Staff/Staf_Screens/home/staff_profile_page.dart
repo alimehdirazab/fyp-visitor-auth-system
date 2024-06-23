@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
-
+import 'package:fyp/logic/services/staff_preferences.dart';
 import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
@@ -16,6 +16,29 @@ class StaffProfilePage extends StatefulWidget {
 }
 
 class _StaffProfilePageState extends State<StaffProfilePage> {
+  String? _name;
+  String? _email;
+  String? _role;
+  String? _profilePic;
+  String? _password;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStaffDetails();
+  }
+
+  Future<void> _loadStaffDetails() async {
+    final staffDetails = await StaffPreferences.fetchStaffDetails();
+    setState(() {
+      _name = staffDetails['name'];
+      _email = staffDetails['email'];
+      _role = staffDetails['role'];
+      _profilePic = staffDetails['profilePic'];
+      _password = staffDetails['password'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,17 +54,28 @@ class _StaffProfilePageState extends State<StaffProfilePage> {
                   Padding(
                     padding: const EdgeInsets.only(right: 3, bottom: 3),
                     child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/ali_mehdi_raza.jpg',
-                        width: 120,
-                        height: 120,
-                        fit: BoxFit.cover,
-                      ),
+                      child: _profilePic != null
+                          ? CachedNetworkImage(
+                              imageUrl: _profilePic!,
+                              width: 120,
+                              height: 120,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.person, size: 120),
+                            )
+                          : const Icon(
+                              Icons.person,
+                              size: 120,
+                            ),
                     ),
                   ),
                   CircleAvatar(
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        // Handle profile picture change
+                      },
                       icon: const Icon(
                         Icons.camera_alt,
                       ),
@@ -50,25 +84,25 @@ class _StaffProfilePageState extends State<StaffProfilePage> {
                 ],
               ),
               const GapWidget(size: 20),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.person,
                 title: 'Name',
-                subtitle: 'Ali Mehdi Raza',
+                subtitle: _name ?? 'Loading...',
               ),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.email_outlined,
                 title: 'Email',
-                subtitle: 'alimehdirazab@gmail.com',
+                subtitle: _email ?? 'Loading...',
               ),
-              const ProfileTile(
-                leadingIcon: Icons.phone,
-                title: 'Phone',
-                subtitle: '+92 307 3064292',
+              ProfileTile(
+                leadingIcon: Icons.person_pin_outlined,
+                title: 'Designation',
+                subtitle: _role ?? 'Loading...',
               ),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.lock,
                 title: 'Password',
-                subtitle: '*********',
+                subtitle: _password != null ? '*********' : 'Loading...',
               ),
               const GapWidget(size: 20),
               PrimaryButton(
