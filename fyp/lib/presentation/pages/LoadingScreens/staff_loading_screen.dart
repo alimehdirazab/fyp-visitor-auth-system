@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/data/models/staff/staff_model.dart';
@@ -15,16 +14,15 @@ class StaffLoadingScreen extends StatefulWidget {
   static const String routeName = "StaffloadingScreen";
 
   @override
-  State<StaffLoadingScreen> createState() => _VisitorLoadingScreenState();
+  State<StaffLoadingScreen> createState() => _StaffLoadingScreenState();
 }
 
-class _VisitorLoadingScreenState extends State<StaffLoadingScreen> {
+class _StaffLoadingScreenState extends State<StaffLoadingScreen> {
   void goToNextScreen() {
-    //Staff Screens Navigation
+    // Staff Screens Navigation
     StaffState staffState = BlocProvider.of<StaffCubit>(context).state;
     if (staffState is StaffLoggedInState) {
       StaffData staffData = staffState.staffData;
-      // log(staffModel.data!.role.toString());
       if (staffData.role == 'staff') {
         Navigator.popUntil(context, (route) => route.isFirst);
         Navigator.pushReplacementNamed(context, StaffHomeScreen.routeName);
@@ -38,10 +36,10 @@ class _VisitorLoadingScreenState extends State<StaffLoadingScreen> {
     } else if (staffState is StaffLoggedOutState) {
       Navigator.popUntil(context, (route) => route.isFirst);
       Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
-      // } else if (staffState is StaffErrorState) {
-      //   Navigator.popUntil(context, (route) => route.isFirst);
-      //   Navigator.pushReplacementNamed(context, StaffLoginScreen.routeName);
-    }
+    } //else {
+    //   Navigator.popUntil(context, (route) => route.isFirst);
+    //   Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
+    // }
   }
 
   @override

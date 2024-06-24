@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
+import 'package:intl/intl.dart';
 
 class VisitorAppointmentFormProvider extends ChangeNotifier {
   final BuildContext context;
@@ -11,7 +12,7 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
   }
 
   bool isLoading = false;
-  String? error = "";
+  String error = "";
   final formKey = GlobalKey<FormState>();
 
   final nameController = TextEditingController();
@@ -31,11 +32,26 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
   void _listenToUserCubit() {
     _userSubscription =
         BlocProvider.of<VisitorCubit>(context).stream.listen((userState) {
-      if (userState is VisitorLoadingState) {
+      if (userState is VisitorLoadingState ||
+          userState is VisitorImageUploadLoadingState ||
+          userState is VisitorDetailsUpdatingState ||
+          userState is VisitorAppointmentSavingState) {
         isLoading = true;
         error = "";
         notifyListeners();
       } else if (userState is VisitorErrorState) {
+        isLoading = false;
+        error = userState.message;
+        notifyListeners();
+      } else if (userState is VisitorImageUploadErrorState) {
+        isLoading = false;
+        error = userState.message;
+        notifyListeners();
+      } else if (userState is VisitorDetailsUpdateErrorState) {
+        isLoading = false;
+        error = userState.message;
+        notifyListeners();
+      } else if (userState is VisitorAppointmentSaveErrorState) {
         isLoading = false;
         error = userState.message;
         notifyListeners();
@@ -55,16 +71,21 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
 
     // Check if required image fields are null
     if (profilePic == null || cnicFrontPic == null || cnicBackPic == null) {
-      error = "Please upload all required images";
-      notifyListeners();
-      return;
+      if (profilePic == null) {
+        error = "Please upload Selfie";
+        notifyListeners();
+        return;
+      } else if (cnicFrontPic == null) {
+        error = "Please upload CNIC Front Pic";
+        notifyListeners();
+        return;
+      } else if (cnicBackPic == null) {
+        error = "Please upload CNIC Back Pic";
+        notifyListeners();
+        return;
+      }
     }
-
-    // Logging for debugging
-    debugPrint("Updating visitor details with:");
-    debugPrint(
-        "Name: $name, Phone: $phone, ProfilePic: $profilePic, CNIC Front: $cnicFrontPic, CNIC Back: $cnicBackPic");
-
+    //if all data is available then call the function to update the visitor details
     BlocProvider.of<VisitorCubit>(context).updateVisitorDetails(
       name: name,
       phone: phone,
@@ -80,21 +101,42 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
     String purpose = purposeController.text.trim();
 
     // Check if userId, appointmentDate, or appointmentTime are null
+
     if (userId == null || appointmentDate == null || appointmentTime == null) {
-      error = "Please complete all appointment details";
-      notifyListeners();
-      return;
+      if (userId == null) {
+        error = "Please select a user";
+        notifyListeners();
+        return;
+      } else if (appointmentDate == null) {
+        error = "Please select a date";
+        notifyListeners();
+        return;
+      } else if (appointmentTime == null) {
+        error = "Please select a time";
+        notifyListeners();
+        return;
+      }
     }
+    // If all data is available then call the function to save the appointment
 
-    // Logging for debugging
-    debugPrint("Saving appointment with:");
-    debugPrint(
-        "UserId: $userId, Date: $appointmentDate, Time: $appointmentTime, Purpose: $purpose");
+    // Combine appointmentDate and appointmentTime into a single DateTime object
+    DateTime combinedDateTime = DateTime(
+      appointmentDate!.year,
+      appointmentDate!.month,
+      appointmentDate!.day,
+      appointmentTime!.hour,
+      appointmentTime!.minute,
+    );
 
+    // Format the combined DateTime as "yyyy-MM-ddTHH:mm:ssZ"
+    String formattedDateTime =
+        DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(combinedDateTime);
+
+    // Using formattedDateTime for both date and time fields
     BlocProvider.of<VisitorCubit>(context).saveAppointment(
       staffId: userId!,
-      date: appointmentDate.toString(),
-      time: appointmentTime.toString(),
+      date: formattedDateTime,
+      time: formattedDateTime,
       purpose: purpose,
     );
   }

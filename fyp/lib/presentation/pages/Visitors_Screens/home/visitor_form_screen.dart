@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
+import 'package:fyp/logic/services/visitor_preferences.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/provider/visitor_appointment_form_provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/widgets/visitor_upload_Button.dart';
@@ -139,7 +140,8 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
             ),
           );
           // If the visitor details are updated successfully, save the appointment
-          provider.saveAppointment();
+          Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
+              .saveAppointment();
         } else if (state is VisitorAppointmentSaveErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -154,6 +156,26 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               backgroundColor: Colors.green,
             ),
           );
+          String? vistorName = state.appointmentData.visitor.name;
+          String? vistorPhone = state.appointmentData.visitor.phone;
+
+          String? visitorProfilePicture =
+              state.appointmentData.visitor.profilePic;
+          await VisitorPreferences.updateVisitorDetails(
+              visitorName: vistorName,
+              phoneNumber: vistorPhone,
+              profilePicture: visitorProfilePicture);
+          // setState(() {
+          //   _cnicFrontImagePath = null;
+          //   _cnicBackImagePath = null;
+          //   _selfieImagePath = null;
+          //   _cnicFrontImageName = '';
+          //   _cnicBackImageName = '';
+          //   _selfieImageName = '';
+          //   provider.nameController.clear();
+          //   provider.phoneController.clear();
+          //   provider.purposeController.clear();
+          // });
         }
       },
       child: Scaffold(
@@ -166,6 +188,13 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const GapWidget(size: -12),
+                  (provider.error != "")
+                      ? Text(
+                          provider.error,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : const SizedBox(),
                   const GapWidget(size: -12),
                   PrimaryTextField(
                     labelText: 'Full Name',
@@ -275,7 +304,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                   ),
                   const GapWidget(size: -5),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       if (_cnicFrontImagePath != null)
                         ClipOval(
@@ -378,7 +407,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                   const GapWidget(),
                   const GapWidget(),
                   PrimaryButton(
-                    text: 'Submit',
+                    text: (provider.isLoading) ? "..." : 'Submit',
                     onPressed: () async {
                       await _uploadImagesAndSubmit();
                     },

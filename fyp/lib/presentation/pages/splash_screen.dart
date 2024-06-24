@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,7 +6,6 @@ import 'package:fyp/logic/services/visitor_preferences.dart';
 import 'package:fyp/main.dart';
 import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
 import 'package:fyp/presentation/pages/LoadingScreens/staff_loading_screen.dart';
-import 'package:fyp/presentation/pages/auth_options_screen.dart';
 import 'package:fyp/presentation/pages/select_user_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -40,14 +37,16 @@ class _SplashScreenState extends State<SplashScreen> {
     final visitorDetails = await VisitorPreferences.fetchVisitorDetails();
     final staffDetails = await StaffPreferences.fetchStaffDetails();
 
+    // Debug prints to trace the flow
+    print("Visitor Details: $visitorDetails");
+    print("Staff Details: $staffDetails");
+
     // Navigate based on the presence of visitor or staff data
-    if (visitorDetails['email'] != '' || visitorDetails['email'] != null) {
-      Navigator.pushReplacementNamed(context, VisitorLoadingScreen.routeName);
-    } else if (staffDetails['email'] != '' || staffDetails['email'] != null) {
+    if (staffDetails['email'] != null) {
       Navigator.pushReplacementNamed(context, StaffLoadingScreen.routeName);
+    } else if (visitorDetails['email'] != null) {
+      Navigator.pushReplacementNamed(context, VisitorLoadingScreen.routeName);
     } else {
-      // Handle the case when neither visitor nor staff data is present
-      // For example, you could navigate to a login screen or an error screen
       Navigator.pushReplacementNamed(context, SelectUserScreen.routeName);
     }
   }

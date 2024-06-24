@@ -257,15 +257,18 @@ class VisitorRepository {
         ),
         data: jsonEncode(payload),
       );
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       // Check the response status
-      if (response.statusCode != 200) {
+      if (apiResponse.status != 200) {
         throw Exception('Upload failed');
       }
 
       // Decode the response body
-      final Map<String, dynamic> data = jsonDecode(response.data);
-      return data['imageUrl']; // Assuming the response contains a 'url' field
+      final Map<String, dynamic> data = apiResponse.data;
+
+      return data['fileUrl']
+          .toString(); // Assuming the response contains a 'url' field
     } catch (e) {
       throw Exception('Error uploading file: $e');
     }
@@ -279,12 +282,23 @@ class VisitorRepository {
     required String cnicBackPic,
   }) async {
     try {
-      print(name + phone + profilePic);
+      print('Updating visitor details: $name, $phone, $profilePic');
+
+      // Fetch visitor details from SharedPreferences
       final preferences = await VisitorPreferences.fetchVisitorDetails();
-      print(name + phone + profilePic);
       final accessToken = preferences['accessToken'];
       final visitorId = preferences['visitorId'];
 
+      // Prepare request data
+      final requestData = {
+        "name": name,
+        "phone": phone,
+        "profilePic": profilePic,
+        "cnicFrontPic": cnicFrontPic,
+        "cnicBacPic": cnicBackPic,
+      };
+
+      // Send PUT request to update visitor details
       final response = await _api.sendRequest.put(
         '/api/v1/visitors/$visitorId',
         options: Options(
@@ -293,25 +307,21 @@ class VisitorRepository {
             'Content-Type': 'application/json',
           },
         ),
-        data: jsonEncode({
-          "name": name,
-          "phone": phone,
-          "profilePic": profilePic,
-          "cnicFrontPic": cnicFrontPic,
-          "cnicBacPic": cnicBackPic,
-        }),
+        data: jsonEncode(requestData), // Encode request data to JSON
       );
-      print("resonce:" + response.data);
 
+      print('Response data: ${response.data}');
+
+      // Handle response
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (apiResponse.status == 200) {
         return StaffDetailsData.fromJson(apiResponse.data);
       } else {
-        throw ('Error updating visitor details: ${response.statusCode}');
+        throw ('Error updating visitor details: ${apiResponse.status}');
       }
     } catch (e) {
-      throw ('Error updating visitor details: $e');
+      throw ('Failed to update details: $e');
     }
   }
 
@@ -325,6 +335,7 @@ class VisitorRepository {
       final preferences = await VisitorPreferences.fetchVisitorDetails();
       final accessToken = preferences['accessToken'];
       final visitorId = preferences['visitorId'];
+      const title = 'Appointment';
 
       final response = await _api.sendRequest.post(
         '/api/v1/appointments',
@@ -335,11 +346,12 @@ class VisitorRepository {
           },
         ),
         data: jsonEncode({
-          "visitorId": visitorId,
-          "userId": staffId,
-          "scheduleDate": date,
           "scheduleTime": time,
+          "scheduleDate": date,
+          "title": title,
           "reason": purpose,
+          "userId": staffId,
+          "visitorId": visitorId,
         }),
       );
 

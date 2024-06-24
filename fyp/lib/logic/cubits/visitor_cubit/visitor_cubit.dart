@@ -223,7 +223,9 @@ class VisitorCubit extends Cubit<VisitorState> {
         fileName: fileName,
         filePath: filePath,
       );
+
       emit(VisitorImageUploadSuccessState(fileUrl));
+
       return fileUrl;
     } catch (e) {
       emit(VisitorImageUploadErrorState(e.toString()));
@@ -247,12 +249,9 @@ class VisitorCubit extends Cubit<VisitorState> {
         cnicFrontPic: cnicFrontPic,
         cnicBackPic: cnicBackPic,
       );
+
       emit(VisitorDetailsUpdatedState(visitorData));
     } catch (e) {
-      // // Log the error message
-      // print('Error updating visitor details: $e');
-
-      // Emit the VisitorDetailsUpdateErrorState with the actual error message
       emit(VisitorDetailsUpdateErrorState('Failed to update details: $e'));
     }
   }

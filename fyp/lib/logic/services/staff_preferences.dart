@@ -1,16 +1,16 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StaffPreferences {
-  static const String _accessTokenKey = "accessToken";
-  static const String _refreshTokenKey = "refreshToken";
-  static const String _emailKey = "email";
-  static const String _passwordKey = "password";
-  static const String _roleKey = "role";
-  static const String _staffIdKey = "staffId";
-  static const String _nameKey = "name";
-  static const String _profilePicKey = "profilePic";
-  static const String _cnicFrontPicKey = "cnicFrontPic";
-  static const String _cnicBackPicKey = "cnicBackPic";
+  static const String _accessTokenKey = "staff_accessToken";
+  static const String _refreshTokenKey = "staff_refreshToken";
+  static const String _emailKey = "staff_email";
+  static const String _passwordKey = "staff_password";
+  static const String _roleKey = "staff_role";
+  static const String _staffIdKey = "staff_staffId";
+  static const String _nameKey = "staff_name";
+  static const String _profilePicKey = "staff_profilePic";
+  static const String _cnicFrontPicKey = "staff_cnicFrontPic";
+  static const String _cnicBackPicKey = "staff_cnicBackPic";
 
   static Future<void> saveStaffDetails(
     String staffId,
