@@ -48,3 +48,14 @@ class StaffAppointmentFetchErrorState extends StaffState {
   final String message;
   StaffAppointmentFetchErrorState(this.message);
 }
+
+//----------------------------------------------------------------
+
+class UpdateAppointmentLoadingState extends StaffState {}
+
+class UpdateAppointmentSuccessState extends StaffState {}
+
+class UpdateAppointmentErrorState extends StaffState {
+  final String message;
+  UpdateAppointmentErrorState(this.message);
+}

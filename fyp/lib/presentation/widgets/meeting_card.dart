@@ -25,11 +25,13 @@ class MeetingCard extends StatelessWidget {
     Color statusColor = Colors.black;
 
     if (status == 'accepted') {
-      statusColor = const Color(0xFF5A9F68); // Visited color
+      statusColor = const Color(0xFF5A9F68); // accepted color
     } else if (status == 'pending') {
-      statusColor = const Color(0xFFFF9900); // Pending color
+      statusColor = const Color(0xFFFF9900); // pending color
     } else if (status == 'rejected') {
-      statusColor = const Color(0xFFFF0000); // Cancel color
+      statusColor = const Color(0xFFFF0000); // rejected color
+    } else if (status == 'entered') {
+      statusColor = Colors.blue; // entered color
     }
 
     return InkWell(

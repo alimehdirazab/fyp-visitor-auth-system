@@ -194,6 +194,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                                                 cnicBackPic: appointment
                                                         .visitor.cnicBackPic ??
                                                     'N/A',
+                                                status: appointment.status,
                                               )));
                                 },
                               ),

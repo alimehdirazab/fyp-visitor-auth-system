@@ -94,36 +94,6 @@ class StaffCubit extends Cubit<StaffState> {
     }
   }
 
-  // void createAccount(
-  //     {required String email,
-  //     required String password,
-  //     required String role}) async {
-  //   emit(StaffLoadingState());
-  //   try {
-  //     StaffModel staffModel = await _staffRepository.createAccount(
-  //         email: email, password: password, role: role);
-  //     _emitLoggedInState(
-  //         staffModel: staffModel, email: email, password: password);
-  //   } catch (ex) {
-  //     emit(StaffErrorState(ex.toString()));
-  //   }
-  // }
-
-  // Future<Map<String, dynamic>> getUserDetails() async {
-  //   final userDetails = await _staffRepository.getUserDetails();
-  //   return userDetails;
-  // }
-
-  // Future<void> getUserById(String id) async {
-  //   emit(StaffLoadingState());
-  //   try {
-  //     StaffData staffData = await _staffRepository.getUserById(id);
-  //     emit(StaffGetByIdState(staffData));
-  //   } catch (ex) {
-  //     emit(StaffErrorState(ex.toString()));
-  //   }
-  // }
-
   Future<void> fetchAppointments() async {
     emit(StaffAppointmentFetchLoadingState());
     try {
@@ -132,6 +102,27 @@ class StaffCubit extends Cubit<StaffState> {
     } catch (e) {
       emit(StaffAppointmentFetchErrorState('Failed to fetch appointments'));
       throw e;
+    }
+  }
+
+  Future<void> updateAppointment({
+    required String appointmentId,
+    DateTime? scheduleDate,
+    DateTime? scheduleTime,
+    String? status,
+  }) async {
+    emit(UpdateAppointmentLoadingState());
+    try {
+      await _staffRepository.updateAppointment(
+        appointmentId: appointmentId,
+        scheduleDate: scheduleDate,
+        scheduleTime: scheduleTime,
+        status: status,
+      );
+      emit(UpdateAppointmentSuccessState());
+      fetchAppointments(); // Fetch updated appointments after a successful update
+    } catch (e) {
+      emit(UpdateAppointmentErrorState(e.toString()));
     }
   }
 
