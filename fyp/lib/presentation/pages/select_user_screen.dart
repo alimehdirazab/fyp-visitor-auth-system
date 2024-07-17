@@ -66,7 +66,7 @@ class _SelectUserScreenState extends State<SelectUserScreen> {
                       icon: 'assets/icons/security_icon.png',
                       onPressed: () {
                         Navigator.pushNamed(
-                            context, SecurityHomeScreen.routeName);
+                            context, StaffLoginScreen.routeName);
                       }),
                 ],
               ),

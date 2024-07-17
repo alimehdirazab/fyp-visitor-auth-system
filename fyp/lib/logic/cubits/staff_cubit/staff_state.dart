@@ -59,3 +59,14 @@ class UpdateAppointmentErrorState extends StaffState {
   final String message;
   UpdateAppointmentErrorState(this.message);
 }
+
+//-----------------------------------------------------
+
+class VerifyQRCodeLoadingState extends StaffState {}
+
+class VerifyQRCodeSuccessState extends StaffState {}
+
+class VerifyQRCodeErrorState extends StaffState {
+  final String message;
+  VerifyQRCodeErrorState(this.message);
+}

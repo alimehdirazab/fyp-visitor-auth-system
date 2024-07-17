@@ -172,6 +172,39 @@ class StaffRepository {
     }
   }
 
+  Future<List<AppointmentDataModel>> fetchAllAppointments() async {
+    try {
+      final preferences = await StaffPreferences.fetchStaffDetails();
+      final accessToken = preferences['accessToken'];
+
+      final response = await _api.sendRequest.get(
+        '/api/v1/appointments',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+          contentType: Headers.formUrlEncodedContentType,
+        ),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+      if (apiResponse.status == 200) {
+        // Directly handle the list of appointments from the response data
+        List<dynamic> responseData = apiResponse.data as List<dynamic>;
+        List<AppointmentDataModel> appointments = responseData
+            .map((data) =>
+                AppointmentDataModel.fromJson(data as Map<String, dynamic>))
+            .toList();
+        return appointments;
+      } else {
+        throw ('Error fetching appointments: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw ('Error fetching appointments: $e');
+    }
+  }
+
   Future<void> updateAppointment({
     required String appointmentId,
     DateTime? scheduleDate,
@@ -179,6 +212,9 @@ class StaffRepository {
     String? status,
   }) async {
     try {
+      final preferences = await StaffPreferences.fetchStaffDetails();
+      final accessToken = preferences['accessToken'];
+
       final data = {
         if (scheduleDate != null)
           'scheduleDate': scheduleDate.toIso8601String(),
@@ -205,6 +241,32 @@ class StaffRepository {
       }
     } catch (e) {
       throw ('Error updating appointment: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyQRCode(String qrToken) async {
+    try {
+      final preferences = await StaffPreferences.fetchStaffDetails();
+      final accessToken = preferences['accessToken'];
+      final userId = preferences['staffId'];
+
+      final response = await _api.sendRequest.post(
+        '/api/v1/users/verify-qrcode',
+        data: {
+          'qrToken': qrToken,
+          'userId': userId,
+        },
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      return response.data;
+    } on DioError catch (e) {
+      throw Exception('Failed to verify QR Code: ${e.response?.data}');
     }
   }
 

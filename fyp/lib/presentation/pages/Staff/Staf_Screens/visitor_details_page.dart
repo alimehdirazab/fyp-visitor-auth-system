@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fyp/core/ui.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
+import 'package:fyp/logic/cubits/staff_cubit/staff_state.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/zoomable_image_view.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/visitor_details_tile.dart';
 import 'package:intl/intl.dart';
 
 class VisitorDetailsPage extends StatefulWidget {
+  final String id;
   final String name;
   final String email;
   final String phone;
@@ -18,6 +22,7 @@ class VisitorDetailsPage extends StatefulWidget {
 
   const VisitorDetailsPage({
     super.key,
+    required this.id,
     required this.name,
     required this.email,
     required this.phone,
@@ -128,7 +133,18 @@ class _VisitorDetailsPageState extends State<VisitorDetailsPage> {
                     ),
                   );
                 } else {
-                  // Perform reschedule logic here
+                  final updatedDateTime = DateTime(
+                    _selectedDate!.year,
+                    _selectedDate!.month,
+                    _selectedDate!.day,
+                    _selectedTime!.hour,
+                    _selectedTime!.minute,
+                  );
+                  context.read<StaffCubit>().updateAppointment(
+                        appointmentId: widget.id,
+                        scheduleDate: _selectedDate,
+                        scheduleTime: updatedDateTime,
+                      );
                   Navigator.of(context).pop();
                 }
               },
@@ -141,147 +157,136 @@ class _VisitorDetailsPageState extends State<VisitorDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Visitor Details'),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Text('Visitor Details', style: TextStyles.heading2),
-                const SizedBox(height: 16),
-                VisitorDetailsTile(
-                  leadingIcon: Icons.person,
-                  title: 'Name',
-                  subtitle: widget.name,
-                ),
-                VisitorDetailsTile(
-                  leadingIcon: Icons.email,
-                  title: 'Email',
-                  subtitle: widget.email,
-                ),
-                VisitorDetailsTile(
-                  leadingIcon: Icons.phone,
-                  title: 'Phone',
-                  subtitle: widget.phone,
-                ),
-                const GapWidget(),
-                Text('Visitor Profile Picture', style: TextStyles.body2),
-                const GapWidget(),
-                GestureDetector(
-                  onTap: () => _openImageView(context, widget.profilePic),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 180,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.profilePic,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
+    return BlocConsumer<StaffCubit, StaffState>(
+      listener: (context, state) {
+        if (state is UpdateAppointmentSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Appointment Status successfully'),
+              backgroundColor: Colors.green,
+            ),
+          );
+        } else if (state is UpdateAppointmentErrorState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${state.message}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Visitor Details'),
+            centerTitle: true,
+          ),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Text('Visitor Details', style: TextStyles.heading2),
+                    const SizedBox(height: 16),
+                    VisitorDetailsTile(
+                      leadingIcon: Icons.person,
+                      title: 'Name',
+                      subtitle: widget.name,
                     ),
-                  ),
-                ),
-                const GapWidget(),
-                Text('Visitor Front CNIC Picture', style: TextStyles.body2),
-                const GapWidget(),
-                GestureDetector(
-                  onTap: () => _openImageView(context, widget.cnicFrontPic),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 180,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.cnicFrontPic,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
+                    VisitorDetailsTile(
+                      leadingIcon: Icons.email,
+                      title: 'Email',
+                      subtitle: widget.email,
                     ),
-                  ),
-                ),
-                const GapWidget(),
-                Text('Visitor Back CNIC Picture', style: TextStyles.body2),
-                const GapWidget(),
-                GestureDetector(
-                  onTap: () => _openImageView(context, widget.cnicBackPic),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15.0),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 180,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.cnicBackPic,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                      ),
+                    VisitorDetailsTile(
+                      leadingIcon: Icons.phone,
+                      title: 'Phone',
+                      subtitle: widget.phone,
                     ),
-                  ),
-                ),
-                const GapWidget(),
-                widget.status == 'entered'
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green.shade100,
+                    const GapWidget(),
+                    Text('Visitor Profile Picture', style: TextStyles.body2),
+                    const GapWidget(),
+                    GestureDetector(
+                      onTap: () => _openImageView(context, widget.profilePic),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 180,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.profilePic,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                            icon: const Icon(Icons.check),
-                            label: const Text('Reached'),
-                            onPressed: () {
-                              // Perform reached logic here
-                            },
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red.shade100,
+                        ),
+                      ),
+                    ),
+                    const GapWidget(),
+                    Text('Visitor Front CNIC Picture', style: TextStyles.body2),
+                    const GapWidget(),
+                    GestureDetector(
+                      onTap: () => _openImageView(context, widget.cnicFrontPic),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 180,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.cnicFrontPic,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
                             ),
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.red,
-                            ),
-                            label: const Text('Not Reached',
-                                style: TextStyle(color: Colors.red)),
-                            onPressed: () {
-                              // Perform not reached logic here
-                            },
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Row(
+                        ),
+                      ),
+                    ),
+                    const GapWidget(),
+                    Text('Visitor Back CNIC Picture', style: TextStyles.body2),
+                    const GapWidget(),
+                    GestureDetector(
+                      onTap: () => _openImageView(context, widget.cnicBackPic),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 180,
+                          child: CachedNetworkImage(
+                            imageUrl: widget.cnicBackPic,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const GapWidget(),
+                    widget.status == 'entered' || widget.status == 'running'
+                        ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ElevatedButton.icon(
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green.shade100,
                                 ),
-                                icon: const Icon(
-                                  Icons.check,
-                                ),
-                                label: const Text('Accept'),
+                                icon: const Icon(Icons.check),
+                                label: const Text('Reached'),
                                 onPressed: () {
-                                  // Perform accept logic here
+                                  context.read<StaffCubit>().updateAppointment(
+                                        appointmentId: widget.id,
+                                        status: 'reached',
+                                      );
                                 },
                               ),
                               ElevatedButton.icon(
@@ -293,36 +298,87 @@ class _VisitorDetailsPageState extends State<VisitorDetailsPage> {
                                   color: Colors.red,
                                 ),
                                 label: const Text(
-                                  'Reject',
+                                  'Not Reached',
                                   style: TextStyle(color: Colors.red),
                                 ),
                                 onPressed: () {
-                                  // Perform reject logic here
+                                  context.read<StaffCubit>().updateAppointment(
+                                        appointmentId: widget.id,
+                                        status: 'not_reached',
+                                      );
                                 },
                               ),
                             ],
+                          )
+                        : Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.green.shade100,
+                                    ),
+                                    icon: const Icon(
+                                      Icons.check,
+                                    ),
+                                    label: const Text('Accept'),
+                                    onPressed: () {
+                                      context
+                                          .read<StaffCubit>()
+                                          .updateAppointment(
+                                            appointmentId: widget.id,
+                                            status: 'accepted',
+                                          );
+                                    },
+                                  ),
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.red.shade100,
+                                    ),
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
+                                    label: const Text(
+                                      'Reject',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    onPressed: () {
+                                      context
+                                          .read<StaffCubit>()
+                                          .updateAppointment(
+                                            appointmentId: widget.id,
+                                            status: 'rejected',
+                                          );
+                                    },
+                                  ),
+                                ],
+                              ),
+                              ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue.shade100,
+                                ),
+                                icon: const Icon(
+                                  Icons.schedule,
+                                  color: Colors.blue,
+                                ),
+                                label: const Text(
+                                  'Reschedule',
+                                  style: TextStyle(color: Colors.blue),
+                                ),
+                                onPressed: () => _showRescheduleDialog(context),
+                              ),
+                            ],
                           ),
-                          ElevatedButton.icon(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.shade100,
-                            ),
-                            icon: const Icon(
-                              Icons.schedule,
-                              color: Colors.blue,
-                            ),
-                            label: const Text(
-                              'Reschedule',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            onPressed: () => _showRescheduleDialog(context),
-                          ),
-                        ],
-                      ),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

@@ -105,6 +105,17 @@ class StaffCubit extends Cubit<StaffState> {
     }
   }
 
+  Future<void> fetchAllAppointments() async {
+    emit(StaffAppointmentFetchLoadingState());
+    try {
+      final appointments = await _staffRepository.fetchAllAppointments();
+      emit(StaffAppointmentFetchLoadedState(appointments));
+    } catch (e) {
+      emit(StaffAppointmentFetchErrorState('Failed to fetch appointments'));
+      throw e;
+    }
+  }
+
   Future<void> updateAppointment({
     required String appointmentId,
     DateTime? scheduleDate,
@@ -123,6 +134,16 @@ class StaffCubit extends Cubit<StaffState> {
       fetchAppointments(); // Fetch updated appointments after a successful update
     } catch (e) {
       emit(UpdateAppointmentErrorState(e.toString()));
+    }
+  }
+
+  Future<void> verifyQRCode({required String qrCode}) async {
+    emit(VerifyQRCodeLoadingState());
+    try {
+      await _staffRepository.verifyQRCode(qrCode);
+      emit(VerifyQRCodeSuccessState());
+    } catch (e) {
+      emit(VerifyQRCodeErrorState(e.toString()));
     }
   }
 

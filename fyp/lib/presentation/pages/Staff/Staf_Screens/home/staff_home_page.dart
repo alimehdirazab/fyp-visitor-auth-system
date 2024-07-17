@@ -177,6 +177,7 @@ class _StaffHomePageState extends State<StaffHomePage> {
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               VisitorDetailsPage(
+                                                id: appointment.id,
                                                 name:
                                                     appointment.visitor.name ??
                                                         'N/A',

@@ -59,7 +59,11 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your functionality here
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SecurityScanVisitorPage(),
+              ));
         },
         backgroundColor: Colors.green,
         child: const Icon(Icons.qr_code_scanner),
