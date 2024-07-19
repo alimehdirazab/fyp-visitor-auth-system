@@ -134,7 +134,7 @@ class AppointmentDataModel {
   final String status;
   final String? userRole;
   final String? qrToken;
-  final List<dynamic> mapTrackings;
+  final List<Map<String, dynamic>> mapTrackings;
   final DateTime createdAt;
   final DateTime updatedAt;
   final User user;
@@ -174,7 +174,9 @@ class AppointmentDataModel {
       status: json['status'],
       userRole: json['userRole'],
       qrToken: json['qrToken'],
-      mapTrackings: json['mapTrackings'],
+      mapTrackings: List<Map<String, dynamic>>.from(
+        json['mapTrackings'].map((item) => Map<String, dynamic>.from(item)),
+      ),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       user: User.fromJson(json['user']),

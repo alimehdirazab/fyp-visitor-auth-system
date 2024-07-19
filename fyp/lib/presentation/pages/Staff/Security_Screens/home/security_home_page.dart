@@ -196,6 +196,8 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
                                                 cnicBackPic: appointment
                                                         .visitor.cnicBackPic ??
                                                     'N/A',
+                                                mapTrackings:
+                                                    appointment.mapTrackings,
                                               )));
                                 },
                               ),

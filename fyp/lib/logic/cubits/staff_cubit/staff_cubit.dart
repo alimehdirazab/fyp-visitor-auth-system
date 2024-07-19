@@ -147,6 +147,17 @@ class StaffCubit extends Cubit<StaffState> {
     }
   }
 
+  Future<void> fetchAppointmentVisitorLocation(String appointmentId) async {
+    emit(AppointmentLoading());
+    try {
+      final appointment =
+          await _staffRepository.getAppointmentVisitorLocation(appointmentId);
+      emit(AppointmentLoaded(appointment.mapTrackings));
+    } catch (e) {
+      emit(AppointmentError(e.toString()));
+    }
+  }
+
   void signOut() async {
     await StaffPreferences.clear();
     _staffRepository.cancelTokenRefreshTimer();

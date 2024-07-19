@@ -70,3 +70,19 @@ class VerifyQRCodeErrorState extends StaffState {
   final String message;
   VerifyQRCodeErrorState(this.message);
 }
+
+//-------------------------------------------------------
+
+class AppointmentLoading extends StaffState {}
+
+class AppointmentLoaded extends StaffState {
+  final List<Map<String, dynamic>> mapTrackings;
+
+  AppointmentLoaded(this.mapTrackings);
+}
+
+class AppointmentError extends StaffState {
+  final String message;
+
+  AppointmentError(this.message);
+}

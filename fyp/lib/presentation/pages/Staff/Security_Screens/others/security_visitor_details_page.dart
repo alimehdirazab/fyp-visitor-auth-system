@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fyp/core/ui.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/others/security_visitor_location.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/zoomable_image_view.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/visitor_details_tile.dart';
@@ -14,6 +15,8 @@ class SecurityVisitorDetailsPage extends StatefulWidget {
   final String profilePic;
   final String cnicFrontPic;
   final String cnicBackPic;
+  final List<Map<String, dynamic>> mapTrackings;
+
   const SecurityVisitorDetailsPage({
     super.key,
     required this.id,
@@ -23,6 +26,7 @@ class SecurityVisitorDetailsPage extends StatefulWidget {
     required this.profilePic,
     required this.cnicFrontPic,
     required this.cnicBackPic,
+    required this.mapTrackings,
   });
 
   @override
@@ -68,8 +72,15 @@ class _SecurityVisitorDetailsPageState
                 Text('Visitor Details', style: TextStyles.heading2),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => SecurityVisitorLocation(
+                                appointmentId: widget.id)));
+                  },
                   child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text('Tap To View Location '),
                       Icon(

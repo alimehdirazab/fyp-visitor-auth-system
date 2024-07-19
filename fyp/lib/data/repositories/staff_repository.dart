@@ -270,6 +270,37 @@ class StaffRepository {
     }
   }
 
+  Future<AppointmentDataModel> getAppointmentVisitorLocation(
+      String appointmentId) async {
+    try {
+      final preferences = await StaffPreferences.fetchStaffDetails();
+      final accessToken = preferences['accessToken'];
+
+      final response = await _api.sendRequest.get(
+        '/api/v1/appointments/$appointmentId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status == 200) {
+        // Directly handle the appointment details from the response data
+        AppointmentDataModel appointment =
+            AppointmentDataModel.fromJson(apiResponse.data);
+        return appointment;
+      }
+      throw Exception(
+          'Failed to fetch Appointment Location: ${apiResponse.message}');
+    } on DioError catch (e) {
+      throw Exception(
+          'Failed to fetch Appointment Location: ${e.response?.data}');
+    }
+  }
+
   // Method to cancel the token refresh timer when signing out
   void cancelTokenRefreshTimer() {
     _tokenRefreshTimer.cancel();
