@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/data/repositories/visitor_repository.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';

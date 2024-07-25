@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:fyp/core/api.dart';
 import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_model.dart';
 import 'package:fyp/logic/services/staff_preferences.dart';
+import 'package:fyp/main.dart';
 
 class StaffRepository {
   String? accessToken;
@@ -41,13 +40,15 @@ class StaffRepository {
       required String password,
       required String role}) async {
     try {
+      String? fcmToken = AppConfig.fcmToken;
+
       Response response = await _api.sendRequest.post(
         '/api/v1/users/signup',
         data: jsonEncode({
           "email": email,
           "password": password,
           "role": role,
-          "fcmToken": password,
+          "fcmToken": fcmToken,
         }),
       );
 
@@ -66,6 +67,8 @@ class StaffRepository {
   Future<StaffData> signIn(
       {required String email, required String password}) async {
     try {
+      String? fcmToken = AppConfig.fcmToken;
+
       Response response = await _api.sendRequest.post(
         '/api/v1/users/login',
         options: Options(
@@ -75,7 +78,7 @@ class StaffRepository {
         data: jsonEncode({
           "email": email,
           "password": password,
-          "fcmToken": password,
+          "fcmToken": fcmToken,
         }),
       );
 
@@ -298,6 +301,43 @@ class StaffRepository {
     } on DioError catch (e) {
       throw Exception(
           'Failed to fetch Appointment Location: ${e.response?.data}');
+    }
+  }
+
+  Future<AppointmentDataModel> sendAppointmentLocation({
+    required String appointmentId,
+    double? latitude,
+    double? longitude,
+    int? timestamp,
+    String? status,
+  }) async {
+    try {
+      final preferences = await StaffPreferences.fetchStaffDetails();
+      final accessToken = preferences['accessToken'];
+
+      final data = {};
+
+      final response = await _api.sendRequest.put(
+        '/api/v1/appointments/$appointmentId',
+        data: jsonEncode(data),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status != 200) {
+        throw ('Error updating appointment: ${apiResponse.message}');
+      }
+      AppointmentDataModel appointment =
+          AppointmentDataModel.fromJson(apiResponse.data);
+      return appointment;
+    } catch (e) {
+      throw ('Error updating appointment: $e');
     }
   }
 

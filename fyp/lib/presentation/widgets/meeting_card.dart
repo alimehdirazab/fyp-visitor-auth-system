@@ -30,6 +30,8 @@ class MeetingCard extends StatelessWidget {
       statusColor = const Color(0xFFFF9900); // pending color
     } else if (status == 'rejected') {
       statusColor = const Color(0xFFFF0000); // rejected color
+    } else if (status == 'redListed') {
+      statusColor = const Color(0xFFFF0000); // redListed color
     } else if (status == 'entered') {
       statusColor = Colors.blue; // entered color
     }

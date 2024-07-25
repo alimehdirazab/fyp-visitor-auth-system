@@ -7,6 +7,7 @@ import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
+import 'package:fyp/main.dart';
 import 'package:path/path.dart';
 // import 'package:fyp/logic/services/visitor_preferences.dart';
 
@@ -41,12 +42,14 @@ class VisitorRepository {
   Future<VisitorData> createAccount(
       {required String email, required String password}) async {
     try {
+      String? fcmToken = AppConfig.fcmToken;
+
       Response response = await _api.sendRequest.post(
         '/api/v1/visitors/signup',
         data: jsonEncode({
           "email": email,
           "password": password,
-          "fcmToken": password,
+          "fcmToken": fcmToken,
         }),
       );
 
@@ -65,6 +68,8 @@ class VisitorRepository {
   Future<VisitorData> signIn(
       {required String email, required String password}) async {
     try {
+      String? fcmToken = AppConfig.fcmToken;
+
       Response response = await _api.sendRequest.post(
         '/api/v1/visitors/login',
         options: Options(
@@ -74,7 +79,7 @@ class VisitorRepository {
         data: jsonEncode({
           "email": email,
           "password": password,
-          "fcmToken": password,
+          "fcmToken": fcmToken,
         }),
       );
 
@@ -398,6 +403,43 @@ class VisitorRepository {
       }
     } catch (e) {
       throw ('Error fetching appointments: $e');
+    }
+  }
+
+  Future<AppointmentDataModel> sendAppointmentLocation({
+    required String appointmentId,
+    double? latitude,
+    double? longitude,
+    int? timestamp,
+    String? status,
+  }) async {
+    try {
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
+
+      final data = {};
+
+      final response = await _api.sendRequest.put(
+        '/api/v1/appointments/$appointmentId',
+        data: jsonEncode(data),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status != 200) {
+        throw ('Error updating appointment: ${apiResponse.message}');
+      }
+      AppointmentDataModel appointment =
+          AppointmentDataModel.fromJson(apiResponse.data);
+      return appointment;
+    } catch (e) {
+      throw ('Error updating appointment: $e');
     }
   }
 

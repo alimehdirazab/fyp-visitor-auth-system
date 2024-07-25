@@ -1,26 +1,68 @@
 import 'dart:developer';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/core/routes.dart';
 import 'package:fyp/core/ui.dart';
+import 'package:fyp/firebase_options.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
-import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_scan_visitor_page.dart';
-import 'package:fyp/presentation/pages/Visitors_Screens/auth/otp_screen.dart';
-
 import 'package:fyp/presentation/pages/splash_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-//Globel object for access mobile screen size
+//Global object for accessing mobile screen size
 late Size mq;
+
+// Static class to hold the FCM token
+class AppConfig {
+  static String? fcmToken; // Static variable to store FCM token
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // SharedPreferences instance = await SharedPreferences.getInstance();
-  // instance.clear();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
-  Bloc.observer = MyBlocOberver();
+  // Fetch and store the FCM token
+  await _initializeFCM();
+
+  Bloc.observer = MyBlocObserver();
   runApp(const MyApp());
+}
+
+Future<void> _initializeFCM() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request permission for iOS (handled by the FirebaseMessaging plugin)
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  // Print permission status (useful for debugging)
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    log('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    log('User granted provisional permission');
+  } else {
+    log('User declined or has not accepted permission');
+  }
+
+  // Get and store the FCM token
+  try {
+    String? token = await messaging.getToken();
+    AppConfig.fcmToken = token; // Store the token in a static variable
+    log("FCM Token: $token"); // Log the token for debugging
+  } catch (e) {
+    log("Error obtaining FCM Token: $e"); // Log any error that occurs
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -47,7 +89,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyBlocOberver extends BlocObserver {
+class MyBlocObserver extends BlocObserver {
   @override
   void onCreate(BlocBase bloc) {
     log("Created: $bloc");
@@ -62,13 +104,13 @@ class MyBlocOberver extends BlocObserver {
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
-    log("Change in $bloc: $transition");
+    log("Transition in $bloc: $transition");
     super.onTransition(bloc, transition);
   }
 
   @override
   void onClose(BlocBase bloc) {
-    log("Closed : $bloc");
+    log("Closed: $bloc");
     super.onClose(bloc);
   }
 }

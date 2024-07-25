@@ -39,10 +39,6 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
-
-        // selectedItemColor: Theme.of(context).colorScheme.primary,
-        // selectedIconTheme:
-        //     IconThemeData(color: Theme.of(context).colorScheme.primary),
         onTap: (index) {
           setState(() {
             currentIndex = index;
