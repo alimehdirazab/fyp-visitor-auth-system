@@ -19,6 +19,15 @@ class StaffModel {
       data: StaffData.fromJson(json['data']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'status': status,
+      'res': res,
+      'message': message,
+      'data': data.toJson(),
+    };
+  }
 }
 
 class StaffData {
@@ -26,13 +35,15 @@ class StaffData {
   final String refreshToken;
   final String id;
   final String? name;
-  final String? profilePic;
-  final String? cnicFrontPic;
-  final String? cnicBackPic;
+  final PictureData? profilePic;
+  final PictureData? cnicFrontPic;
+  final PictureData? cnicBackPic; // Updated to match response
   final String email;
   final bool emailVerified;
+  final String? phone;
   final String? username;
-  final String role;
+  final String? role; // Updated to handle potential null values
+  final List<String> devices;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -46,8 +57,10 @@ class StaffData {
     this.cnicBackPic,
     required this.email,
     required this.emailVerified,
+    this.phone,
     this.username,
-    required this.role,
+    this.role,
+    required this.devices,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -58,15 +71,68 @@ class StaffData {
       refreshToken: json['refreshToken'],
       id: json['id'],
       name: json['name'],
-      profilePic: json['profilePic'],
-      cnicFrontPic: json['cnicFrontPic'],
-      cnicBackPic: json['cnicBacPic'],
+      profilePic: json['profilePic'] != null
+          ? PictureData.fromJson(json['profilePic'])
+          : null,
+      cnicFrontPic: json['cnicFrontPic'] != null
+          ? PictureData.fromJson(json['cnicFrontPic'])
+          : null,
+      cnicBackPic: json['cnicBackPic'] != null
+          ? PictureData.fromJson(
+              json['cnicBackPic']) // Updated to match response
+          : null,
       email: json['email'],
       emailVerified: json['emailVerified'],
+      phone: json['phone'],
       username: json['username'],
-      role: json['role'],
+      role: json['role'], // Updated to handle potential null values
+      devices: List<String>.from(json['devices']),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+      'id': id,
+      'name': name,
+      'profilePic': profilePic?.toJson(),
+      'cnicFrontPic': cnicFrontPic?.toJson(),
+      'cnicBackPic': cnicBackPic?.toJson(),
+      'email': email,
+      'emailVerified': emailVerified,
+      'phone': phone,
+      'username': username,
+      'role': role,
+      'devices': devices,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+}
+
+class PictureData {
+  final String? fileUrl;
+  final String? fileName;
+
+  PictureData({
+    this.fileUrl,
+    this.fileName,
+  });
+
+  factory PictureData.fromJson(Map<String, dynamic> json) {
+    return PictureData(
+      fileUrl: json['fileUrl'],
+      fileName: json['fileName'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fileUrl': fileUrl,
+      'fileName': fileName,
+    };
   }
 }

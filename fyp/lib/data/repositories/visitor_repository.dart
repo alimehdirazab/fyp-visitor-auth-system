@@ -390,19 +390,28 @@ class VisitorRepository {
       );
 
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
       if (apiResponse.status == 200) {
-        // Directly handle the list of appointments from the response data
-        List<dynamic> responseData = apiResponse.data as List<dynamic>;
-        List<AppointmentDataModel> appointments = responseData
-            .map((data) =>
-                AppointmentDataModel.fromJson(data as Map<String, dynamic>))
-            .toList();
-        return appointments;
+        // Check if responseData is a List
+        if (apiResponse.data is List) {
+          List<dynamic> responseData = apiResponse.data as List<dynamic>;
+
+          // Convert the list of JSON objects into a list of AppointmentDataModel
+          List<AppointmentDataModel> appointments = responseData
+              .map((data) =>
+                  AppointmentDataModel.fromJson(data as Map<String, dynamic>))
+              .toList();
+
+          return appointments;
+        } else {
+          throw Exception(
+              'Expected a list of appointments but got ${apiResponse.data.runtimeType}');
+        }
       } else {
-        throw ('Error fetching appointments: ${response.statusCode}');
+        throw Exception('Error fetching appointments: ${response.statusCode}');
       }
     } catch (e) {
-      throw ('Error fetching appointments: $e');
+      throw Exception('Error fetching appointments: $e');
     }
   }
 
@@ -417,7 +426,16 @@ class VisitorRepository {
       final preferences = await VisitorPreferences.fetchVisitorDetails();
       final accessToken = preferences['accessToken'];
 
-      final data = {};
+      final data = {
+        'mapTrackings': [
+          {
+            'latitude': latitude,
+            'longitude': longitude,
+            'timestamp': timestamp,
+          }
+        ],
+        'status': status,
+      };
 
       final response = await _api.sendRequest.put(
         '/api/v1/appointments/$appointmentId',

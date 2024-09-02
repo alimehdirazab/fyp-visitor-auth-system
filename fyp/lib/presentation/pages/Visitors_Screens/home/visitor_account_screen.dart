@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fyp/logic/services/location_service.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
 import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dart';
@@ -35,6 +36,13 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
       phone = details['phoneNumber'];
       profilePicture = details['profilePicture'];
     });
+  }
+
+  static Future<bool> canLogout() async {
+    // Fetch appointments with status "entered"
+    final appointments =
+        await LocationCallbackHandler.getAppointmentsWithStatusEntered();
+    return appointments.isEmpty;
   }
 
   @override
@@ -104,11 +112,29 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: PrimaryButton(
-                  onPressed: () {
-                    BlocProvider.of<VisitorCubit>(context).signOut();
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                    Navigator.pushReplacementNamed(
-                        context, VisitorLoadingScreen.routeName);
+                  onPressed: () async {
+                    if (await canLogout()) {
+                      BlocProvider.of<VisitorCubit>(context).signOut();
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                      Navigator.pushReplacementNamed(
+                          context, VisitorLoadingScreen.routeName);
+                    } else {
+                      // Show warning dialog
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Logout Restricted'),
+                          content: const Text(
+                              'You cannot logout while an appointment is in progress.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   text: "Log out",
                 ),

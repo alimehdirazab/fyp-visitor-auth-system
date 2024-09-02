@@ -160,7 +160,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
           String? vistorPhone = state.appointmentData.visitor.phone;
 
           String? visitorProfilePicture =
-              state.appointmentData.visitor.profilePic;
+              state.appointmentData.visitor.profilePic?.fileUrl;
           await VisitorPreferences.updateVisitorDetails(
               visitorName: vistorName,
               phoneNumber: vistorPhone,

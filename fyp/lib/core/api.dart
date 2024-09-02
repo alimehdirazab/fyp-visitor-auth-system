@@ -18,8 +18,8 @@ class Api {
       _dio.options.headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    _dio.options.connectTimeout = const Duration(seconds: 30); // 5 seconds
-    _dio.options.receiveTimeout = const Duration(seconds: 30); // 5 seconds
+    _dio.options.connectTimeout = const Duration(seconds: 60);
+    _dio.options.receiveTimeout = const Duration(seconds: 60);
 
     _dio.interceptors.add(PrettyDioLogger(
       requestBody: true,

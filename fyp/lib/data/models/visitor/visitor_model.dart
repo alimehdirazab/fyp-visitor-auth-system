@@ -35,9 +35,9 @@ class VisitorData {
   final String refreshToken;
   final String id;
   final String? name;
-  final String? profilePic;
-  final String? cnicFrontPic;
-  final String? cnicBackPic;
+  final String? profilePic; // Changed to String
+  final String? cnicFrontPic; // Changed to String
+  final String? cnicBackPic; // Changed to String and key updated
   final String email;
   final bool emailVerified;
   final String? phone;
@@ -67,9 +67,9 @@ class VisitorData {
       refreshToken: json['refreshToken'],
       id: json['id'],
       name: json['name'],
-      profilePic: json['profilePic'],
-      cnicFrontPic: json['cnicFrontPic'],
-      cnicBackPic: json['cnicBackPic'],
+      profilePic: json['profilePic'], // Updated
+      cnicFrontPic: json['cnicFrontPic'], // Updated
+      cnicBackPic: json['cnicBacPic'], // Updated key name
       email: json['email'],
       emailVerified: json['emailVerified'],
       phone: json['phone'],
@@ -85,9 +85,9 @@ class VisitorData {
       'refreshToken': refreshToken,
       'id': id,
       'name': name,
-      'profilePic': profilePic,
-      'cnicFrontPic': cnicFrontPic,
-      'cnicBackPic': cnicBackPic,
+      'profilePic': profilePic, // Updated
+      'cnicFrontPic': cnicFrontPic, // Updated
+      'cnicBackPic': cnicBackPic, // Updated key name
       'email': email,
       'emailVerified': emailVerified,
       'phone': phone,

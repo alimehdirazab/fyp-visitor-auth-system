@@ -83,11 +83,14 @@ class _SecurityRedListPageState extends State<SecurityRedListPage> {
                                   email: appointment.visitor.email,
                                   phone: appointment.visitor.phone ?? 'N/A',
                                   profilePic:
-                                      appointment.visitor.profilePic ?? 'N/A',
-                                  cnicFrontPic:
-                                      appointment.visitor.cnicFrontPic ?? 'N/A',
-                                  cnicBackPic:
-                                      appointment.visitor.cnicBackPic ?? 'N/A',
+                                      appointment.visitor.profilePic?.fileUrl ??
+                                          'N/A',
+                                  cnicFrontPic: appointment
+                                          .visitor.cnicFrontPic?.fileUrl ??
+                                      'N/A',
+                                  cnicBackPic: appointment
+                                          .visitor.cnicBackPic?.fileUrl ??
+                                      'N/A',
                                   mapTrackings: appointment.mapTrackings,
                                 ),
                               ),

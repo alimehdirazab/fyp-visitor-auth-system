@@ -186,14 +186,16 @@ class _StaffHomePageState extends State<StaffHomePage> {
                                                 phone:
                                                     appointment.visitor.phone ??
                                                         'N/A',
-                                                profilePic: appointment
-                                                        .visitor.profilePic ??
+                                                profilePic: appointment.visitor
+                                                        .profilePic?.fileUrl ??
                                                     'N/A',
                                                 cnicFrontPic: appointment
-                                                        .visitor.cnicFrontPic ??
+                                                        .visitor
+                                                        .cnicFrontPic
+                                                        ?.fileUrl ??
                                                     'N/A',
-                                                cnicBackPic: appointment
-                                                        .visitor.cnicBackPic ??
+                                                cnicBackPic: appointment.visitor
+                                                        .cnicBackPic?.fileUrl ??
                                                     'N/A',
                                                 status: appointment.status,
                                               )));

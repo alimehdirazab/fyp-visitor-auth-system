@@ -76,7 +76,7 @@ class _VisitorAppointmentsScreenState extends State<VisitorAppointmentsScreen> {
                                     visitorName: appointment.visitor.name ??
                                         'Unknown Visitor',
                                     visitorProfilePicture:
-                                        appointment.visitor.profilePic,
+                                        appointment.visitor.profilePic?.fileUrl,
                                   ),
                           ),
                         );

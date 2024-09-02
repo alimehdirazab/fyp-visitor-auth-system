@@ -4,7 +4,6 @@ import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_state.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/others/security_visitor_details_page.dart';
-import 'package:fyp/presentation/pages/Staff/Staf_Screens/visitor_details_page.dart';
 import 'package:fyp/presentation/widgets/custom_dropdown_button.dart';
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/meeting_card.dart';
@@ -187,14 +186,16 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
                                                 phone:
                                                     appointment.visitor.phone ??
                                                         'N/A',
-                                                profilePic: appointment
-                                                        .visitor.profilePic ??
+                                                profilePic: appointment.visitor
+                                                        .profilePic?.fileUrl ??
                                                     'N/A',
                                                 cnicFrontPic: appointment
-                                                        .visitor.cnicFrontPic ??
+                                                        .visitor
+                                                        .cnicFrontPic
+                                                        ?.fileUrl ??
                                                     'N/A',
-                                                cnicBackPic: appointment
-                                                        .visitor.cnicBackPic ??
+                                                cnicBackPic: appointment.visitor
+                                                        .cnicBackPic?.fileUrl ??
                                                     'N/A',
                                                 mapTrackings:
                                                     appointment.mapTrackings,

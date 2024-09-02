@@ -72,9 +72,10 @@ class StaffCubit extends Cubit<StaffState> {
       String role = staffData.role.toString();
       String staffId = staffData.id.toString();
       String name = staffData.name.toString();
-      String profilePic = staffData.profilePic.toString();
-      String cnicFrontPicture = staffData.cnicFrontPic.toString();
-      String cnicBackPicture = staffData.cnicBackPic.toString();
+      String profilePic = staffData.profilePic?.fileUrl?.toString() ?? '';
+      String cnicFrontPicture =
+          staffData.cnicFrontPic?.fileUrl?.toString() ?? '';
+      String cnicBackPicture = staffData.cnicBackPic?.fileUrl?.toString() ?? '';
 
       _emitLoggedInState(
         staffData: staffData,

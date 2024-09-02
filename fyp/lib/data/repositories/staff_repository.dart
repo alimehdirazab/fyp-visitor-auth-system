@@ -304,43 +304,6 @@ class StaffRepository {
     }
   }
 
-  Future<AppointmentDataModel> sendAppointmentLocation({
-    required String appointmentId,
-    double? latitude,
-    double? longitude,
-    int? timestamp,
-    String? status,
-  }) async {
-    try {
-      final preferences = await StaffPreferences.fetchStaffDetails();
-      final accessToken = preferences['accessToken'];
-
-      final data = {};
-
-      final response = await _api.sendRequest.put(
-        '/api/v1/appointments/$appointmentId',
-        data: jsonEncode(data),
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-
-      ApiResponse apiResponse = ApiResponse.fromResponse(response);
-
-      if (apiResponse.status != 200) {
-        throw ('Error updating appointment: ${apiResponse.message}');
-      }
-      AppointmentDataModel appointment =
-          AppointmentDataModel.fromJson(apiResponse.data);
-      return appointment;
-    } catch (e) {
-      throw ('Error updating appointment: $e');
-    }
-  }
-
   // Method to cancel the token refresh timer when signing out
   void cancelTokenRefreshTimer() {
     _tokenRefreshTimer.cancel();

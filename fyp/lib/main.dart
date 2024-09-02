@@ -10,11 +10,15 @@ import 'package:fyp/firebase_options.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/presentation/pages/splash_screen.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart'; // for getting application documents directory
+import 'package:fyp/data/models/other/location_model.dart';
 
 //Global object for accessing mobile screen size
 late Size mq;
 
-// Static class to hold the FCM token
+// .dart';Static class to hold the FCM token
 class AppConfig {
   static String? fcmToken; // Static variable to store FCM token
 }
@@ -24,6 +28,10 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Hive
+  await Hive.initFlutter();
+  Hive.registerAdapter(LocationModelAdapter());
 
   // Fetch and store the FCM token
   await _initializeFCM();

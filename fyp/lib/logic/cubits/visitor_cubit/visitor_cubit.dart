@@ -78,9 +78,9 @@ class VisitorCubit extends Cubit<VisitorState> {
       bool emailVerified = visitorData.emailVerified;
       String phoneNumber = visitorData.phone.toString();
       String visitorName = visitorData.name.toString();
-      String profilePicture = visitorData.profilePic.toString();
-      String cnicBackPicture = visitorData.cnicBackPic.toString();
-      String cnicFrontPicture = visitorData.cnicFrontPic.toString();
+      String profilePicture = visitorData.profilePic ?? '';
+      String cnicBackPicture = visitorData.cnicBackPic ?? '';
+      String cnicFrontPicture = visitorData.cnicFrontPic ?? '';
 
       if (!emailVerified) {
         emit(VisitorEmailNotVerifiedState());
@@ -131,9 +131,9 @@ class VisitorCubit extends Cubit<VisitorState> {
       bool emailVerified = visitorData.emailVerified;
       String phoneNumber = visitorData.phone.toString();
       String visitorName = visitorData.name.toString();
-      String profilePicture = visitorData.profilePic.toString();
-      String cnicBackPicture = visitorData.cnicBackPic.toString();
-      String cnicFrontPicture = visitorData.cnicFrontPic.toString();
+      String profilePicture = visitorData.profilePic ?? '';
+      String cnicBackPicture = visitorData.cnicBackPic ?? '';
+      String cnicFrontPicture = visitorData.cnicFrontPic ?? '';
 
       if (!emailVerified) {
         emit(VisitorEmailNotVerifiedState());

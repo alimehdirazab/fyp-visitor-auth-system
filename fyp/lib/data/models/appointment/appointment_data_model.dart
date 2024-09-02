@@ -1,11 +1,36 @@
+class FileInfo {
+  final String fileUrl;
+  final String fileName;
+
+  FileInfo({
+    required this.fileUrl,
+    required this.fileName,
+  });
+
+  factory FileInfo.fromJson(Map<String, dynamic> json) {
+    return FileInfo(
+      fileUrl: json['fileUrl'],
+      fileName: json['fileName'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fileUrl': fileUrl,
+      'fileName': fileName,
+    };
+  }
+}
+
 class User {
   final String id;
   final String? name;
-  final String? profilePic;
-  final String? cnicFrontPic;
-  final String? cnicBackPic; // Fixed typo
+  final FileInfo? profilePic;
+  final FileInfo? cnicFrontPic;
+  final FileInfo? cnicBackPic;
   final String email;
   final bool emailVerified;
+  final String? phone;
   final String? username;
   final String? role;
   final List<String> devices;
@@ -20,6 +45,7 @@ class User {
     this.cnicBackPic,
     required this.email,
     required this.emailVerified,
+    this.phone,
     this.username,
     this.role,
     required this.devices,
@@ -31,11 +57,18 @@ class User {
     return User(
       id: json['id'],
       name: json['name'],
-      profilePic: json['profilePic'],
-      cnicFrontPic: json['cnicFrontPic'],
-      cnicBackPic: json['cnicBacPic'], // Fixed typo
+      profilePic: json['profilePic'] != null
+          ? FileInfo.fromJson(json['profilePic'])
+          : null,
+      cnicFrontPic: json['cnicFrontPic'] != null
+          ? FileInfo.fromJson(json['cnicFrontPic'])
+          : null,
+      cnicBackPic: json['cnicBackPic'] != null
+          ? FileInfo.fromJson(json['cnicBackPic'])
+          : null,
       email: json['email'],
       emailVerified: json['emailVerified'],
+      phone: json['phone'],
       username: json['username'],
       role: json['role'],
       devices: List<String>.from(json['devices']),
@@ -48,11 +81,12 @@ class User {
     return {
       'id': id,
       'name': name,
-      'profilePic': profilePic,
-      'cnicFrontPic': cnicFrontPic,
-      'cnicBackPic': cnicBackPic,
+      'profilePic': profilePic?.toJson(),
+      'cnicFrontPic': cnicFrontPic?.toJson(),
+      'cnicBackPic': cnicBackPic?.toJson(),
       'email': email,
       'emailVerified': emailVerified,
+      'phone': phone,
       'username': username,
       'role': role,
       'devices': devices,
@@ -65,12 +99,12 @@ class User {
 class Visitor {
   final String id;
   final String? name;
-  final String? profilePic;
-  final String? cnicFrontPic;
-  final String? cnicBackPic; // Fixed typo
+  final FileInfo? profilePic;
+  final FileInfo? cnicFrontPic;
+  final FileInfo? cnicBackPic;
   final String email;
   final bool emailVerified;
-  final String? phone;
+  final String phone;
   final List<String> devices;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -83,7 +117,7 @@ class Visitor {
     this.cnicBackPic,
     required this.email,
     required this.emailVerified,
-    this.phone,
+    required this.phone,
     required this.devices,
     required this.createdAt,
     required this.updatedAt,
@@ -93,9 +127,15 @@ class Visitor {
     return Visitor(
       id: json['id'],
       name: json['name'],
-      profilePic: json['profilePic'],
-      cnicFrontPic: json['cnicFrontPic'],
-      cnicBackPic: json['cnicBacPic'], // Fixed typo
+      profilePic: json['profilePic'] != null
+          ? FileInfo.fromJson(json['profilePic'])
+          : null,
+      cnicFrontPic: json['cnicFrontPic'] != null
+          ? FileInfo.fromJson(json['cnicFrontPic'])
+          : null,
+      cnicBackPic: json['cnicBackPic'] != null
+          ? FileInfo.fromJson(json['cnicBackPic'])
+          : null,
       email: json['email'],
       emailVerified: json['emailVerified'],
       phone: json['phone'],
@@ -109,9 +149,9 @@ class Visitor {
     return {
       'id': id,
       'name': name,
-      'profilePic': profilePic,
-      'cnicFrontPic': cnicFrontPic,
-      'cnicBackPic': cnicBackPic,
+      'profilePic': profilePic?.toJson(),
+      'cnicFrontPic': cnicFrontPic?.toJson(),
+      'cnicBackPic': cnicBackPic?.toJson(),
       'email': email,
       'emailVerified': emailVerified,
       'phone': phone,
@@ -174,9 +214,7 @@ class AppointmentDataModel {
       status: json['status'],
       userRole: json['userRole'],
       qrToken: json['qrToken'],
-      mapTrackings: List<Map<String, dynamic>>.from(
-        json['mapTrackings'].map((item) => Map<String, dynamic>.from(item)),
-      ),
+      mapTrackings: List<Map<String, dynamic>>.from(json['mapTrackings']),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
       user: User.fromJson(json['user']),

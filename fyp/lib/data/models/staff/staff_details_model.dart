@@ -35,13 +35,15 @@ class StaffDetailsModel {
 class StaffDetailsData {
   final String id;
   final String? name;
-  final String? profilePic;
-  final String? cnicFrontPic;
-  final String? cnicBacPic;
+  final FileDetails? profilePic;
+  final FileDetails? cnicFrontPic;
+  final FileDetails? cnicBacPic;
   final String email;
   final bool emailVerified;
+  final String? phone;
   final String? username;
-  final String? role;
+  final String role;
+  final List<String> devices;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -53,8 +55,10 @@ class StaffDetailsData {
     this.cnicBacPic,
     required this.email,
     required this.emailVerified,
+    this.phone,
     this.username,
     required this.role,
+    required this.devices,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -63,13 +67,21 @@ class StaffDetailsData {
     return StaffDetailsData(
       id: json['id'],
       name: json['name'],
-      profilePic: json['profilePic'],
-      cnicFrontPic: json['cnicFrontPic'],
-      cnicBacPic: json['cnicBacPic'],
+      profilePic: json['profilePic'] != null
+          ? FileDetails.fromJson(json['profilePic'])
+          : null,
+      cnicFrontPic: json['cnicFrontPic'] != null
+          ? FileDetails.fromJson(json['cnicFrontPic'])
+          : null,
+      cnicBacPic: json['cnicBacPic'] != null
+          ? FileDetails.fromJson(json['cnicBacPic'])
+          : null,
       email: json['email'],
       emailVerified: json['emailVerified'],
+      phone: json['phone'],
       username: json['username'],
       role: json['role'],
+      devices: List<String>.from(json['devices']),
       createdAt: DateTime.parse(json['createdAt']),
       updatedAt: DateTime.parse(json['updatedAt']),
     );
@@ -79,15 +91,41 @@ class StaffDetailsData {
     return {
       'id': id,
       'name': name,
-      'profilePic': profilePic,
-      'cnicFrontPic': cnicFrontPic,
-      'cnicBacPic': cnicBacPic,
+      'profilePic': profilePic?.toJson(),
+      'cnicFrontPic': cnicFrontPic?.toJson(),
+      'cnicBacPic': cnicBacPic?.toJson(),
       'email': email,
       'emailVerified': emailVerified,
+      'phone': phone,
       'username': username,
       'role': role,
+      'devices': devices,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
+    };
+  }
+}
+
+class FileDetails {
+  final String fileUrl;
+  final String fileName;
+
+  FileDetails({
+    required this.fileUrl,
+    required this.fileName,
+  });
+
+  factory FileDetails.fromJson(Map<String, dynamic> json) {
+    return FileDetails(
+      fileUrl: json['fileUrl'],
+      fileName: json['fileName'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'fileUrl': fileUrl,
+      'fileName': fileName,
     };
   }
 }
