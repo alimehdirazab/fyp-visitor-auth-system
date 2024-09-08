@@ -176,6 +176,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
           //   provider.phoneController.clear();
           //   provider.purposeController.clear();
           // });
+          context.read<VisitorCubit>().fetchUsers();
         }
       },
       child: Scaffold(

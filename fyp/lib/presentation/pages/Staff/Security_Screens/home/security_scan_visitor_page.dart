@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/presentation/pages/Staff/Security_Screens/home/security_home_screen.dart';
+import 'package:fyp/presentation/widgets/custom_dialog_box.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
@@ -36,6 +38,20 @@ class _SecurityScanVisitorPageState extends State<SecurityScanVisitorPage> {
     }
   }
 
+  void _showCustomDialog(BuildContext context, String title, String description,
+      void Function() onOkPressed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialogBox(
+          title: title,
+          description: description,
+          onOkPressed: onOkPressed,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +77,10 @@ class _SecurityScanVisitorPageState extends State<SecurityScanVisitorPage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Error: ${state.message}')),
                 );
+                _showCustomDialog(context, 'Successfully Scaned',
+                    'This is Authorized Visitor', () {
+                  Navigator.pushNamed(context, SecurityHomeScreen.routeName);
+                });
               }
             },
             builder: (context, state) {
@@ -68,12 +88,6 @@ class _SecurityScanVisitorPageState extends State<SecurityScanVisitorPage> {
                 return const Expanded(
                   child: Center(
                     child: CircularProgressIndicator(),
-                  ),
-                );
-              } else if (state is VerifyQRCodeSuccessState) {
-                return Expanded(
-                  child: Center(
-                    child: Text('Scanned QR Code: ${result?.rawValue}'),
                   ),
                 );
               } else {

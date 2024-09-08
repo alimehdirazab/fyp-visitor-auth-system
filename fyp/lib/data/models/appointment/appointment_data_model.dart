@@ -63,8 +63,8 @@ class User {
       cnicFrontPic: json['cnicFrontPic'] != null
           ? FileInfo.fromJson(json['cnicFrontPic'])
           : null,
-      cnicBackPic: json['cnicBackPic'] != null
-          ? FileInfo.fromJson(json['cnicBackPic'])
+      cnicBackPic: json['cnicBacPic'] != null
+          ? FileInfo.fromJson(json['cnicBacPic'])
           : null,
       email: json['email'],
       emailVerified: json['emailVerified'],
@@ -99,9 +99,9 @@ class User {
 class Visitor {
   final String id;
   final String? name;
-  final FileInfo? profilePic;
-  final FileInfo? cnicFrontPic;
-  final FileInfo? cnicBackPic;
+  final dynamic profilePic;
+  final dynamic cnicFrontPic;
+  final dynamic cnicBackPic;
   final String email;
   final bool emailVerified;
   final String phone;
@@ -124,18 +124,19 @@ class Visitor {
   });
 
   factory Visitor.fromJson(Map<String, dynamic> json) {
+    // Handle case where the profilePic, cnicFrontPic, cnicBackPic are strings or maps
     return Visitor(
       id: json['id'],
       name: json['name'],
-      profilePic: json['profilePic'] != null
-          ? FileInfo.fromJson(json['profilePic'])
-          : null,
-      cnicFrontPic: json['cnicFrontPic'] != null
-          ? FileInfo.fromJson(json['cnicFrontPic'])
-          : null,
-      cnicBackPic: json['cnicBackPic'] != null
-          ? FileInfo.fromJson(json['cnicBackPic'])
-          : null,
+      profilePic: json['profilePic'] is String
+          ? json['profilePic']
+          : FileInfo.fromJson(json['profilePic']),
+      cnicFrontPic: json['cnicFrontPic'] is String
+          ? json['cnicFrontPic']
+          : FileInfo.fromJson(json['cnicFrontPic']),
+      cnicBackPic: json['cnicBacPic'] is String
+          ? json['cnicBacPic']
+          : FileInfo.fromJson(json['cnicBacPic']),
       email: json['email'],
       emailVerified: json['emailVerified'],
       phone: json['phone'],
@@ -149,9 +150,14 @@ class Visitor {
     return {
       'id': id,
       'name': name,
-      'profilePic': profilePic?.toJson(),
-      'cnicFrontPic': cnicFrontPic?.toJson(),
-      'cnicBackPic': cnicBackPic?.toJson(),
+      'profilePic':
+          profilePic is String ? profilePic : (profilePic as FileInfo).toJson(),
+      'cnicFrontPic': cnicFrontPic is String
+          ? cnicFrontPic
+          : (cnicFrontPic as FileInfo).toJson(),
+      'cnicBackPic': cnicBackPic is String
+          ? cnicBackPic
+          : (cnicBackPic as FileInfo).toJson(),
       'email': email,
       'emailVerified': emailVerified,
       'phone': phone,

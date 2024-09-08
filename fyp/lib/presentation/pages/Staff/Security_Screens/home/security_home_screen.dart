@@ -33,24 +33,24 @@ class _SecurityHomeScreenState extends State<SecurityHomeScreen> {
       appBar: AppBar(
         title: const Text('Security Home Screen'),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, StaffNotificationScreen.routeName);
-              },
-              icon: const Icon(
-                Icons.published_with_changes_outlined,
-                color: Colors.black,
-              )),
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, StaffNotificationScreen.routeName);
-              },
-              icon: const Icon(
-                Icons.notifications_active_rounded,
-                color: Colors.black,
-              )),
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         Navigator.pushNamed(context, StaffNotificationScreen.routeName);
+        //       },
+        //       icon: const Icon(
+        //         Icons.published_with_changes_outlined,
+        //         color: Colors.black,
+        //       )),
+        //   IconButton(
+        //       onPressed: () {
+        //         Navigator.pushNamed(context, StaffNotificationScreen.routeName);
+        //       },
+        //       icon: const Icon(
+        //         Icons.notifications_active_rounded,
+        //         color: Colors.black,
+        //       )),
+        // ],
       ),
       body: PageStorage(
         bucket: bucket,
