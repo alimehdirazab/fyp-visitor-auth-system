@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+
 import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -17,12 +17,12 @@ class _ZoomableImageViewState extends State<ZoomableImageView> {
   @override
   void initState() {
     super.initState();
-    _secureScreen();
+    //_secureScreen();
   }
 
-  Future<void> _secureScreen() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
+  // Future<void> _secureScreen() async {
+  //   await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  // }
 
   @override
   Widget build(BuildContext context) {

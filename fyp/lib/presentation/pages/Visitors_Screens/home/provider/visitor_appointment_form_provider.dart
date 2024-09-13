@@ -23,9 +23,11 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
   String? visitorId;
   DateTime? appointmentDate;
   TimeOfDay? appointmentTime;
-  String? profilePic;
-  String? cnicFrontPic;
-  String? cnicBackPic;
+
+  // Update these fields to Map<String, dynamic> for profile pics
+  Map<String, dynamic>? profilePic;
+  Map<String, dynamic>? cnicFrontPic;
+  Map<String, dynamic>? cnicBackPic;
 
   StreamSubscription? _userSubscription;
 
@@ -85,13 +87,14 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
         return;
       }
     }
-    //if all data is available then call the function to update the visitor details
+
+    // Call the function to update visitor details, ensuring fileUrl is passed correctly
     BlocProvider.of<VisitorCubit>(context).updateVisitorDetails(
       name: name,
       phone: phone,
-      profilePic: profilePic!,
-      cnicFrontPic: cnicFrontPic!,
-      cnicBackPic: cnicBackPic!,
+      profilePic: profilePic!['fileUrl'], // Extract fileUrl
+      cnicFrontPic: cnicFrontPic!['fileUrl'], // Extract fileUrl
+      cnicBackPic: cnicBackPic!['fileUrl'], // Extract fileUrl
     );
   }
 
@@ -101,7 +104,6 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
     String purpose = purposeController.text.trim();
 
     // Check if userId, appointmentDate, or appointmentTime are null
-
     if (userId == null || appointmentDate == null || appointmentTime == null) {
       if (userId == null) {
         error = "Please select a user";
@@ -117,7 +119,6 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
         return;
       }
     }
-    // If all data is available then call the function to save the appointment
 
     // Combine appointmentDate and appointmentTime into a single DateTime object
     DateTime combinedDateTime = DateTime(
@@ -132,7 +133,7 @@ class VisitorAppointmentFormProvider extends ChangeNotifier {
     String formattedDateTime =
         DateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(combinedDateTime);
 
-    // Using formattedDateTime for both date and time fields
+    // Call the saveAppointment function
     BlocProvider.of<VisitorCubit>(context).saveAppointment(
       staffId: userId!,
       date: formattedDateTime,

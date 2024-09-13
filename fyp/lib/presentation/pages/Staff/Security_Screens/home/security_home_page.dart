@@ -186,16 +186,14 @@ class _SecurityHomePageState extends State<SecurityHomePage> {
                                                 phone:
                                                     appointment.visitor.phone ??
                                                         'N/A',
-                                                profilePic: appointment.visitor
-                                                        .profilePic?.fileUrl ??
+                                                profilePic: appointment
+                                                        .visitor.profilePic ??
                                                     'N/A',
                                                 cnicFrontPic: appointment
-                                                        .visitor
-                                                        .cnicFrontPic
-                                                        ?.fileUrl ??
+                                                        .visitor.cnicFrontPic ??
                                                     'N/A',
-                                                cnicBackPic: appointment.visitor
-                                                        .cnicBackPic?.fileUrl ??
+                                                cnicBackPic: appointment
+                                                        .visitor.cnicBackPic ??
                                                     'N/A',
                                                 mapTrackings:
                                                     appointment.mapTrackings,

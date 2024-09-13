@@ -11,6 +11,7 @@ import 'package:fyp/data/models/other/location_model.dart';
 import 'package:fyp/data/repositories/visitor_repository.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
+// ignore: depend_on_referenced_packages
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 

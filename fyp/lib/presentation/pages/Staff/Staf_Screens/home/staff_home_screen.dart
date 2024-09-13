@@ -4,7 +4,6 @@ import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_home_page.d
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_invite_visitor_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_profile_page.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/home/staff_search_page.dart';
-import 'package:fyp/presentation/pages/Staff/Staf_Screens/staff_notification_screen.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/my_drawer.dart';
 
 class StaffHomeScreen extends StatefulWidget {
@@ -33,16 +32,16 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
           style: TextStyles.body1.copyWith(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, StaffNotificationScreen.routeName);
-              },
-              icon: const Icon(
-                Icons.notifications_active_rounded,
-                color: Colors.black,
-              ))
-        ],
+        // actions: [
+        //   IconButton(
+        //       onPressed: () {
+        //         Navigator.pushNamed(context, StaffNotificationScreen.routeName);
+        //       },
+        //       icon: const Icon(
+        //         Icons.notifications_active_rounded,
+        //         color: Colors.black,
+        //       ))
+        // ],
       ),
       body: PageStorage(
         bucket: _bucket,

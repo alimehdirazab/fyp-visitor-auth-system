@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
@@ -44,12 +43,12 @@ class _VisitorDetailsPageState extends State<VisitorDetailsPage> {
   @override
   void initState() {
     super.initState();
-    _secureScreen();
+   // _secureScreen();
   }
 
-  Future<void> _secureScreen() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
+  // Future<void> _secureScreen() async {
+  //   await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  // }
 
   void _openImageView(BuildContext context, String imageUrl) {
     Navigator.push(
@@ -166,6 +165,7 @@ class _VisitorDetailsPageState extends State<VisitorDetailsPage> {
               backgroundColor: Colors.green,
             ),
           );
+          Navigator.pop(context);
         } else if (state is UpdateAppointmentErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

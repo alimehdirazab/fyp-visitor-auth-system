@@ -35,12 +35,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  lottie: ^2.7.0
+  lottie: ^3.1.2
   dio: ^5.4.0
   pretty_dio_logger: ^1.3.1
   flutter_bloc: ^8.1.3
   provider: ^6.1.1
-  email_validator: ^2.1.17
+  email_validator: ^3.0.0
   shared_preferences: ^2.2.2
   dropdown_button3: ^3.0.0
   image_picker: ^1.0.7
@@ -54,7 +54,7 @@ dependencies:
   qr_flutter: ^4.0.0
   cached_network_image: ^3.3.1
   photo_view: ^0.15.0
-  flutter_windowmanager: ^0.2.0
+  #flutter_windowmanager: ^0.2.0
   google_maps_flutter: ^2.7.0
   mobile_scanner: ^5.1.1
   hive_flutter: ^1.1.0
@@ -73,7 +73,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   hive_generator: ^2.0.1
   build_runner: ^2.4.11
   flutter_launcher_icons: ^0.13.1

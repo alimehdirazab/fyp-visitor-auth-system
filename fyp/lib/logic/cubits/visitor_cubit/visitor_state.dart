@@ -1,6 +1,7 @@
 import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
+import 'package:fyp/data/models/visitor/visitor_update_details_model.dart';
 
 abstract class VisitorState {}
 
@@ -49,7 +50,7 @@ class VisitorDetailsUpdatingState extends VisitorState {}
 
 class VisitorDetailsUpdatedState extends VisitorState {
   /// Using StaffDetailsData in this case because Visitor and a Staff have the same structure
-  final StaffDetailsData visitorData;
+  final VisitorUpdateDetailsModel visitorData;
 
   VisitorDetailsUpdatedState(this.visitorData);
 }

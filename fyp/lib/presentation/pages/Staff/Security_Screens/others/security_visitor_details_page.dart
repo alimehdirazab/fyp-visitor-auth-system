@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:fyp/core/ui.dart';
 import 'package:fyp/presentation/pages/Staff/Security_Screens/others/security_visitor_location.dart';
 import 'package:fyp/presentation/pages/Staff/Staf_Screens/widgets/zoomable_image_view.dart';
@@ -39,12 +38,12 @@ class _SecurityVisitorDetailsPageState
   @override
   void initState() {
     super.initState();
-    _secureScreen();
+    // _secureScreen();
   }
 
-  Future<void> _secureScreen() async {
-    await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
-  }
+  // Future<void> _secureScreen() async {
+  //   await FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
+  // }
 
   void _openImageView(BuildContext context, String imageUrl) {
     Navigator.push(

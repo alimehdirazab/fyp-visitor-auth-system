@@ -57,7 +57,7 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
   @override
   void dispose() {
     // Stop location tracking when app is disposed
-    LocationService.stopLocationService();
+    // LocationService.stopLocationService();
     super.dispose();
   }
 

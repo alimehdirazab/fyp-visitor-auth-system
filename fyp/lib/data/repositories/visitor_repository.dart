@@ -6,6 +6,7 @@ import 'package:fyp/core/api.dart';
 import 'package:fyp/data/models/appointment/appointment_data_model.dart';
 import 'package:fyp/data/models/staff/staff_details_model.dart';
 import 'package:fyp/data/models/visitor/visitor_model.dart';
+import 'package:fyp/data/models/visitor/visitor_update_details_model.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
 import 'package:fyp/main.dart';
 import 'package:path/path.dart';
@@ -115,7 +116,7 @@ class VisitorRepository {
       );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (apiResponse.status == 200) {
+      if (apiResponse.status == 201) {
         Map<String, dynamic> responseData = jsonDecode(response.data);
         bool emailVerified = responseData['data']['emailVerified'];
         return emailVerified;
@@ -279,7 +280,7 @@ class VisitorRepository {
     }
   }
 
-  Future<StaffDetailsData> updateVisitorDetails({
+  Future<VisitorUpdateDetailsModel> updateVisitorDetails({
     required String name,
     required String phone,
     required String profilePic,
@@ -321,7 +322,7 @@ class VisitorRepository {
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
       if (apiResponse.status == 200) {
-        return StaffDetailsData.fromJson(apiResponse.data);
+        return VisitorUpdateDetailsModel.fromJson(apiResponse.data);
       } else {
         throw ('Error updating visitor details: ${apiResponse.status}');
       }

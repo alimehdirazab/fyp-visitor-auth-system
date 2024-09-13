@@ -98,10 +98,17 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
           cnicBackUrl.isNotEmpty &&
           selfieUrl.isNotEmpty) {
         Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
-          ..cnicFrontPic = cnicFrontUrl
-          ..cnicBackPic = cnicBackUrl
-          ..profilePic = selfieUrl;
+          ..profilePic = {'fileUrl': selfieUrl, 'fileName': _selfieImageName}
+          ..cnicFrontPic = {
+            'fileUrl': cnicFrontUrl,
+            'fileName': _cnicFrontImageName
+          }
+          ..cnicBackPic = {
+            'fileUrl': cnicBackUrl,
+            'fileName': _cnicBackImageName
+          };
 
+        // Call the method to update visitor details
         Provider.of<VisitorAppointmentFormProvider>(context, listen: false)
             .updateVisitorDetails();
       } else {
@@ -132,6 +139,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               backgroundColor: Colors.red,
             ),
           );
+          context.read<VisitorCubit>().fetchUsers();
         } else if (state is VisitorDetailsUpdatedState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -149,6 +157,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               backgroundColor: Colors.red,
             ),
           );
+          context.read<VisitorCubit>().fetchUsers();
         } else if (state is VisitorAppointmentSavedState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -156,6 +165,8 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               backgroundColor: Colors.green,
             ),
           );
+          context.read<VisitorCubit>().fetchUsers();
+          // Update the visitor details in the shared preferences
           String? vistorName = state.appointmentData.visitor.name;
           String? vistorPhone = state.appointmentData.visitor.phone;
 
@@ -165,18 +176,17 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
               visitorName: vistorName,
               phoneNumber: vistorPhone,
               profilePicture: visitorProfilePicture);
-          // setState(() {
-          //   _cnicFrontImagePath = null;
-          //   _cnicBackImagePath = null;
-          //   _selfieImagePath = null;
-          //   _cnicFrontImageName = '';
-          //   _cnicBackImageName = '';
-          //   _selfieImageName = '';
-          //   provider.nameController.clear();
-          //   provider.phoneController.clear();
-          //   provider.purposeController.clear();
-          // });
-          context.read<VisitorCubit>().fetchUsers();
+          setState(() {
+            _cnicFrontImagePath = null;
+            _cnicBackImagePath = null;
+            _selfieImagePath = null;
+            _cnicFrontImageName = '';
+            _cnicBackImageName = '';
+            _selfieImageName = '';
+            provider.nameController.clear();
+            provider.phoneController.clear();
+            provider.purposeController.clear();
+          });
         }
       },
       child: Scaffold(
@@ -234,7 +244,12 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                   BlocBuilder<VisitorCubit, VisitorState>(
                     builder: (context, state) {
                       if (state is VisitorStaffDetailsLoadingState) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                          ],
+                        );
                       } else if (state is VisitorStaffDetailsLoadedState) {
                         return Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -305,7 +320,6 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                   ),
                   const GapWidget(size: -5),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       if (_cnicFrontImagePath != null)
                         ClipOval(
@@ -316,6 +330,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                             fit: BoxFit.cover,
                           ),
                         ),
+                      const SizedBox(width: 70),
                       if (_cnicBackImagePath != null)
                         ClipOval(
                           child: Image.file(
@@ -325,6 +340,7 @@ class _VisitorFormScreenState extends State<VisitorFormScreen> {
                             fit: BoxFit.cover,
                           ),
                         ),
+                      const SizedBox(width: 70),
                       if (_selfieImagePath != null)
                         ClipOval(
                           child: Image.file(
