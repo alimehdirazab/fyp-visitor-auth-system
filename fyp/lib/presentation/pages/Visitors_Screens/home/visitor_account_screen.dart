@@ -38,12 +38,12 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
     });
   }
 
-  static Future<bool> canLogout() async {
-    // Fetch appointments with status "entered"
-    final appointments =
-        await LocationCallbackHandler.getAppointmentsWithStatusEntered();
-    return appointments.isEmpty;
-  }
+  // static Future<bool> canLogout() async {
+  //   // Fetch appointments with status "entered", "running", or "redListed"
+  //   final appointments =
+  //       await LocationCallbackHandler.getAppointmentsWithStatusEntered();
+  //   return appointments.isEmpty;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,28 +113,28 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: PrimaryButton(
                   onPressed: () async {
-                    if (await canLogout()) {
-                      BlocProvider.of<VisitorCubit>(context).signOut();
-                      Navigator.popUntil(context, (route) => route.isFirst);
-                      Navigator.pushReplacementNamed(
-                          context, VisitorLoadingScreen.routeName);
-                    } else {
-                      // Show warning dialog
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Logout Restricted'),
-                          content: const Text(
-                              'You cannot logout while an appointment is in progress.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('OK'),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
+                    // if (await canLogout()) {
+                    //   BlocProvider.of<VisitorCubit>(context).signOut();
+                    //   Navigator.popUntil(context, (route) => route.isFirst);
+                    //   Navigator.pushReplacementNamed(
+                    //       context, VisitorLoadingScreen.routeName);
+                    // } else {
+                    //   // Show warning dialog
+                    //   showDialog(
+                    //     context: context,
+                    //     builder: (context) => AlertDialog(
+                    //       title: const Text('Logout Restricted'),
+                    //       content: const Text(
+                    //           'You cannot logout while an appointment is in progress.'),
+                    //       actions: [
+                    //         TextButton(
+                    //           onPressed: () => Navigator.of(context).pop(),
+                    //           child: const Text('OK'),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   );
+                    // }
                   },
                   text: "Log out",
                 ),

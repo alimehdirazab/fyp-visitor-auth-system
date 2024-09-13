@@ -427,14 +427,39 @@ class VisitorRepository {
       final preferences = await VisitorPreferences.fetchVisitorDetails();
       final accessToken = preferences['accessToken'];
 
+      // Fetch the current appointment data to retrieve existing mapTrackings
+      final appointmentResponse = await _api.sendRequest.get(
+        '/api/v1/appointments/$appointmentId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      ApiResponse appointmentApiResponse =
+          ApiResponse.fromResponse(appointmentResponse);
+      if (appointmentApiResponse.status != 200) {
+        throw ('Error fetching appointment: ${appointmentApiResponse.message}');
+      }
+
+      // Parse the existing appointment data
+      AppointmentDataModel currentAppointment =
+          AppointmentDataModel.fromJson(appointmentApiResponse.data);
+
+      // Get the existing mapTrackings and append the new tracking data
+      List<dynamic> currentMapTrackings = currentAppointment.mapTrackings ?? [];
+
+      currentMapTrackings.add({
+        'latitude': latitude,
+        'longitude': longitude,
+        'timestamp': timestamp,
+      });
+
+      // Update the appointment with the new mapTrackings array
       final data = {
-        'mapTrackings': [
-          {
-            'latitude': latitude,
-            'longitude': longitude,
-            'timestamp': timestamp,
-          }
-        ],
+        'mapTrackings': currentMapTrackings,
         'status': status,
       };
 
@@ -454,9 +479,10 @@ class VisitorRepository {
       if (apiResponse.status != 200) {
         throw ('Error updating appointment: ${apiResponse.message}');
       }
-      AppointmentDataModel appointment =
+
+      AppointmentDataModel updatedAppointment =
           AppointmentDataModel.fromJson(apiResponse.data);
-      return appointment;
+      return updatedAppointment;
     } catch (e) {
       throw ('Error updating appointment: $e');
     }

@@ -3,7 +3,6 @@ import 'package:fyp/logic/services/location_service.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_account_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_appointments_screen.dart';
 import 'package:fyp/presentation/pages/Visitors_Screens/home/visitor_form_screen.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class VisitorHomeScreen extends StatefulWidget {
@@ -28,16 +27,14 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
   void initState() {
     super.initState();
     _checkAndRequestLocationPermission();
+    print('Visitor home screen initialized..................................................................................................................................');
   }
 
   Future<void> _checkAndRequestLocationPermission() async {
-    // Request location permission
     PermissionStatus permission = await Permission.location.request();
     if (permission.isGranted) {
-      // Start location tracking service
       await LocationService.initLocationService();
     } else {
-      // Handle permission denied
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -56,8 +53,7 @@ class _VisitorHomeScreenState extends State<VisitorHomeScreen> {
 
   @override
   void dispose() {
-    // Stop location tracking when app is disposed
-    // LocationService.stopLocationService();
+    LocationService.stopLocationService();
     super.dispose();
   }
 
