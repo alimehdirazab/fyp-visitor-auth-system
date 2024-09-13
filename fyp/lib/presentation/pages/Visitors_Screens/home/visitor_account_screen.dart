@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fyp/data/models/appointment/appointment_data_model.dart';
+import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/logic/services/location_service.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
 import 'package:fyp/logic/services/visitor_preferences.dart';
@@ -28,6 +30,32 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
     _fetchVisitorDetails();
   }
 
+  static Future<List<AppointmentDataModel>>
+      getAppointmentsWithStatusEntered() async {
+    try {
+      print(
+          'Fetching appointments with status "entered", "running", or "redListed"');
+      final visitorCubit = VisitorCubitSingleton.getInstance();
+      await visitorCubit.fetchAppointments();
+      final state = visitorCubit.state;
+
+      if (state is VisitorAppointmentFetchLoadedState) {
+        print('Appointments fetched successfully');
+        return state.appointmentData.where((appointment) {
+          return appointment.status == 'entered' ||
+              appointment.status == 'running' ||
+              appointment.status == 'redListed';
+        }).toList();
+      } else {
+        print('Failed to fetch appointments or no appointments found');
+        return [];
+      }
+    } catch (e) {
+      print('Error fetching appointments: $e');
+      return [];
+    }
+  }
+
   Future<void> _fetchVisitorDetails() async {
     final details = await VisitorPreferences.fetchVisitorDetails();
     setState(() {
@@ -38,12 +66,11 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
     });
   }
 
-  // static Future<bool> canLogout() async {
-  //   // Fetch appointments with status "entered", "running", or "redListed"
-  //   final appointments =
-  //       await LocationCallbackHandler.getAppointmentsWithStatusEntered();
-  //   return appointments.isEmpty;
-  // }
+  static Future<bool> canLogout() async {
+    // Fetch appointments with status "entered", "running", or "redListed"
+    final appointments = await getAppointmentsWithStatusEntered();
+    return appointments.isEmpty;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,28 +140,28 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                 padding: const EdgeInsets.all(20.0),
                 child: PrimaryButton(
                   onPressed: () async {
-                    // if (await canLogout()) {
-                    //   BlocProvider.of<VisitorCubit>(context).signOut();
-                    //   Navigator.popUntil(context, (route) => route.isFirst);
-                    //   Navigator.pushReplacementNamed(
-                    //       context, VisitorLoadingScreen.routeName);
-                    // } else {
-                    //   // Show warning dialog
-                    //   showDialog(
-                    //     context: context,
-                    //     builder: (context) => AlertDialog(
-                    //       title: const Text('Logout Restricted'),
-                    //       content: const Text(
-                    //           'You cannot logout while an appointment is in progress.'),
-                    //       actions: [
-                    //         TextButton(
-                    //           onPressed: () => Navigator.of(context).pop(),
-                    //           child: const Text('OK'),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   );
-                    // }
+                    if (await canLogout()) {
+                      BlocProvider.of<VisitorCubit>(context).signOut();
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                      Navigator.pushReplacementNamed(
+                          context, VisitorLoadingScreen.routeName);
+                    } else {
+                      // Show warning dialog
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Logout Restricted'),
+                          content: const Text(
+                              'You cannot logout while an appointment is in progress.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
                   },
                   text: "Log out",
                 ),

@@ -116,9 +116,11 @@ class VisitorRepository {
       );
       ApiResponse apiResponse = ApiResponse.fromResponse(response);
 
-      if (apiResponse.status == 201) {
-        Map<String, dynamic> responseData = jsonDecode(response.data);
-        bool emailVerified = responseData['data']['emailVerified'];
+      if (apiResponse.status == 200) {
+        Map<String, dynamic> responseData = apiResponse.data;
+
+        bool emailVerified = responseData['emailVerified'];
+
         return emailVerified;
       } else if (apiResponse.status == 400) {
         return false;

@@ -43,6 +43,10 @@ class LocationService {
         }
       }
 
+      // Enable background mode for location
+      bool backgroundMode = await location.enableBackgroundMode(enable: true);
+      print('Background mode enabled: $backgroundMode');
+
       // Fetch appointments once
       await _fetchAppointments();
 

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_cubit.dart';
 import 'package:fyp/logic/cubits/staff_cubit/staff_state.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart'; // For date formatting
 
 class SecurityVisitorLocation extends StatefulWidget {
   final String appointmentId;
@@ -41,7 +42,7 @@ class _SecurityVisitorLocationState extends State<SecurityVisitorLocation> {
     context
         .read<StaffCubit>()
         .fetchAppointmentVisitorLocation(widget.appointmentId);
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
       context
           .read<StaffCubit>()
           .fetchAppointmentVisitorLocation(widget.appointmentId);
@@ -148,7 +149,7 @@ class _SecurityVisitorLocationState extends State<SecurityVisitorLocation> {
   void _updateMapTrackings(List<Map<String, dynamic>> newTrackings) {
     setState(() {
       // Add new trackings at the top of the list
-      _mapTrackings = newTrackings + _mapTrackings;
+      _mapTrackings = newTrackings;
     });
   }
 
@@ -189,11 +190,18 @@ class _SecurityVisitorLocationState extends State<SecurityVisitorLocation> {
                   final tracking = _mapTrackings[index];
                   final latitude = tracking['latitude'] ?? 0.0;
                   final longitude = tracking['longitude'] ?? 0.0;
-                  final time = tracking['time'] ?? 'N/A';
+                  final time = tracking['timestamp'] ?? 'N/A';
+                  // Convert timestamp to DateTime object
+                  final DateTime dateTime =
+                      DateTime.fromMillisecondsSinceEpoch(time);
+
+                  // Format the DateTime to a readable format (e.g., "yyyy-MM-dd HH:mm:ss")
+                  final String formattedDate =
+                      DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
 
                   return ListTile(
                     title: Text('Latitude: $latitude, Longitude: $longitude'),
-                    subtitle: Text('Time: $time'),
+                    subtitle: Text('Time: $formattedDate'),
                     onTap: () => _openLocationOnMap(latitude, longitude),
                   );
                 },

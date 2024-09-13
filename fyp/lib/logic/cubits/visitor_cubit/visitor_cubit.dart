@@ -79,7 +79,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       String phoneNumber = visitorData.phone.toString();
       String visitorName = visitorData.name.toString();
       String profilePicture = visitorData.profilePic ?? '';
-      String cnicBackPicture = visitorData.cnicBackPic ?? '';
+      String cnicBackPicture = visitorData.cnicBacPic ?? '';
       String cnicFrontPicture = visitorData.cnicFrontPic ?? '';
 
       if (!emailVerified) {
@@ -132,7 +132,7 @@ class VisitorCubit extends Cubit<VisitorState> {
       String phoneNumber = visitorData.phone.toString();
       String visitorName = visitorData.name.toString();
       String profilePicture = visitorData.profilePic ?? '';
-      String cnicBackPicture = visitorData.cnicBackPic ?? '';
+      String cnicBackPicture = visitorData.cnicBacPic ?? '';
       String cnicFrontPicture = visitorData.cnicFrontPic ?? '';
 
       if (!emailVerified) {

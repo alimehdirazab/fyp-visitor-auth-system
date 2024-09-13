@@ -37,7 +37,7 @@ class VisitorData {
   final String? name;
   final String? profilePic; // Changed to String
   final String? cnicFrontPic; // Changed to String
-  final String? cnicBackPic; // Changed to String and key updated
+  final String? cnicBacPic; // Changed to String and key updated
   final String email;
   final bool emailVerified;
   final String? phone;
@@ -52,7 +52,7 @@ class VisitorData {
     this.name,
     this.profilePic,
     this.cnicFrontPic,
-    this.cnicBackPic,
+    this.cnicBacPic,
     required this.email,
     required this.emailVerified,
     this.phone,
@@ -69,7 +69,7 @@ class VisitorData {
       name: json['name'],
       profilePic: json['profilePic'], // Updated
       cnicFrontPic: json['cnicFrontPic'], // Updated
-      cnicBackPic: json['cnicBacPic'], // Updated key name
+      cnicBacPic: json['cnicBacPic'], // Updated key name
       email: json['email'],
       emailVerified: json['emailVerified'],
       phone: json['phone'],
@@ -87,7 +87,7 @@ class VisitorData {
       'name': name,
       'profilePic': profilePic, // Updated
       'cnicFrontPic': cnicFrontPic, // Updated
-      'cnicBackPic': cnicBackPic, // Updated key name
+      'cnicBackPic': cnicBacPic, // Updated key name
       'email': email,
       'emailVerified': emailVerified,
       'phone': phone,
