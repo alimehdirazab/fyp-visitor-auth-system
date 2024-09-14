@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fyp/core/ui.dart';
 import 'package:fyp/data/models/appointment/appointment_data_model.dart';
+import 'package:fyp/data/models/visitor/visitor_update_details_model.dart';
+import 'package:fyp/data/repositories/visitor_repository.dart'; // Import repository
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_state.dart';
 import 'package:fyp/logic/services/location_service.dart';
 import 'package:fyp/logic/cubits/visitor_cubit/visitor_cubit.dart';
@@ -10,6 +13,7 @@ import 'package:fyp/presentation/pages/LoadingScreens/visitor_loading_screen.dar
 import 'package:fyp/presentation/widgets/gap_widget.dart';
 import 'package:fyp/presentation/widgets/primary_button.dart';
 import 'package:fyp/presentation/widgets/profile_tile.dart';
+import 'package:image_picker/image_picker.dart';
 
 class VisitorAccountScreen extends StatefulWidget {
   const VisitorAccountScreen({super.key});
@@ -56,6 +60,12 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
     }
   }
 
+  static Future<bool> canLogout() async {
+    // Fetch appointments with status "entered", "running", or "redListed"
+    final appointments = await getAppointmentsWithStatusEntered();
+    return appointments.isEmpty;
+  }
+
   Future<void> _fetchVisitorDetails() async {
     final details = await VisitorPreferences.fetchVisitorDetails();
     setState(() {
@@ -66,10 +76,244 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
     });
   }
 
-  static Future<bool> canLogout() async {
-    // Fetch appointments with status "entered", "running", or "redListed"
-    final appointments = await getAppointmentsWithStatusEntered();
-    return appointments.isEmpty;
+  Future<void> _updateVisitorDetail({
+    String? name,
+    String? phone,
+    String? profilePic,
+    String? password, // Add password here
+  }) async {
+    final visitorRepo = VisitorRepository();
+
+    try {
+      VisitorUpdateDetailsModel updatedDetails =
+          await visitorRepo.updateVisitorIndividualDetail(
+        name: name,
+        phone: phone,
+        profilePic: profilePic,
+        password: password, // Include password in the update
+      );
+
+      // Save the updated details in VisitorPreferences
+      await VisitorPreferences.updateVisitorDetails(
+        visitorName: updatedDetails.name,
+        phoneNumber: updatedDetails.phone,
+        profilePicture: updatedDetails.profilePic,
+        password: password, // Save password if updated
+      );
+
+      // Update local state
+      setState(() {
+        this.name = updatedDetails.name;
+        this.phone = updatedDetails.phone;
+        this.profilePicture = updatedDetails.profilePic;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Details updated successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update details: $e')),
+      );
+    }
+  }
+
+  //pick image
+  Future<String?> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+
+    // Pick an image from the gallery
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    // Check if an image was selected
+    if (image != null) {
+      return image.path; // Return the path of the selected image
+    } else {
+      // Handle the case when no image was selected
+      return null;
+    }
+  }
+
+  //////
+  void _updateProfileImage() async {
+    final String? filePath =
+        await _pickImage(); // Call _pickImage to select an image
+
+    if (filePath != null) {
+      final String fileName =
+          filePath.split('/').last; // Extract the file name from the path
+      await updateProfileImage(fileName,
+          filePath); // Call the function to upload and update the image
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No image selected')),
+      );
+    }
+  }
+
+  //update Profile Pic
+  Future<void> updateProfileImage(String fileName, String filePath) async {
+    try {
+      final visitorRepo = VisitorRepository();
+      // Call the existing uploadFile function to upload the image
+      final String imageUrl = await visitorRepo.uploadFile(
+        fileName: fileName,
+        filePath: filePath,
+      );
+
+      // Update the visitor details with the new image URL
+      await _updateVisitorDetail(profilePic: imageUrl);
+
+      // Notify user of success
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile image updated successfully')),
+      );
+    } catch (e) {
+      // Handle any errors that occur
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update profile image: $e')),
+      );
+    }
+  }
+
+  //Edit Name
+  void _editName() {
+    TextEditingController nameController = TextEditingController(text: name);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Name'),
+        content: TextField(
+          controller: nameController,
+          decoration: const InputDecoration(labelText: 'Name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _updateVisitorDetail(name: nameController.text);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Edit Phone
+  void _editPhone() {
+    TextEditingController phoneController = TextEditingController(text: phone);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Phone'),
+        content: TextField(
+          controller: phoneController,
+          decoration: const InputDecoration(labelText: 'Phone'),
+          keyboardType: TextInputType
+              .phone, // Ensure the keyboard is optimized for phone input
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _updateVisitorDetail(phone: phoneController.text);
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _editPassword() {
+    TextEditingController oldPasswordController = TextEditingController();
+    TextEditingController newPasswordController = TextEditingController();
+    bool oldPasswordValid = false;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Change Password'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextField(
+                    controller: oldPasswordController,
+                    decoration:
+                        const InputDecoration(labelText: 'Old Password'),
+                    obscureText: true,
+                  ),
+                  if (oldPasswordValid) ...[
+                    TextField(
+                      controller: newPasswordController,
+                      decoration:
+                          const InputDecoration(labelText: 'New Password'),
+                      obscureText: true,
+                    ),
+                  ],
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    if (!oldPasswordValid) {
+                      // Check if the old password is correct
+                      final visitorDetails =
+                          await VisitorPreferences.fetchVisitorDetails();
+                      String storedPassword = visitorDetails['password'];
+
+                      if (oldPasswordController.text == storedPassword) {
+                        // Old password is correct, allow user to enter new password
+                        setState(() {
+                          oldPasswordValid = true;
+                        });
+                      } else {
+                        // Old password is incorrect
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('Incorrect old password'),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    } else {
+                      // Save new password
+                      if (newPasswordController.text.isNotEmpty) {
+                        await _updateVisitorDetail(
+                            password: newPasswordController.text);
+                        Navigator.pop(context);
+                      } else {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text('New password cannot be empty'),
+                          backgroundColor: Colors.red,
+                        ));
+                      }
+                    }
+                  },
+                  child: Text(oldPasswordValid ? 'Save' : 'Next'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -106,10 +350,8 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                   ),
                   CircleAvatar(
                     child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.camera_alt,
-                      ),
+                      onPressed: _updateProfileImage,
+                      icon: const Icon(Icons.camera_alt),
                     ),
                   ),
                 ],
@@ -119,21 +361,25 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                 leadingIcon: Icons.person,
                 title: 'Name',
                 subtitle: name ?? 'Add your name',
+                onPressed: _editName, // Edit name
               ),
               ProfileTile(
                 leadingIcon: Icons.email_outlined,
                 title: 'Email',
                 subtitle: email ?? 'Add your email',
+                editMode: false,
               ),
               ProfileTile(
                 leadingIcon: Icons.phone,
                 title: 'Phone',
                 subtitle: phone ?? 'Add your phone number',
+                onPressed: _editPhone,
               ),
-              const ProfileTile(
+              ProfileTile(
                 leadingIcon: Icons.lock,
                 title: 'Password',
                 subtitle: '*********',
+                onPressed: _editPassword,
               ),
               const GapWidget(size: 20),
               Padding(
@@ -146,7 +392,6 @@ class _VisitorAccountScreenState extends State<VisitorAccountScreen> {
                       Navigator.pushReplacementNamed(
                           context, VisitorLoadingScreen.routeName);
                     } else {
-                      // Show warning dialog
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(

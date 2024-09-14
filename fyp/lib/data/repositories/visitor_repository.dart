@@ -490,6 +490,67 @@ class VisitorRepository {
     }
   }
 
+  Future<VisitorUpdateDetailsModel> updateVisitorIndividualDetail({
+    String? name,
+    String? phone,
+    String? profilePic,
+    String? cnicFrontPic,
+    String? cnicBackPic,
+    String? password,
+  }) async {
+    try {
+      print('Updating visitor details: $name, $phone, $profilePic, $password');
+
+      // Fetch visitor details from SharedPreferences
+      final preferences = await VisitorPreferences.fetchVisitorDetails();
+      final accessToken = preferences['accessToken'];
+      final visitorId = preferences['visitorId'];
+
+      // Prepare request data dynamically based on which fields are provided
+      final Map<String, dynamic> requestData = {};
+
+      if (name != null && name.isNotEmpty) requestData['name'] = name;
+      if (phone != null && phone.isNotEmpty) requestData['phone'] = phone;
+      if (profilePic != null && profilePic.isNotEmpty)
+        requestData['profilePic'] = profilePic;
+      if (cnicFrontPic != null && cnicFrontPic.isNotEmpty)
+        requestData['cnicFrontPic'] = cnicFrontPic;
+      if (cnicBackPic != null && cnicBackPic.isNotEmpty)
+        requestData['cnicBackPic'] = cnicBackPic;
+      if (password != null && password.isNotEmpty)
+        requestData['password'] = password;
+
+      if (requestData.isEmpty) {
+        throw 'No fields provided for update'; // Optional: Throw an error if no fields are provided
+      }
+
+      // Send PUT request to update visitor details
+      final response = await _api.sendRequest.put(
+        '/api/v1/visitors/$visitorId',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $accessToken',
+            'Content-Type': 'application/json',
+          },
+        ),
+        data: jsonEncode(requestData), // Encode request data to JSON
+      );
+
+      print('Response data: ${response.data}');
+
+      // Handle response
+      ApiResponse apiResponse = ApiResponse.fromResponse(response);
+
+      if (apiResponse.status == 200) {
+        return VisitorUpdateDetailsModel.fromJson(apiResponse.data);
+      } else {
+        throw ('Error updating visitor details: ${apiResponse.status}');
+      }
+    } catch (e) {
+      throw ('Failed to update details: $e');
+    }
+  }
+
   // Method to cancel the token refresh timer when signing out
   void cancelTokenRefreshTimer() {
     _tokenRefreshTimer.cancel();

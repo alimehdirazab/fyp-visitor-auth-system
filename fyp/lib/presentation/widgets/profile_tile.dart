@@ -4,12 +4,16 @@ class ProfileTile extends StatelessWidget {
   final IconData leadingIcon;
   final String title;
   final String subtitle;
+  final bool editMode;
+  final void Function()? onPressed;
 
   const ProfileTile({
     super.key,
     required this.leadingIcon,
     required this.title,
     required this.subtitle,
+    this.editMode = true,
+    this.onPressed,
   });
 
   @override
@@ -25,12 +29,14 @@ class ProfileTile extends StatelessWidget {
       subtitle: Text(subtitle),
       subtitleTextStyle:
           const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-      trailing: IconButton(
-          onPressed: () {},
-          icon: Icon(
-            Icons.edit,
-            color: Theme.of(context).colorScheme.primary,
-          )),
+      trailing: editMode
+          ? IconButton(
+              onPressed: onPressed,
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).colorScheme.primary,
+              ))
+          : null,
     );
   }
 }
